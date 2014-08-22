@@ -12,6 +12,18 @@ compilationUnit
     :   importDeclaration* statementDeclaration* EOF
     ;
 
+importDeclaration
+    :   IMPORT (innerImport | externalImport) ';'
+    ;
+
+innerImport
+    : qualifiedName (AS Identifier)?
+    ;
+
+externalImport
+    : StringLiteral AS Identifier // here alias is mandatory
+    ;
+
 statementDeclaration
     :   controlStatement
     |   wiidgetDeclaration
@@ -32,11 +44,11 @@ foreachControl
     ;
 
 foreachVariable
-    : Identifier
+    : (Identifier ARROW)? Identifier
     ;      
 
 wiidgetDeclaration
-    :   wiidgetVariableBinding? wiidgetName wiidgetArguments? wiidgetBody
+    :   wiidgetVariableBinding? unifiedWiidgetName wiidgetArguments? wiidgetBody
     ;
 
 wiidgetVariableBinding
@@ -47,20 +59,26 @@ wiidgetVariable
     : WiidgetVarSign Identifier
     ;
 
-wiidgetName
-    : qualifiedName
+unifiedWiidgetName
+    : expressionWiidgetName
+    | Identifier
+    | StringLiteral    
+    ;
+
+expressionWiidgetName:
+    '`' expression '`'
     ;
 
 wiidgetMethodCallExpression
     :   wiidgetVariable '.' Identifier LPAREN expressionList? RPAREN
     ;
 
-wiidgetArguments
-    : '(' ( elementValuePairs | elementValue )? ')'
-    ;
-
 seamStatement
     : SEAM LPAREN expression RPAREN wiidgetBody
+    ;
+
+wiidgetArguments
+    : '(' ( elementValue | elementValuePairs )? ')'
     ;
 
 elementValuePairs
@@ -68,9 +86,9 @@ elementValuePairs
     ;
 
 elementValuePair
-    :   Identifier '=' elementValue
+    : Identifier '=' elementValue
     ;
-    
+
 elementValue
     :   expression
     |   qualifiedName
@@ -78,14 +96,8 @@ elementValue
     ;
     
 elementValueArrayInitializer
-    :   '{' (elementValue (',' elementValue)*)? (',')? '}'
+    :   '{' (elementValue (',' elementValue)*)? '}'
     ;
-
-importDeclaration
-    :   IMPORT qualifiedName JokerImport? ';'
-    ;
-
-JokerImport: '.' '@' ;
 
 wiidgetBody
     :   ';'
@@ -431,6 +443,9 @@ NullLiteral
 IF : 'if';
 FOREACH : 'foreach';
 
+// KEYWORDS
+AS : 'as';
+
 // Separators
 
 LPAREN : '(';
@@ -442,6 +457,7 @@ RBRACK : ']';
 SEMI : ';';
 COMMA : ',';
 DOT : '.';
+ARROW : '->';
 
 // Operators
 
@@ -486,6 +502,13 @@ Identifier
 	;
 
 fragment
+AttributeCharacter
+    : [a-zA-Z0-9_]
+    | '-'
+    | ':'
+    ;
+
+fragment
 JavaLetter
 	:	[a-zA-Z_] // these are the "java letters" below 0xFF
 	|	// covers all characters above 0xFF which are not a surrogate
@@ -506,13 +529,6 @@ JavaLetterOrDigit
 		[\uD800-\uDBFF] [\uDC00-\uDFFF]
 		{Character.isJavaIdentifierPart(Character.toCodePoint((char)_input.LA(-2), (char)_input.LA(-1)))}?
 	;
-
-//
-// Additional symbols not defined in the lexical specification
-//
-
-AT : '@';
-ELLIPSIS : '...';
 
 //
 // Whitespace and comments
