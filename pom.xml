@@ -23,7 +23,7 @@
 
 	<developers>
 		<developer>
-			<id>zsoltlengyelit</id>
+			<id>zsolt.lengyel.it</id>
 			<name>Zsolt Lengyel</name>
 			<timezone>CET</timezone>
 			<email>zsolt.lengyel.it@gmail.com</email>
@@ -85,17 +85,17 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.2</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>org.sonatype.plugins</groupId> -->
+			<!-- <artifactId>nexus-staging-maven-plugin</artifactId> -->
+			<!-- <version>1.6.2</version> -->
+			<!-- <extensions>true</extensions> -->
+			<!-- <configuration> -->
+			<!-- <serverId>ossrh</serverId> -->
+			<!-- <nexusUrl>https://oss.sonatype.org/</nexusUrl> -->
+			<!-- <autoReleaseAfterClose>true</autoReleaseAfterClose> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
 
 		</plugins>
 
@@ -119,27 +119,27 @@
 
 	</build>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
-
 	<!-- <distributionManagement> -->
-	<!-- <repository> -->
-	<!-- <id>repo</id> -->
-	<!-- <url>https://github.com/landasource/maven-repo/raw/master/releases</url> -->
-	<!-- </repository> -->
 	<!-- <snapshotRepository> -->
-	<!-- <id>snapshot-repo</id> -->
-	<!-- <url>https://github.com/landasource/maven-repo/raw/master/snapshots</url> -->
+	<!-- <id>ossrh-snapshots</id> -->
+	<!-- <url>https://oss.sonatype.org/content/repositories/snapshots</url> -->
 	<!-- </snapshotRepository> -->
+	<!-- <repository> -->
+	<!-- <id>ossrh</id> -->
+	<!-- <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> -->
+	<!-- </repository> -->
 	<!-- </distributionManagement> -->
+
+	<distributionManagement>
+		<repository>
+			<id>repo</id>
+			<url>https://github.com/landasource/maven-repo/raw/master/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-repo</id>
+			<url>https://github.com/landasource/maven-repo/raw/master/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<dependencies>
 
