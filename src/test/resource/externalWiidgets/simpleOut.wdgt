@@ -1,3 +1,0 @@
-import org.landa.wiidget.basewiidgets.Out as out;
-
-out("Hello external wiidget");
