@@ -5,54 +5,57 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.landasource.wiidget.basewiidgets.ContextualWiidget;
+
 /**
  * Wiidget for files.
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class ResourceWiidget extends Wiidget {
+public class ResourceWiidget extends ContextualWiidget {
 
-	/** Stream of the file. */
-	private InputStream stream;
-	private String fileName;
+    /** Full path to file. */
+    private String fileName;
 
-	// TODO handle children
+    // TODO handle children
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		try {
-			final InputStream inputStream = getWiidgetFactory().getConfiguration().getFileLoader().getFile(fileName);
+        try {
+            final InputStream inputStream = getWiidgetFactory().getConfiguration().getFileLoader().getFile(fileName);
 
-			final String template = IOUtils.toString(inputStream);
+            final String template = IOUtils.toString(inputStream);
 
-			final String content = Renderer.create(getWiidgetFactory()).render(template);
+            final String content = Renderer.create(getWiidgetFactory()).render(template);
 
-			write(content);
+            write(content);
 
-		} catch (final WiidgetException exception) {
+        } catch (final WiidgetException exception) {
 
-			throw new WiidgetException("Cannot render wiidget: " + fileName, exception);
+            throw new WiidgetException("Cannot render wiidget: " + fileName, exception);
 
-		} catch (final IOException e) {
-			throw new WiidgetException("Cannot load wiidget", e);
-		}
+        } catch (final IOException e) {
+            throw new WiidgetException("Cannot load wiidget", e);
+        }
 
-	}
+        restoreContext();
 
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
+    }
 
-	/**
-	 * @param fileName
-	 *            the fileName to set
-	 */
-	public void setFileName(final String fileName) {
-		this.fileName = fileName;
-	}
+    /**
+     * @return the fileName
+     */
+    public String getFileName() {
+        return fileName;
+    }
+
+    /**
+     * @param fileName
+     *            the fileName to set
+     */
+    public void setFileName(final String fileName) {
+        this.fileName = fileName;
+    }
 
 }

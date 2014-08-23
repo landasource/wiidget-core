@@ -555,12 +555,7 @@ public class WiidgetTemplateProcessor extends WiidgetView {
         Wiidget wiidget;
         if (wiidgetResource instanceof FileWiidgetResource) {
 
-            final FileWiidgetResource fileWiidgetResource = (FileWiidgetResource) wiidgetResource;
-
-            final ResourceWiidget resourceWiidget = getWiidgetFactory().createWiidget(getOwner(), ResourceWiidget.class, EMPTY_DATA, true);
-            resourceWiidget.setFileName(fileWiidgetResource.getCanonicalFileName());
-
-            wiidget = resourceWiidget;
+            wiidget = createFileWiidgetResource(wiidgetResource, arguments);
 
         } else if (wiidgetResource instanceof ClassWiidgetResource) {
 
@@ -578,6 +573,19 @@ public class WiidgetTemplateProcessor extends WiidgetView {
         }
 
         return wiidget;
+    }
+
+    private Wiidget createFileWiidgetResource(final WiidgetResource wiidgetResource, final WiidgetArgumentsContext arguments) throws WiidgetParserException {
+
+        final FileWiidgetResource fileWiidgetResource = (FileWiidgetResource) wiidgetResource;
+        final DataMap data = processArguments(arguments, null);
+
+        final ResourceWiidget resourceWiidget = getWiidgetFactory().createWiidget(getOwner(), ResourceWiidget.class, EMPTY_DATA, true);
+        resourceWiidget.setFileName(fileWiidgetResource.getCanonicalFileName());
+
+        resourceWiidget.setContext(data);
+
+        return resourceWiidget;
     }
 
     private Wiidget createExternalWiidget(final ExternalWiidgetResource wiidgetResource, final WiidgetArgumentsContext arguments) throws WiidgetParserException {

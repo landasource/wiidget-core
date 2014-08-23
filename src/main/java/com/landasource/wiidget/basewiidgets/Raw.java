@@ -55,7 +55,8 @@ public class Raw extends RawWiidget {
 
         if (Strings.isEmpty(children) && attributes.size() == 1 && attributes.containsKey(DefaultField.NAME)) {
             // This is the special case when output only the value attribute
-            children = attributes.get(DefaultField.NAME).toString();
+            final Object content = attributes.get(DefaultField.NAME);
+            children = null == content ? "" : content.toString();
 
         } else {
             for (final Entry<String, Object> attribute : attributes.entrySet()) {
