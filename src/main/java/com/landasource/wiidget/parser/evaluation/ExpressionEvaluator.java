@@ -70,7 +70,7 @@ public class ExpressionEvaluator {
 			final ExpressionContext baseExpressionContext = expression.expression(0);
 			final Object baseValue = evaluate(baseExpressionContext);
 			if (baseValue == null) {
-				throw new EvaluationException("Value is null for: " + baseExpressionContext.getText());
+				throw new EvaluationException(expression, "Value is null for: " + baseExpressionContext.getText());
 			}
 
 			final ExpressionContext indexExpressionContext = expression.expression(1);
@@ -157,7 +157,7 @@ public class ExpressionEvaluator {
 			return evaluateTernaryOperator(expression);
 		}
 
-		throw new EvaluationException("Cannot evaluate expression: '" + expression.getText() + "'");
+		throw new EvaluationException(expression, "Cannot evaluate expression: '" + expression.getText() + "'");
 	}
 
 	private Object evaluatePropertyByReflection(final Object baseValue, final Object index) throws PropertyAccessException {
@@ -208,7 +208,7 @@ public class ExpressionEvaluator {
 
 			final Object baseValue = evaluate(baseExpressionContext);
 			if (baseValue == null) {
-				throw new EvaluationException("Value is null for: " + baseExpressionContext.getText());
+				throw new EvaluationException(expression, "Value is null for: " + baseExpressionContext.getText());
 			}
 
 			final TerminalNode lparen = expression.LPAREN();
@@ -226,7 +226,7 @@ public class ExpressionEvaluator {
 
 		}
 
-		throw new EvaluationException("Cannot evaluate expression: " + expression.getText());
+		throw new EvaluationException(expression, "Cannot evaluate expression: " + expression.getText());
 	}
 
 	private Object evaluateWiidgetVariable(final WiidgetVariableContext wiidgetVariableContext) throws EvaluationException {
@@ -275,7 +275,7 @@ public class ExpressionEvaluator {
 			return firstOperand || secondOperand;
 
 		default:
-			throw new EvaluationException("Unknown operator: " + operator);
+			throw new EvaluationException(null, "Unknown operator: " + operator);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class ExpressionEvaluator {
 			return compareValue >= 0;
 
 		default:
-			throw new EvaluationException("Unknown operator: '" + operator + "'");
+			throw new EvaluationException(null, "Unknown operator: '" + operator + "'");
 		}
 	}
 
@@ -353,7 +353,7 @@ public class ExpressionEvaluator {
 			return getValue(identifier.getText());
 		}
 
-		throw new EvaluationException("Unexpected expression: " + primaryContext.getText());
+		throw new EvaluationException(primaryContext, "Unexpected expression: " + primaryContext.getText());
 	}
 
 	private Object evaluateMathematicalExpression(final ExpressionContext firstOperandExpression, final String operator, final ExpressionContext secondOperandExpression)
@@ -392,7 +392,7 @@ public class ExpressionEvaluator {
 			result = (isFirstDouble ? firstOperand.doubleValue() : firstOperand.intValue()) % (isSecondDouble ? secondOperand.doubleValue() : secondOperand.intValue());
 			break;
 		default:
-			throw new EvaluationException("Cannot evaluate expression: " + operator);
+			throw new EvaluationException(null, "Cannot evaluate operator: " + operator);
 		}
 
 		if (isFirstDouble || isSecondDouble) {
@@ -467,12 +467,12 @@ public class ExpressionEvaluator {
 			return null;
 		}
 
-		throw new EvaluationException("Cannot evaluate literal: " + literalContext.getText());
+		throw new EvaluationException(literalContext, "Cannot evaluate literal: " + literalContext.getText());
 	}
 
-	private Object processWiidgetMethodCall(final WiidgetMethodCallExpressionContext wiidgetMethodCallExpressionContext) throws EvaluationException {
+	private Object processWiidgetMethodCall(final WiidgetMethodCallExpressionContext expressionContext) throws EvaluationException {
 
-		final String wiidgetVariable = wiidgetMethodCallExpressionContext.wiidgetVariable().Identifier().getText();
+		final String wiidgetVariable = expressionContext.wiidgetVariable().Identifier().getText();
 
 		final Wiidget wiidget = getWiidgetMap().get(wiidgetVariable);
 
@@ -480,16 +480,16 @@ public class ExpressionEvaluator {
 			handleUndefinedWiidgetVariable(wiidgetVariable);
 		}
 
-		final String methodName = wiidgetMethodCallExpressionContext.Identifier().getText();
+		final String methodName = expressionContext.Identifier().getText();
 
-		final ExpressionListContext expressionListContext = wiidgetMethodCallExpressionContext.expressionList();
+		final ExpressionListContext expressionListContext = expressionContext.expressionList();
 
 		final Object[] parameters = null == expressionListContext ? new Object[0] : evaluateExpressionList(expressionListContext);
 
 		try {
 			return Reflection.callMethod(wiidget, methodName, parameters);
 		} catch (final ReflectionException reflectionException) {
-			throw new EvaluationException("Cannot call method '" + methodName + "' on " + wiidget.getClass().getCanonicalName(), reflectionException);
+			throw new EvaluationException(expressionContext, "Cannot call method '" + methodName + "' on " + wiidget.getClass().getCanonicalName(), reflectionException);
 		}
 	}
 
@@ -498,7 +498,7 @@ public class ExpressionEvaluator {
 	 * @throws EvaluationException
 	 */
 	private void handleUndefinedWiidgetVariable(final String variable) throws EvaluationException {
-		throw new EvaluationException("Variable is undefined: '" + variable + "'");
+		throw new EvaluationException(null, "Variable is undefined: '" + variable + "'");
 	}
 
 	private Object getValue(final String name) {

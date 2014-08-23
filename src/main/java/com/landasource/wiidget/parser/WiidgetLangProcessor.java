@@ -157,7 +157,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 		try {
 			importContext.process();
 		} catch (final ImportException e) {
-			throw new WiidgetParserException("Illegal import", e);
+			throw new WiidgetException("Illegal import", e);
 		}
 
 		importDefaultClasses();
@@ -231,7 +231,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 		final Object object = evaluateExpression(expressionContext);
 
 		if (object instanceof Wiidget == false) {
-			throw new WiidgetParserException("Expression '" + expressionContext.getText() + "' must be return wiidget instance.");
+			throw new WiidgetParserException(seamStatementContext, "Expression '" + expressionContext.getText() + "' must be return wiidget instance.");
 		}
 
 		final Wiidget wiidget = (Wiidget) object;
@@ -315,7 +315,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 			iterable = (Iterable<?>) evaluateExpression(foreachControlContext.expression());
 		} catch (final ClassCastException castException) {
 
-			throw new WiidgetParserException("Foreach statement must have iterable class.", castException);
+			throw new WiidgetParserException(foreachControlContext, "Foreach statement must have iterable class.", castException);
 		}
 
 		return new ForeachControl(variable, iterable);
@@ -331,7 +331,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 
 		} catch (final ClassCastException castException) {
 
-			throw new WiidgetParserException("Expression must be boolean: " + ifControlContext.expression().getText(), castException);
+			throw new WiidgetParserException(ifControlContext, "Expression must be boolean: " + ifControlContext.expression().getText(), castException);
 		}
 
 	}
@@ -361,7 +361,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 				final WiidgetResource wiidgetResource = getWiidgetClass(alias);
 
 				if (null == wiidgetResource) {
-					throw new WiidgetParserException("Unknown wiidget alias: " + alias);
+					throw new WiidgetParserException(declarationContext, "Unknown wiidget alias: " + alias);
 				}
 
 				wiidget = createWiidget(wiidgetResource, wiidgetArguments);
@@ -418,7 +418,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 
 		}
 
-		throw new WiidgetParserException(String.format("Unsupported wiidget name expression: %s", value));
+		throw new WiidgetParserException(expression, String.format("Unsupported wiidget name expression: %s (%s)", value, expression.getText()));
 	}
 
 	private Wiidget createRawWiidget(final String tagName, final WiidgetArgumentsContext wiidgetArguments) throws WiidgetParserException {
@@ -573,7 +573,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 		if (null != expressionContext) {
 			return evaluateExpression(expressionContext);
 		}
-		throw new WiidgetParserException("Cannot get value of : " + valueContext.getText());
+		throw new WiidgetParserException(valueContext, "Cannot get value of : " + valueContext.getText());
 
 	}
 
@@ -640,13 +640,13 @@ public class WiidgetLangProcessor extends WiidgetView {
 		return configuration.getExpressionEvaluatorFactory(getWiidgetContext(), getWiidgetMap()).create();
 	}
 
-	public static CompilationUnitContext getCompilationUnitContext(final InputStream inputStream) throws WiidgetParserException {
+	public static CompilationUnitContext getCompilationUnitContext(final InputStream inputStream) throws WiidgetException {
 		try {
 			final ANTLRInputStream input = new ANTLRInputStream(inputStream);
 			return getCompilationUnitContext(input);
 
 		} catch (final IOException exception) {
-			throw new WiidgetParserException("Cannot parse input.", exception);
+			throw new WiidgetException("Cannot parse input.", exception);
 		}
 	}
 

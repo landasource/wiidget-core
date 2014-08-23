@@ -1,5 +1,7 @@
 package com.landasource.wiidget.parser.evaluation;
 
+import org.antlr.v4.runtime.tree.RuleNode;
+
 import com.landasource.wiidget.parser.WiidgetParserException;
 
 /**
@@ -10,14 +12,14 @@ import com.landasource.wiidget.parser.WiidgetParserException;
  */
 public class EvaluationException extends WiidgetParserException {
 
-    private static final long serialVersionUID = -6942914294591027572L;
+	private static final long serialVersionUID = -6942914294591027572L;
 
-    public EvaluationException(final String message) {
-        super(message);
-    }
+	public EvaluationException(final RuleNode node, final String message) {
+		super(node, message);
+	}
 
-    public EvaluationException(final String string, final Throwable cause) {
-        super(string, cause);
-    }
+	public EvaluationException(final RuleNode node, final String string, final Throwable cause) {
+		super(node, string, cause);
+	}
 
 }
