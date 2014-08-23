@@ -16,304 +16,329 @@ import com.landasource.wiidget.util.DataMap;
  */
 public abstract class Wiidget {
 
-    /** Empty data map. */
-    public static final DataMap EMPTY_DATA = new DataMap();
-
-    /**
-     * Unique ID of wiidget.
-     */
-    protected String id;
-
-    /**
-     * Rendered property. By default every widget is rendered.
-     */
-    private boolean rendered = true;
-
-    private WiidgetView owner;
-
-    private final List<Wiidget> children = new LinkedList<Wiidget>();
-
-    /**
-     * This method is invoked, when all the children's run method has invoked.
-     */
-    public void run() {
-    }
-
-    /**
-     * This method is called, when the lang processor did not find the field in the class.
-     *
-     * @param name
-     *            name of the field
-     * @param value
-     *            value of the field.
-     */
-    public void setAttribute(final String name, final Object value) {
-        throw new WiidgetException("Wiidget has no field with name: " + name);
-    }
-
-    protected <W extends Wiidget> W beginWiidget(final W wiidget) {
-        getWiidgetFactory().addWiidget(wiidget, getOwner(), true);
-
-        if (wiidget.isRendered()) {
-            wiidget.init();
-
-            return wiidget;
-        }
-        // the wiidget is not rendered
-        return null;
-    }
-
-    protected <W extends Wiidget> W wiidget(final Class<W> widgetClass) {
-        return wiidget(widgetClass, EMPTY_DATA);
-    }
-
-    protected <W extends Wiidget> W wiidget(final Class<W> widgetClass, final DataMap dataMap) {
-        final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, false);
-
-        if (widget.isRendered()) {
-            widget.init();
-            widget.run();
-
-            return widget;
-
-        }
-
-        // the wiidget is not rendered
-        return null;
-    }
-
-    protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass) {
-        return beginWiidget(widgetClass, new DataMap());
-    }
-
-    protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass, final DataMap dataMap) {
-        final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, true);
-
-        if (widget.isRendered()) {
-            widget.init();
-
-            return widget;
-        }
-        // the wiidget is not rendered
-        return null;
-    }
+	/** Empty data map. */
+	public static final DataMap EMPTY_DATA = new DataMap();
+
+	/**
+	 * Unique ID of wiidget.
+	 */
+	protected String id;
+
+	/**
+	 * Rendered property. By default every widget is rendered.
+	 */
+	private boolean rendered = true;
+
+	private WiidgetView owner;
+
+	private final List<Wiidget> children = new LinkedList<Wiidget>();
+
+	/**
+	 * This method is invoked, when all the children's run method has invoked.
+	 */
+	public void run() {
+	}
+
+	/**
+	 * This method is called, when the lang processor did not find the field in the class.
+	 *
+	 * @param name
+	 *            name of the field
+	 * @param value
+	 *            value of the field.
+	 */
+	public void setAttribute(final String name, final Object value) {
+		throw new WiidgetException("Wiidget has no field with name: " + name);
+	}
+
+	protected <W extends Wiidget> W beginWiidget(final W wiidget) {
+		getWiidgetFactory().addWiidget(wiidget, getOwner(), true);
+
+		if (wiidget.isRendered()) {
+			wiidget.init();
+
+			return wiidget;
+		}
+		// the wiidget is not rendered
+		return null;
+	}
+
+	protected <W extends Wiidget> W wiidget(final Class<W> widgetClass) {
+		return wiidget(widgetClass, EMPTY_DATA);
+	}
+
+	protected <W extends Wiidget> W wiidget(final Class<W> widgetClass, final DataMap dataMap) {
+		final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, false);
+
+		if (widget.isRendered()) {
+			widget.init();
+			widget.run();
+
+			return widget;
+
+		}
+
+		// the wiidget is not rendered
+		return null;
+	}
+
+	protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass) {
+		return beginWiidget(widgetClass, new DataMap());
+	}
+
+	protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass, final DataMap dataMap) {
+		final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, true);
+
+		if (widget.isRendered()) {
+			widget.init();
+
+			return widget;
+		}
+		// the wiidget is not rendered
+		return null;
+	}
 
-    protected ResourceWiidget beginResourceWiidget(final String wiidgetName) {
+	protected ResourceWiidget beginResourceWiidget(final String wiidgetName) {
 
-        final ResourceWiidget widget = getWiidgetFactory().createWiidget(getOwner(), ResourceWiidget.class, EMPTY_DATA, true);
-        widget.setFileName(wiidgetName);
-        return startWiidget(widget);
-    }
+		final ResourceWiidget widget = getWiidgetFactory().createWiidget(getOwner(), ResourceWiidget.class, EMPTY_DATA, true);
+		widget.setFileName(wiidgetName);
+		return startWiidget(widget);
+	}
 
-    /**
-     *
-     * @param wiidget
-     *            wiidget to start
-     * @return the wiidget when its rendered. Otherwise null
-     */
-    protected <W extends Wiidget> W startWiidget(final W wiidget) {
-        if (wiidget.isRendered()) {
+	/**
+	 *
+	 * @param wiidget
+	 *            wiidget to start
+	 * @return the wiidget when its rendered. Otherwise null
+	 */
+	protected <W extends Wiidget> W startWiidget(final W wiidget) {
+		if (wiidget.isRendered()) {
 
-            wiidget.init();
+			wiidget.init();
 
-            return wiidget;
-        }
-        // the wiidget is not rendered
-        return null;
-    }
+			return wiidget;
+		}
+		// the wiidget is not rendered
+		return null;
+	}
 
-    @SuppressWarnings("unchecked")
-    protected <W extends Wiidget> W endWiidget() {
-        final Wiidget wiidget = getWiidgetFactory().getWiidgetStack().pop();
+	@SuppressWarnings("unchecked")
+	protected <W extends Wiidget> W endWiidget() {
+		final Wiidget wiidget = getWiidgetFactory().getWiidgetStack().pop();
 
-        if (wiidget.isRendered()) {
-            wiidget.run();
-        }
+		if (wiidget.isRendered()) {
+			wiidget.run();
+		}
 
-        return (W) wiidget;
-    }
+		return (W) wiidget;
+	}
 
-    @SuppressWarnings("unchecked")
-    protected <W extends Wiidget> W endWiidget(final W widget) {
+	@SuppressWarnings("unchecked")
+	protected <W extends Wiidget> W endWiidget(final W widget) {
 
-        final Wiidget popedWidget = getWiidgetFactory().getWiidgetStack().pop();
+		final Wiidget popedWidget = getWiidgetFactory().getWiidgetStack().pop();
 
-        if (!popedWidget.isRendered()) { // this wiidget is not rendered
-            return (W) popedWidget;
-        }
+		if (!popedWidget.isRendered()) { // this wiidget is not rendered
+			return (W) popedWidget;
+		}
 
-        if (widget != popedWidget) {
-            throw new WiidgetException("Run specified widget failed. Maybe there is another unclosed widget.");
-        }
-
-        if (widget.isRendered()) {
-            widget.run();
-        }
-
-        return widget;
-    }
+		if (widget != popedWidget) {
+			throw new WiidgetException("Run specified widget failed. Maybe there is another unclosed widget.");
+		}
 
-    @SuppressWarnings("unchecked")
-    protected <W extends Wiidget> W endWiidget(final Class<W> widgetClass) {
-        final Wiidget widget = getWiidgetFactory().getWiidgetStack().pop();
+		if (widget.isRendered()) {
+			widget.run();
+		}
 
-        if (!widgetClass.isAssignableFrom(widget.getClass())) {
-            throw new WiidgetException("Run specified widget failed. Maybe there is another unclosed widget.");
-        }
+		return widget;
+	}
 
-        if (widget.isRendered()) {
-            widget.run();
-        }
+	@SuppressWarnings("unchecked")
+	protected <W extends Wiidget> W endWiidget(final Class<W> widgetClass) {
+		final Wiidget widget = getWiidgetFactory().getWiidgetStack().pop();
 
-        return (W) widget;
-    }
+		if (!widgetClass.isAssignableFrom(widget.getClass())) {
+			throw new WiidgetException("Run specified widget failed. Maybe there is another unclosed widget.");
+		}
 
-    /**
-     * @return
-     */
-    public WiidgetView getOwner() {
-        return this.owner;
-    }
+		if (widget.isRendered()) {
+			widget.run();
+		}
 
-    public void setOwner(final WiidgetView owner) {
-        this.owner = owner;
-    }
+		return (W) widget;
+	}
 
-    public List<Wiidget> getChildren() {
-        return children;
-    }
+	/**
+	 * @return
+	 */
+	public WiidgetView getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(final WiidgetView owner) {
+		this.owner = owner;
+	}
 
-    @Override
-    public String toString() {
+	public List<Wiidget> getChildren() {
+		return children;
+	}
 
-        return super.toString();
-    }
+	@Override
+	public String toString() {
 
-    @SuppressWarnings("unchecked")
-    public <W> List<W> getChildren(final Class<W> wiidgetClass) {
+		return super.toString();
+	}
 
-        final List<W> childrenWithType = new LinkedList<W>();
+	@SuppressWarnings("unchecked")
+	public <W> List<W> getChildren(final Class<W> wiidgetClass) {
 
-        for (final Wiidget child : getChildren()) {
+		final List<W> childrenWithType = new LinkedList<W>();
 
-            if (wiidgetClass.isAssignableFrom(child.getClass())) {
+		for (final Wiidget child : getChildren()) {
 
-                childrenWithType.add((W) child);
-            }
-        }
+			if (wiidgetClass.isAssignableFrom(child.getClass())) {
 
-        return childrenWithType;
-    }
+				childrenWithType.add((W) child);
+			}
+		}
 
-    /**
-     * @param wiidgetClass
-     * @return
-     */
-    public <W> W getChild(final Class<W> wiidgetClass) {
+		return childrenWithType;
+	}
 
-        final List<W> children = getChildren(wiidgetClass);
+	/**
+	 * @param wiidgetClass
+	 * @return
+	 */
+	public <W> W getChild(final Class<W> wiidgetClass) {
 
-        if (children.size() > 1) {
-            throw new WiidgetException("The wiidget has more than one children with type: " + wiidgetClass.getCanonicalName());
-        }
+		final List<W> children = getChildren(wiidgetClass);
 
-        if (children.isEmpty()) {
-            return null;
-        }
-        return children.get(0);
-    }
+		if (children.size() > 1) {
+			throw new WiidgetException("The wiidget has more than one children with type: " + wiidgetClass.getCanonicalName());
+		}
 
-    /**
-     * This method called after all the attributes setted succesfully.
-     */
-    public void init() {
-    }
+		if (children.isEmpty()) {
+			return null;
+		}
+		return children.get(0);
+	}
 
-    protected void startBuffer() {
-        getPrintStream().startBuffer();
-    }
+	/**
+	 *
+	 * @param wiidgetClass
+	 * @return
+	 */
+	public <W> W getChildRecursive(final Class<W> wiidgetClass) {
 
-    protected String endBuffer() {
-        return getPrintStream().endBuffer();
-    }
+		final List<Wiidget> children = getChildren();
+		for (final Wiidget child : children) {
 
-    /**
-     * Returns the content of the specified file.
-     *
-     * @param path
-     * @return
-     */
-    protected String getFileContent(final String path) {
-        if (null == path) {
-            throw new WiidgetException("File path cannot be null.");
-        }
+			// return the first match
+			if (wiidgetClass.isAssignableFrom(child.getClass())) {
+				return (W) child;
+			}
 
-        String content = "";
+			final W fromChild = child.getChildRecursive(wiidgetClass);
+			if (null != fromChild) {
+				return fromChild;
+			}
+		}
 
-        try {
+		return null;
 
-            final InputStream file = getClass().getResourceAsStream(path);
+	}
 
-            if (file == null) {
-                throw new WiidgetException("Cannot found file: " + path);
-            }
+	/**
+	 * This method called after all the attributes setted succesfully.
+	 */
+	public void init() {
+	}
 
-            content = readFile(file);
+	protected void startBuffer() {
+		getPrintStream().startBuffer();
+	}
 
-        } catch (final IOException exception) {
+	protected String endBuffer() {
+		return getPrintStream().endBuffer();
+	}
 
-            throw new WiidgetException("Cannot read file: " + path, exception);
-        }
+	/**
+	 * Returns the content of the specified file.
+	 *
+	 * @param path
+	 * @return
+	 */
+	protected String getFileContent(final String path) {
+		if (null == path) {
+			throw new WiidgetException("File path cannot be null.");
+		}
 
-        return content;
-    }
+		String content = "";
 
-    private static String readFile(final InputStream inputStream) throws IOException {
-        @SuppressWarnings("resource")
-        final java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
+		try {
 
-    protected void write(final String string) {
-        getPrintStream().write(string);
-    }
+			final InputStream file = getClass().getResourceAsStream(path);
 
-    protected void write(final Object object) {
-        write(object.toString());
-    }
+			if (file == null) {
+				throw new WiidgetException("Cannot found file: " + path);
+			}
 
-    protected BufferedPrintStream getPrintStream() {
-        return getOwner().getPrintStream();
-    }
+			content = readFile(file);
 
-    protected WiidgetFactory getWiidgetFactory() {
-        return getOwner().getWiidgetFactory();
-    }
+		} catch (final IOException exception) {
 
-    protected DataMap data() {
-        return new DataMap();
-    }
+			throw new WiidgetException("Cannot read file: " + path, exception);
+		}
 
-    public String getId() {
+		return content;
+	}
 
-        if (null == this.id) {
-            final String uniqueId = getWiidgetFactory().getUniqueId();
-            this.setId(uniqueId);
-        }
+	private static String readFile(final InputStream inputStream) throws IOException {
+		@SuppressWarnings("resource")
+		final java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
+		return s.hasNext() ? s.next() : "";
+	}
 
-        return id;
-    }
+	protected void write(final String string) {
+		getPrintStream().write(string);
+	}
 
-    public void setId(final String id) {
-        this.id = id;
-    }
+	protected void write(final Object object) {
+		write(object.toString());
+	}
 
-    public boolean isRendered() {
-        return rendered;
-    }
+	protected BufferedPrintStream getPrintStream() {
+		return getOwner().getPrintStream();
+	}
 
-    public void setRendered(final boolean rendered) {
-        this.rendered = rendered;
-    }
+	protected WiidgetFactory getWiidgetFactory() {
+		return getOwner().getWiidgetFactory();
+	}
+
+	protected DataMap data() {
+		return new DataMap();
+	}
+
+	public String getId() {
+
+		if (null == this.id) {
+			final String uniqueId = getWiidgetFactory().getUniqueId();
+			this.setId(uniqueId);
+		}
+
+		return id;
+	}
+
+	public void setId(final String id) {
+		this.id = id;
+	}
+
+	public boolean isRendered() {
+		return rendered;
+	}
+
+	public void setRendered(final boolean rendered) {
+		this.rendered = rendered;
+	}
 
 }
