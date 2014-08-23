@@ -1,23 +1,59 @@
 package com.landasource.wiidget.parser.control;
 
+import java.util.Map;
+
+/**
+ * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
+ */
 public class ForeachControl {
 
-	private final String variable;
+    /** Key in loop. Optional, can be null. */
+    private final String key;
 
-	private final Iterable<?> iterable;
+    /** Variable of loop. */
+    private final String variable;
 
-	public ForeachControl(String variable, Iterable<?> iterable) {
-		super();
-		this.variable = variable;
-		this.iterable = iterable;
-	}
+    /** Iterable value. */
+    private final Object value;
 
-	public String getVariable() {
-		return variable;
-	}
+    /**
+     * @param key
+     *            key of loop
+     * @param variable
+     *            variable of loop
+     * @param value
+     *            value of loop
+     */
+    public ForeachControl(final String key, final String variable, final Object value) {
+        this.key = key;
+        this.variable = variable;
 
-	public Iterable<?> getIterable() {
-		return iterable;
-	}
+        if (value instanceof Iterable || value instanceof Map) {
+            this.value = value;
+        } else {
+            throw new IllegalArgumentException("Cannot iterate over value: " + value);
+        }
+    }
+
+    /**
+     * @return Key in loop. Optional, can be null.
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * @return the variable
+     */
+    public String getVariable() {
+        return variable;
+    }
+
+    /**
+     * @return the value
+     */
+    public Object getValue() {
+        return value;
+    }
 
 }

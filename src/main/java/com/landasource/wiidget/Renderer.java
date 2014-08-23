@@ -11,7 +11,7 @@ import com.landasource.wiidget.engine.DefaultWiidgetFactory;
 import com.landasource.wiidget.engine.Position;
 import com.landasource.wiidget.engine.ResourceLink;
 import com.landasource.wiidget.engine.WiidgetFactory;
-import com.landasource.wiidget.parser.WiidgetLangProcessor;
+import com.landasource.wiidget.parser.WiidgetTemplateProcessor;
 import com.landasource.wiidget.parser.WiidgetParserException;
 
 /**
@@ -102,7 +102,7 @@ public final class Renderer {
      */
     public String render(final InputStream inputStream) {
 
-        final WiidgetLangProcessor langProcessor = new WiidgetLangProcessor(wiidgetFactory);
+        final WiidgetTemplateProcessor langProcessor = new WiidgetTemplateProcessor(wiidgetFactory);
 
         try {
 
@@ -150,7 +150,7 @@ public final class Renderer {
      * @return
      */
     public String renderWithoutResources(final String template) {
-        final WiidgetLangProcessor langProcessor = new WiidgetLangProcessor(wiidgetFactory);
+        final WiidgetTemplateProcessor langProcessor = new WiidgetTemplateProcessor(wiidgetFactory);
 
         try {
 

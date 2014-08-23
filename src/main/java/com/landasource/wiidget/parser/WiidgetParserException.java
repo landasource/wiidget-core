@@ -22,17 +22,17 @@ public class WiidgetParserException extends Exception {
 
 	@Override
 	public String getMessage() {
-		return String.format("%s - %s", node.getText(), super.getMessage());
+		return String.format("%s - %s", null == node ? "" : node.getText(), super.getMessage());
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%s - %s", node.getText(), super.toString());
+		return String.format("%s - %s", null == node ? "" : node.getText(), super.toString());
 	}
 
 	@Override
 	public String getLocalizedMessage() {
-		return String.format("%s - %s", node.getText(), super.getLocalizedMessage());
+		return String.format("%s - %s", null == node ? "" : node.getText(), super.getLocalizedMessage());
 	}
 
 }

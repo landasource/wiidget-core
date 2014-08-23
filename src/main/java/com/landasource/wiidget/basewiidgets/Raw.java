@@ -3,65 +3,93 @@ package com.landasource.wiidget.basewiidgets;
 import java.util.Map.Entry;
 
 import com.landasource.wiidget.Tag;
+import com.landasource.wiidget.annotation.DefaultField;
 import com.landasource.wiidget.engine.RawWiidget;
 import com.landasource.wiidget.util.DataMap;
+import com.landasource.wiidget.util.Strings;
 
 /**
- *
  * @author lzsolt
- *
  */
 public class Raw extends RawWiidget {
 
-	/** Attributes. */
-	private final DataMap attributes = new DataMap();
+    /** Attributes. */
+    private final DataMap attributes = new DataMap();
 
-	/** Name of the tag. */
-	private String rawTagName;
+    /** Name of the tag. */
+    private String rawTagName;
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		startBuffer();
-	}
+        startBuffer();
+    }
 
-	@Override
-	public void run() {
-		super.run();
+    @Override
+    public void run() {
+        super.run();
 
-		final String children = endBuffer();
+        final String children = endBuffer();
 
-		final Tag tag = new Tag(getRawTagName());
-		for (final Entry<String, Object> attribute : attributes.entrySet()) {
+        if (Strings.isEmpty(children) && attributes.isEmpty()) {
 
-			final String value = null == attribute ? null : attribute.toString();
-			tag.a(attribute.getKey(), value);
-		}
+            write(getRawTagName()); // just output string
 
-		tag.addChild(children);
+        } else {
 
-		write(tag);
-	}
+            writeTag(children);
+        }
+    }
 
-	@Override
-	public void setAttribute(final String name, final Object value) {
-		attributes.put(name, value);
-	}
+    /**
+     * Prints tag.
+     *
+     * @param customChildren
+     *            children of wiidget
+     */
+    private void writeTag(final String customChildren) {
+        String children = customChildren;
 
-	/**
-	 * @return the rawTagName
-	 */
-	public String getRawTagName() {
-		return rawTagName;
-	}
+        final Tag tag = new Tag(getRawTagName());
 
-	/**
-	 * @param rawTagName the rawTagName to set
-	 */
-	@Override
-	public void setRawTagName(final String rawTagName) {
-		this.rawTagName = rawTagName;
-	}
+        if (Strings.isEmpty(children) && attributes.size() == 1 && attributes.containsKey(DefaultField.NAME)) {
+            // This is the special case when output only the value attribute
+            children = attributes.get(DefaultField.NAME).toString();
+
+        } else {
+            for (final Entry<String, Object> attribute : attributes.entrySet()) {
+
+                final Object attributeValue = attribute.getValue();
+                final String value = null == attributeValue ? null : attributeValue.toString();
+                tag.a(attribute.getKey(), value);
+            }
+        }
+
+        tag.addChild(children);
+
+        write(tag);
+    }
+
+    @Override
+    public void setAttribute(final String name, final Object value) {
+        attributes.put(name, value);
+    }
+
+    /**
+     * @return the rawTagName
+     */
+    public String getRawTagName() {
+        return rawTagName;
+    }
+
+    /**
+     * @param rawTagName
+     *            the rawTagName to set
+     */
+    @Override
+    public void setRawTagName(final String rawTagName) {
+        this.rawTagName = rawTagName;
+    }
 
 }

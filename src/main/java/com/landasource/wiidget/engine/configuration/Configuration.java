@@ -8,6 +8,7 @@ import com.landasource.wiidget.context.WiidgetContext;
 import com.landasource.wiidget.engine.ObjectFactory;
 import com.landasource.wiidget.engine.RawWiidget;
 import com.landasource.wiidget.engine.externals.ExternalWiidgetLoader;
+import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.url.URLResolver;
 import com.landasource.wiidget.validation.WiidgetValidator;
@@ -53,4 +54,9 @@ public interface Configuration {
 	 * @return set of loaders that can load external wiidget resources
 	 */
 	public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders();
+
+	/**
+	 * @return file loader
+	 */
+	public FileLoader getFileLoader();
 }

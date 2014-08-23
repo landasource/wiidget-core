@@ -5,14 +5,15 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 import com.landasource.wiidget.engine.WiidgetFactory;
 import com.landasource.wiidget.io.BufferedPrintStream;
+import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.util.DataMap;
 
 /**
- *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
- *
  */
 public abstract class Wiidget {
 
@@ -40,7 +41,8 @@ public abstract class Wiidget {
 	}
 
 	/**
-	 * This method is called, when the lang processor did not find the field in the class.
+	 * This method is called, when the lang processor did not find the field in
+	 * the class.
 	 *
 	 * @param name
 	 *            name of the field
@@ -98,15 +100,7 @@ public abstract class Wiidget {
 		return null;
 	}
 
-	protected ResourceWiidget beginResourceWiidget(final String wiidgetName) {
-
-		final ResourceWiidget widget = getWiidgetFactory().createWiidget(getOwner(), ResourceWiidget.class, EMPTY_DATA, true);
-		widget.setFileName(wiidgetName);
-		return startWiidget(widget);
-	}
-
 	/**
-	 *
 	 * @param wiidget
 	 *            wiidget to start
 	 * @return the wiidget when its rendered. Otherwise null
@@ -224,7 +218,6 @@ public abstract class Wiidget {
 	}
 
 	/**
-	 *
 	 * @param wiidgetClass
 	 * @return
 	 */
@@ -266,7 +259,9 @@ public abstract class Wiidget {
 	 * Returns the content of the specified file.
 	 *
 	 * @param path
-	 * @return
+	 *            path of the template
+	 * @return content of the file
+	 * @see FileLoader
 	 */
 	protected String getFileContent(final String path) {
 		if (null == path) {
@@ -277,7 +272,8 @@ public abstract class Wiidget {
 
 		try {
 
-			final InputStream file = getClass().getResourceAsStream(path);
+			final FileLoader fileLoader = getWiidgetFactory().getConfiguration().getFileLoader();
+			final InputStream file = fileLoader.getFile(path);
 
 			if (file == null) {
 				throw new WiidgetException("Cannot found file: " + path);
@@ -294,9 +290,7 @@ public abstract class Wiidget {
 	}
 
 	private static String readFile(final InputStream inputStream) throws IOException {
-		@SuppressWarnings("resource")
-		final java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
-		return s.hasNext() ? s.next() : "";
+		return IOUtils.toString(inputStream);
 	}
 
 	protected void write(final String string) {

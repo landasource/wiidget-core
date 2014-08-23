@@ -14,6 +14,7 @@ import com.landasource.wiidget.engine.externals.ExternalWiidgetLoader;
 import com.landasource.wiidget.engine.externals.LocalFileWiidgetLoader;
 import com.landasource.wiidget.engine.externals.ResourceWiidgetLoader;
 import com.landasource.wiidget.engine.externals.WebWiidgetLoader;
+import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.url.TransparentURLResolver;
 import com.landasource.wiidget.url.URLResolver;
@@ -69,6 +70,11 @@ public class DefaultConfiguration implements Configuration {
 	@Override
 	public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders() {
 		return externalWiidgetLoader;
+	}
+
+	@Override
+	public FileLoader getFileLoader() {
+		return new ClassPathFileLoader();
 	}
 
 }
