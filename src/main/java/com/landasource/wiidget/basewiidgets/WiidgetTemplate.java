@@ -8,16 +8,19 @@ import com.landasource.wiidget.context.WiidgetContext;
 import com.landasource.wiidget.util.DataMap;
 
 /**
- * Compiles the specified template by value / or children
+ * Compiles the specified template by value / or children.
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class WiidgetLangCompiler extends Wiidget {
+public class WiidgetTemplate extends Wiidget {
 
+	/** Wiidget template content. */
 	private String value;
 
+	/** Extra context value of the template.*/
 	private DataMap context = new DataMap();
 
+	/** Previous values of the external context. */
 	private final DataMap previousContext = new DataMap();
 
 	@Override
@@ -30,6 +33,9 @@ public class WiidgetLangCompiler extends Wiidget {
 		}
 	}
 
+	/**
+	 * Exports defined context values from {@link #context}.
+	 */
 	private void exportContext() {
 		final WiidgetContext wiidgetContext = getWiidgetFactory().getWiidgetContext();
 		for (final String key : context.keySet()) {
@@ -71,18 +77,30 @@ public class WiidgetLangCompiler extends Wiidget {
 		}
 	}
 
+	/**
+	 * @return the value
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	/**
+	 * @param value the value to set
+	 */
 	public void setValue(final String value) {
 		this.value = value;
 	}
 
+	/**
+	 * @return the context
+	 */
 	public DataMap getContext() {
 		return context;
 	}
 
+	/**
+	 * @param context the context to set
+	 */
 	public void setContext(final DataMap context) {
 		this.context = context;
 	}

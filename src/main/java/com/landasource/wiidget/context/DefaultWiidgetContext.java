@@ -1,6 +1,7 @@
 package com.landasource.wiidget.context;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +14,27 @@ import com.landasource.wiidget.util.DataMap;
  */
 public class DefaultWiidgetContext implements WiidgetContext {
 
-	private static final List<String> RESERVED_WORDS = Arrays.asList(CONTEXT_VARIABLE, "true", "false");
+	/**
+	 * List of reserved words that are unacceptable to set.
+	 */
+	public static final List<String> RESERVED_WORDS = Collections.unmodifiableList(Arrays.asList(CONTEXT_VARIABLE, "true", "false"));
 
+	/**
+	 * Store context values in this map.
+	 */
 	private final DataMap dataMap;
 
+	/**
+	 * Default constructor.
+	 */
 	public DefaultWiidgetContext() {
 		this(new DataMap());
 	}
 
+	/**
+	 * @param data
+	 *            create context from preexisting map
+	 */
 	public DefaultWiidgetContext(final Map<String, Object> data) {
 		this.dataMap = new DataMap(data);
 

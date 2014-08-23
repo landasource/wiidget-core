@@ -10,27 +10,54 @@ import java.util.Set;
  */
 public interface WiidgetContext {
 
-    /** The varuiable name that refers to this context. */
-    public static final String CONTEXT_VARIABLE = "context";
+	/** The variable name that refers to this context. */
+	String CONTEXT_VARIABLE = "context";
 
-    /**
-     * Get variable value.
-     * 
-     * @param variable
-     *            variable name
-     * @return variable value
-     */
-    public Object get(String variable);
+	/**
+	 * Get variable value.
+	 *
+	 * @param variable
+	 *            variable name
+	 * @return variable value
+	 */
+	public Object get(String variable);
 
-    public void set(String variable, Object value);
+	/**
+	 * @param variable
+	 *            variable name
+	 * @param value
+	 *            value of the variable
+	 */
+	public void set(String variable, Object value);
 
-    public void remove(String variable);
+	/**
+	 * Removes variable by name.
+	 *
+	 * @param variable
+	 *            name of the variable to remove
+	 */
+	public void remove(String variable);
 
-    public boolean isSet(String variable);
+	/**
+	 * @param variable
+	 *            name of the variable
+	 * @return true when the variable is set in the context
+	 */
+	public boolean isSet(String variable);
 
-    public void setAll(Map<String, Object> data);
+	/**
+	 * @param data
+	 *            copy values from the map
+	 */
+	public void setAll(Map<String, Object> data);
 
-    public Map<String, Object> getAll();
+	/**
+	 * @return values of the context
+	 */
+	public Map<String, Object> getAll();
 
-    public Set<String> getKeys();
+	/**
+	 * @return present keys (variables)
+	 */
+	public Set<String> getKeys();
 }

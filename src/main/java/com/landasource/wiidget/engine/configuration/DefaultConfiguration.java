@@ -21,24 +21,28 @@ import com.landasource.wiidget.validation.DefaultWiidgetValidator;
 import com.landasource.wiidget.validation.WiidgetValidator;
 
 /**
- *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
- *
  */
 public class DefaultConfiguration implements Configuration {
 
+	/**
+	 * Set of external loaders.
+	 */
 	private final Set<ExternalWiidgetLoader> externalWiidgetLoader = new HashSet<>();
+
+	/**
+	 * Default constructor.
+	 */
+	public DefaultConfiguration() {
+		super();
+		getExternalWiidgetLoaders().add(new WebWiidgetLoader());
+		getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
+		getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
+	}
 
 	@Override
 	public Class<? extends RawWiidget> getRawType() {
 		return Raw.class;
-	}
-
-	public DefaultConfiguration() {
-
-		getExternalWiidgetLoaders().add(new WebWiidgetLoader());
-		getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
-		getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
 	}
 
 	@Override

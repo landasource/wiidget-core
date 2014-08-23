@@ -40,7 +40,8 @@ import com.landasource.wiidget.antlr.WiidgetParser.WiidgetBodyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetDeclarationContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableBindingContext;
-import com.landasource.wiidget.basewiidgets.WiidgetLangCompiler;
+import com.landasource.wiidget.basewiidgets.WiidgetTemplate;
+import com.landasource.wiidget.engine.RawWiidget;
 import com.landasource.wiidget.engine.WiidgetFactory;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.engine.externals.ExternalWiidgetLoader;
@@ -61,7 +62,8 @@ import com.landasource.wiidget.util.DataMap;
 /**
  * The part of Wiidget framework interprets the ANTLR lexer result.
  * <p>
- * The processor extends the {@link WiidgetView}, so behaves as a view. Cause of this fact, the processor can create wiidgets, and can render a template.
+ * The processor extends the {@link WiidgetView}, so behaves as a view. Cause of
+ * this fact, the processor can create wiidgets, and can render a template.
  * </p>
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -88,7 +90,6 @@ public class WiidgetLangProcessor extends WiidgetView {
 	}
 
 	/**
-	 *
 	 * @param wiidgetFactory
 	 */
 	public WiidgetLangProcessor(final WiidgetFactory wiidgetFactory) {
@@ -96,7 +97,6 @@ public class WiidgetLangProcessor extends WiidgetView {
 	}
 
 	/**
-	 *
 	 * @param wiidgetFactory
 	 * @param owner
 	 */
@@ -423,16 +423,20 @@ public class WiidgetLangProcessor extends WiidgetView {
 
 	private Wiidget createRawWiidget(final String tagName, final WiidgetArgumentsContext wiidgetArguments) throws WiidgetParserException {
 
-		final Class<? extends Wiidget> rawType = getRawType();
+		final Class<? extends RawWiidget> rawType = getRawType();
 
 		final DataMap dataMap = processArguments(wiidgetArguments, rawType);
-		dataMap.put("rawTagName", tagName); // TODO interface for rawtype
-		final Wiidget wiidget = getWiidgetFactory().createWiidget(this, rawType, dataMap, true);
+
+		final RawWiidget wiidget = getWiidgetFactory().createWiidget(this, rawType, dataMap, true);
+		wiidget.setRawTagName(tagName);
 
 		return wiidget;
 	}
 
-	private Class<? extends Wiidget> getRawType() {
+	/**
+	 * @return the configured raw type
+	 */
+	private Class<? extends RawWiidget> getRawType() {
 		return getWiidgetFactory().getConfiguration().getRawType();
 	}
 
@@ -475,7 +479,7 @@ public class WiidgetLangProcessor extends WiidgetView {
 
 		final DataMap data = processArguments(arguments, null);
 
-		return getWiidgetFactory().createWiidget(this, WiidgetLangCompiler.class, data().set("value", content).set("context", data), true);
+		return getWiidgetFactory().createWiidget(this, WiidgetTemplate.class, data().set("value", content).set("context", data), true);
 
 	}
 

@@ -49,10 +49,17 @@ public class Raw extends RawWiidget {
 		attributes.put(name, value);
 	}
 
+	/**
+	 * @return the rawTagName
+	 */
 	public String getRawTagName() {
 		return rawTagName;
 	}
 
+	/**
+	 * @param rawTagName the rawTagName to set
+	 */
+	@Override
 	public void setRawTagName(final String rawTagName) {
 		this.rawTagName = rawTagName;
 	}

@@ -16,25 +16,33 @@ import com.landasource.wiidget.util.WiidgetProperties;
 public interface WiidgetFactory {
 
 	/**
-	 * @param widgetClass
-	 * @param printStream
 	 * @param owner
-	 * @param putToStack
+	 *            owner of the wiidget
+	 * @param widgetClass
+	 *            type of the wiidget
 	 * @param attributes
-	 * @return
+	 *            attribute map to set
+	 * @param putToStack
+	 *            should put to stack
+	 * @param <W>
+	 *            type of the wiidget
+	 * @return the new constructed wiidget with set properties
 	 */
 	public <W extends Wiidget> W createWiidget(WiidgetView owner, Class<W> widgetClass, DataMap attributes, boolean putToStack);
 
 	/**
-	 * @return
+	 * @return the stask of the wiidgets in current state
 	 */
 	public Stack<Wiidget> getWiidgetStack();
 
 	/**
 	 * @param componentClass
-	 * @return
+	 *            creates instance from class
+	 * @param <W>
+	 *            type of wiidget
+	 * @return wiidget instance
 	 */
-	public <C extends Wiidget> C createComponent(final Class<C> componentClass);
+	public <W extends Wiidget> W createWiidget(final Class<W> componentClass);
 
 	/**
 	 * Creates new instance.
@@ -43,9 +51,11 @@ public interface WiidgetFactory {
 	 *            class of wiidget
 	 * @param data
 	 *            data to set
+	 * @param <C>
+	 *            type of wiidget
 	 * @return instance
 	 */
-	public <C extends Wiidget> C createComponent(final Class<C> componentClass, final DataMap data);
+	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final DataMap data);
 
 	/**
 	 * Generates unique id.
@@ -54,36 +64,57 @@ public interface WiidgetFactory {
 	 */
 	public String getUniqueId();
 
+	/**
+	 * Adds wiidget to the specified view (owner).
+	 *
+	 * @param wiidget
+	 *            wiidget to add
+	 * @param owner
+	 *            the owner
+	 * @param putToStack
+	 *            should put to wiidget stack?
+	 */
 	public void addWiidget(final Wiidget wiidget, final WiidgetView owner, final boolean putToStack);
 
 	/**
 	 * Returns the underlying registrator.
 	 *
-	 * @return
+	 * @return registrator of transformers
 	 */
 	public ResultTransformerRegistrator getResutlTransformerRegistrator();
 
 	/**
 	 * Properties getter.
 	 *
-	 * @return
+	 * @return properties
 	 */
 	public WiidgetProperties getWiidgetProperties();
 
 	/**
 	 * Holds the context variables.
 	 *
-	 * @return
+	 * @return context of the current run
 	 */
 	public WiidgetContext getWiidgetContext();
 
 	/**
-	 * @return
+	 * @return registered resources while run
 	 */
 	public Set<ResourceLink> getResourceLinks();
 
+	/**
+	 * Adds new resource link. Do not adds when the link is already specified.
+	 *
+	 * @param resourceLink
+	 *            add this
+	 */
 	public void addResourceLink(ResourceLink resourceLink);
 
+	/**
+	 * Current configuration of factory.
+	 *
+	 * @return configuration instance
+	 */
 	public Configuration getConfiguration();
 
 }

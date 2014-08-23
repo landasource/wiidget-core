@@ -4,9 +4,7 @@ import java.net.URI;
 import java.util.Set;
 
 /**
- *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
- *
  */
 public abstract class AbstractWiidgetLoader implements ExternalWiidgetLoader {
 
@@ -23,6 +21,9 @@ public abstract class AbstractWiidgetLoader implements ExternalWiidgetLoader {
 		return false;
 	}
 
+	/**
+	 * @return set of supported schemes (e.g. "http", "https", "ftp")
+	 */
 	protected abstract Set<String> getSupportedSchemes();
 
 }
