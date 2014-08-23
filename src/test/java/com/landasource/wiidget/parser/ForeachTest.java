@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.landasource.wiidget.Renderer;
+import com.landasource.wiidget.testutil.Model;
+import com.landasource.wiidget.testutil.TestEnum;
 import com.landasource.wiidget.util.DataMap;
 
 /**
@@ -64,9 +66,23 @@ public class ForeachTest {
         assertRender(" foreach(key -> var : list){ `\"\" + key`; \"->\"; `var`; }  ", contains("0->one"), contains("1->two"), contains("2->three"));
     }
 
+    @Test
+    public void testArray() {
+
+        context.set("array", new Model[] { new Model("John", 2), new Model("Tee", 10) });
+
+        assertRender(" foreach(key -> model : array){ `\"\" + key`; \"->\"; `model.name + \"-\" + model.age`; }  ", contains("0->John-2"), contains("1->Tee-10"));
+    }
+
+    @Test
+    public void testEnum() {
+        context.set("enumClass", TestEnum.class);
+
+        assertRender(" foreach(key -> model : enumClass){ `\"\" + key`; \"->\"; `model.name()`; }  ", contains("0->FOO"), contains("1->BAR"));
+    }
+
     @SuppressWarnings("unchecked")
     private void assertRender(final String expected, final String template) {
-
         assertRender(template, CoreMatchers.equalTo(expected));
     }
 

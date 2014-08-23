@@ -28,11 +28,22 @@ public class ForeachControl {
         this.key = key;
         this.variable = variable;
 
-        if (value instanceof Iterable || value instanceof Map) {
+        if (value instanceof Iterable || value instanceof Map || value.getClass().isArray() || isEnum(value)) {
             this.value = value;
         } else {
             throw new IllegalArgumentException("Cannot iterate over value: " + value);
         }
+    }
+
+    /**
+     * @param enumClass
+     *            candidate
+     * @return true if value is an enum
+     */
+    @SuppressWarnings("rawtypes")
+    private boolean isEnum(final Object enumClass) {
+
+        return enumClass instanceof Class && ((Class) enumClass).isEnum();
     }
 
     /**

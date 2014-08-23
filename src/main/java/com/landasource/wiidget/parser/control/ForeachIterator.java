@@ -1,6 +1,7 @@
 package com.landasource.wiidget.parser.control;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,24 @@ public class ForeachIterator {
             return getMapEntrySet((Map) value);
         }
 
+        if (value.getClass().isArray()) {
+            return getArrayEntrySet((Object[]) value);
+        }
+
+        if (value instanceof Class && ((Class) value).isEnum()) {
+            return getArrayEntrySet(((Class) value).getEnumConstants());
+        }
+
         throw new UnsupportedOperationException(String.format("Cannot get entry set of: %s", value));
+    }
+
+    /**
+     * @param array
+     *            array for create
+     * @return set of index-value pairs
+     */
+    private List<Pair<Object, Object>> getArrayEntrySet(final Object[] array) {
+        return getCollectionEntrySet(Arrays.asList(array));
     }
 
     /**
