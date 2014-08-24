@@ -4,25 +4,29 @@ import java.net.URI;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.landasource.wiidget.engine.externals.WebWiidgetLoader;
-
+/**
+ * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
+ */
 public class WebWiidgetLoaderTest {
 
-	private WebWiidgetLoader webWiidgetLoader;
+    private WebWiidgetLoader webWiidgetLoader;
 
-	@Before
-	public void initLoader() {
-		webWiidgetLoader = new WebWiidgetLoader();
-	}
+    @Before
+    public void initLoader() {
+        webWiidgetLoader = new WebWiidgetLoader();
+    }
 
-	@Test
-	public void testFtp() {
+    @Test
+    // TODO
+    @Ignore("Test with own hosted wiidget")
+    public void testFtp() {
 
-		final URI uri = URI.create("ftp://ftp.bme.hu/.banner");
-		Assert.assertTrue("Can handle FTP", webWiidgetLoader.canHandle(uri));
-		Assert.assertNotNull(webWiidgetLoader.load(uri));
+        final URI uri = URI.create("ftp://ftp.bme.hu/.banner");
+        Assert.assertTrue("Can handle FTP", webWiidgetLoader.canHandle(uri));
+        Assert.assertNotNull(webWiidgetLoader.load(uri));
 
-	}
+    }
 }

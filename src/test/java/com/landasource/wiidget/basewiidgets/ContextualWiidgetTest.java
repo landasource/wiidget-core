@@ -19,7 +19,6 @@ public class ContextualWiidgetTest extends AbstractTemplateTest {
 
         Assert.assertEquals("FooBarFoo", result);
         Assert.assertEquals("Foo", context.get("title"));
-
     }
 
 }
