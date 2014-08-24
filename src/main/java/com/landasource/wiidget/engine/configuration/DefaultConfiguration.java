@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.landasource.wiidget.Wiidget;
-import com.landasource.wiidget.basewiidgets.Raw;
+import com.landasource.wiidget.commons.Raw;
 import com.landasource.wiidget.context.WiidgetContext;
 import com.landasource.wiidget.engine.ObjectFactory;
 import com.landasource.wiidget.engine.RawWiidget;

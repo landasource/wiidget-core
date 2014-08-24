@@ -40,7 +40,7 @@ import com.landasource.wiidget.antlr.WiidgetParser.WiidgetBodyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetDeclarationContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableBindingContext;
-import com.landasource.wiidget.basewiidgets.WiidgetTemplate;
+import com.landasource.wiidget.commons.WiidgetTemplate;
 import com.landasource.wiidget.engine.RawWiidget;
 import com.landasource.wiidget.engine.WiidgetFactory;
 import com.landasource.wiidget.engine.configuration.Configuration;
@@ -363,13 +363,19 @@ public class WiidgetTemplateProcessor extends WiidgetView {
      *            statement
      * @param bodyContext
      *            body of context
+     * @param
      * @throws WiidgetParserException
      *             when cannot process body
      */
     private void processIf(final IfControl ifControl, final WiidgetBodyContext bodyContext) throws WiidgetParserException {
 
         // TODO else
-        if (ifControl.getValue()) {
+        final Boolean value = ifControl.getValue();
+        if (null == value) {
+            throw new WiidgetParserException(ifControl.getControlContext(), "Value of 'if' control is null.");
+        }
+
+        if (value) {
 
             processStatements(bodyContext.statementDeclaration());
         }
@@ -414,8 +420,7 @@ public class WiidgetTemplateProcessor extends WiidgetView {
 
             final Boolean condition = (Boolean) evaluateExpression(ifControlContext.expression());
 
-            // TODO else
-            return new IfControl(condition);
+            return new IfControl(ifControlContext, condition);
 
         } catch (final ClassCastException castException) {
 

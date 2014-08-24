@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import com.landasource.wiidget.basewiidgets.ContextualWiidget;
+import com.landasource.wiidget.commons.ContextualWiidget;
 
 /**
  * Wiidget for files.

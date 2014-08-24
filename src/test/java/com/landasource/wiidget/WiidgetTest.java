@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.basewiidgets.Raw;
+import com.landasource.wiidget.commons.Raw;
 import com.landasource.wiidget.engine.DefaultWiidgetFactory;
 
 /**
