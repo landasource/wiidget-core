@@ -1,4 +1,4 @@
-package com.landasource.wiidget.basewiidgets;
+package com.landasource.wiidget.commons;
 
 import org.junit.Assert;
 import org.junit.Test;

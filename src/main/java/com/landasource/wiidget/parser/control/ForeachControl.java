@@ -2,6 +2,8 @@ package com.landasource.wiidget.parser.control;
 
 import java.util.Map;
 
+import com.landasource.wiidget.antlr.WiidgetParser.ElseControlContext;
+
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
@@ -17,16 +19,24 @@ public class ForeachControl {
     private final Object value;
 
     /**
+     * The optional else.
+     */
+    private final ElseControlContext elseControl;
+
+    /**
      * @param key
      *            key of loop
      * @param variable
      *            variable of loop
      * @param value
      *            value of loop
+     * @param elseControl
+     *            the optional else
      */
-    public ForeachControl(final String key, final String variable, final Object value) {
+    public ForeachControl(final String key, final String variable, final Object value, final ElseControlContext elseControl) {
         this.key = key;
         this.variable = variable;
+        this.elseControl = elseControl;
 
         if (value instanceof Iterable || value instanceof Map || value.getClass().isArray() || isEnum(value)) {
             this.value = value;
@@ -65,6 +75,13 @@ public class ForeachControl {
      */
     public Object getValue() {
         return value;
+    }
+
+    /**
+     * @return the elseControl
+     */
+    public ElseControlContext getElseControl() {
+        return elseControl;
     }
 
 }

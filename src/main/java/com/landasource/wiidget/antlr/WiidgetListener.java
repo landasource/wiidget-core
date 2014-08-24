@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -117,6 +117,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#wiidgetMethodCallExpression}.

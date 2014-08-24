@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -80,6 +80,13 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#wiidgetMethodCallExpression}.

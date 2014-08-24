@@ -32,7 +32,7 @@ statementDeclaration
     ;
 
 controlStatement
-    :   (ifControl || foreachControl) wiidgetBody
+    :   (ifControl | foreachControl) wiidgetBody (elseControl)?
     ;
 
 ifControl
@@ -41,6 +41,10 @@ ifControl
 
 foreachControl
     : FOREACH LPAREN foreachVariable ':' expression RPAREN
+    ;
+
+elseControl
+    : ELSE wiidgetBody
     ;
 
 foreachVariable
@@ -442,6 +446,7 @@ NullLiteral
 // CONTROLS
 IF : 'if';
 FOREACH : 'foreach';
+ELSE : 'else';
 
 // KEYWORDS
 AS : 'as';

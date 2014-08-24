@@ -33,6 +33,9 @@ public class IfTest extends AbstractTemplateTest {
         assertText("Foo", " if(!truevalue){ \"Bar\"; } else { \"Foo\"; } ");
         assertText("Foo", " if(truevalue){ \"Foo\"; } else { \"Bar\"; } ");
 
+        assertText("", " if(!truevalue){ \"Foo\"; } else; ");
+        assertText("", " if(!truevalue){ \"Foo\"; } else{}; ");
+
     }
 
 }

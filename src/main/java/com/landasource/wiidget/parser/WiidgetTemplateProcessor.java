@@ -26,6 +26,7 @@ import com.landasource.wiidget.antlr.WiidgetParser.ElementValueArrayInitializerC
 import com.landasource.wiidget.antlr.WiidgetParser.ElementValueContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ElementValuePairContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ElementValuePairsContext;
+import com.landasource.wiidget.antlr.WiidgetParser.ElseControlContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionWiidgetNameContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ForeachControlContext;
@@ -292,10 +293,11 @@ public class WiidgetTemplateProcessor extends WiidgetView {
         final WiidgetBodyContext bodyContext = controlStatementContext.wiidgetBody();
 
         final IfControlContext ifControlContext = controlStatementContext.ifControl();
+        final ElseControlContext elseControl = controlStatementContext.elseControl(); // this will be used everywhere
 
         if (null != ifControlContext) {
 
-            final IfControl ifControl = processIfControl(ifControlContext);
+            final IfControl ifControl = processIfControl(ifControlContext, elseControl);
 
             processIf(ifControl, bodyContext);
 
@@ -303,7 +305,7 @@ public class WiidgetTemplateProcessor extends WiidgetView {
 
             final ForeachControlContext foreachControlContext = controlStatementContext.foreachControl();
             if (null != foreachControlContext) {
-                final ForeachControl foreachControl = processForeachControl(foreachControlContext);
+                final ForeachControl foreachControl = processForeachControl(foreachControlContext, elseControl);
 
                 processForeach(foreachControl, bodyContext);
             }
@@ -338,15 +340,25 @@ public class WiidgetTemplateProcessor extends WiidgetView {
         final ForeachIterator iterator = new ForeachIterator(value);
         final boolean mustSetKey = null != key;
 
-        for (final Pair<Object, Object> item : iterator.entrySet()) {
+        final List<Pair<Object, Object>> entrySet = iterator.entrySet(); // get the iterable list
+        if (entrySet.isEmpty()) { // handle the else here
 
-            if (mustSetKey) {
-                getWiidgetContext().set(key, item.getLeft());
+            final ElseControlContext elseControl = foreachControl.getElseControl();
+            if (null != elseControl) {
+                processStatements(elseControl.wiidgetBody().statementDeclaration());
             }
 
-            getWiidgetContext().set(variable, item.getRight());
+        } else {
+            for (final Pair<Object, Object> item : entrySet) {
 
-            processStatements(bodyContext.statementDeclaration());
+                if (mustSetKey) {
+                    getWiidgetContext().set(key, item.getLeft());
+                }
+
+                getWiidgetContext().set(variable, item.getRight());
+
+                processStatements(bodyContext.statementDeclaration());
+            }
         }
 
         if (oldVariableValue == null) {
@@ -369,15 +381,22 @@ public class WiidgetTemplateProcessor extends WiidgetView {
      */
     private void processIf(final IfControl ifControl, final WiidgetBodyContext bodyContext) throws WiidgetParserException {
 
-        // TODO else
         final Boolean value = ifControl.getValue();
         if (null == value) {
             throw new WiidgetParserException(ifControl.getControlContext(), "Value of 'if' control is null.");
         }
 
+        // THIS IF IS THE STATEMENT IN THE TEMPLATE
         if (value) {
-
             processStatements(bodyContext.statementDeclaration());
+        } else {
+            // THIS ELSE IS THE STATEMENT IN TEMPLATE
+
+            final ElseControlContext elseContext = ifControl.getElseContext();
+            if (null != elseContext) {
+                processStatements(elseContext.wiidgetBody().statementDeclaration());
+            }
+
         }
 
     }
@@ -385,11 +404,13 @@ public class WiidgetTemplateProcessor extends WiidgetView {
     /**
      * @param foreachControlContext
      *            foreach
+     * @param elseControl
+     *            the optional else
      * @return control object
      * @throws WiidgetParserException
      *             when cannot iterate over value
      */
-    private ForeachControl processForeachControl(final ForeachControlContext foreachControlContext) throws WiidgetParserException {
+    private ForeachControl processForeachControl(final ForeachControlContext foreachControlContext, final ElseControlContext elseControl) throws WiidgetParserException {
 
         String variable;
         String key = null;
@@ -404,23 +425,25 @@ public class WiidgetTemplateProcessor extends WiidgetView {
 
         final Object value = evaluateExpression(foreachControlContext.expression());
 
-        return new ForeachControl(key, variable, value);
+        return new ForeachControl(key, variable, value, elseControl);
 
     }
 
     /**
      * @param ifControlContext
      *            if control
+     * @param elseControlContext
+     *            the optional else
      * @return control object
      * @throws WiidgetParserException
      *             when the expression is not a boolean
      */
-    private IfControl processIfControl(final IfControlContext ifControlContext) throws WiidgetParserException {
+    private IfControl processIfControl(final IfControlContext ifControlContext, final ElseControlContext elseControlContext) throws WiidgetParserException {
         try {
 
             final Boolean condition = (Boolean) evaluateExpression(ifControlContext.expression());
 
-            return new IfControl(ifControlContext, condition);
+            return new IfControl(ifControlContext, elseControlContext, condition);
 
         } catch (final ClassCastException castException) {
 

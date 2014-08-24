@@ -44,7 +44,7 @@ public abstract class AbstractTemplateTest {
 
     protected void assertText(final String expected, final String content) {
 
-        assertMatch(content, CoreMatchers.equalTo(expected));
+        assertMatch(content, equalTo(expected));
 
     }
 
@@ -55,6 +55,15 @@ public abstract class AbstractTemplateTest {
         for (final Matcher<String> matcher : matchers) {
             Assert.assertThat(result, matcher);
         }
+    }
+
+    protected Matcher<String> contains(final String string) {
+
+        return CoreMatchers.containsString(string);
+    }
+
+    protected Matcher equalTo(final String expected) {
+        return CoreMatchers.equalTo(expected);
     }
 
 }

@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -141,6 +141,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterElseControl(@NotNull WiidgetParser.ElseControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitElseControl(@NotNull WiidgetParser.ElseControlContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
