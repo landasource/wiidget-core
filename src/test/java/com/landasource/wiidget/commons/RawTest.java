@@ -13,8 +13,8 @@ public class RawTest {
     @Test
     public void testEmpty() {
 
-        assertRender("<div> </div>", " \"div\"(\" \");;; ");
-        assertRender("<div>a</div>", " \"div\"() { \"a\"; };; ");
+        assertRender("<div> </div>", " \"div\"(\" \"); ");
+        assertRender("<div>a</div>", " \"div\"() { \"a\"; } ");
     }
 
     private void assertRender(final String expected, final String template) {
