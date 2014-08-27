@@ -39,8 +39,7 @@ public class ResourceWiidget extends ContextualWiidget {
             throw new WiidgetException("Cannot load wiidget", e);
         }
 
-        restoreContext();
-
+        super.run();
     }
 
     /**

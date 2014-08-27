@@ -23,6 +23,12 @@ public abstract class ContextualWiidget extends Wiidget {
         exportContext();
     }
 
+    @Override
+    public void run() {
+        super.run();
+        restoreContext();
+    }
+
     /**
      * Exports defined context values from {@link #context}.
      */
@@ -32,6 +38,8 @@ public abstract class ContextualWiidget extends Wiidget {
             if (wiidgetContext.isSet(key)) {
                 // set to backup
                 previousContext.set(key, wiidgetContext.get(key));
+            } else {
+                previousContext.set(key, null);
             }
             // set to context
             wiidgetContext.set(key, context.get(key));
@@ -45,7 +53,13 @@ public abstract class ContextualWiidget extends Wiidget {
         final WiidgetContext wiidgetContext = getWiidgetFactory().getWiidgetContext();
         for (final Entry<String, Object> entry : previousContext.entrySet()) {
 
-            wiidgetContext.set(entry.getKey(), entry.getValue());
+            final String variable = entry.getKey();
+            final Object value = entry.getValue();
+            if (value == null) {
+                //wiidgetContext.remove(variable);
+            } else {
+                wiidgetContext.set(variable, value);
+            }
         }
     }
 

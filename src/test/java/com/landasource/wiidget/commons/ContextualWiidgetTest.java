@@ -21,4 +21,12 @@ public class ContextualWiidgetTest extends AbstractTemplateTest {
         Assert.assertEquals("Foo", context.get("title"));
     }
 
+    @Test
+    public void testContextRestore2() {
+
+        render("contextual2.wdgt");
+
+        Assert.assertEquals(null, context.get("title"));
+    }
+
 }
