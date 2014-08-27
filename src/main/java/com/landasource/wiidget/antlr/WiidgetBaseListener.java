@@ -329,6 +329,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx) { }
 	/**
 	 * {@inheritDoc}

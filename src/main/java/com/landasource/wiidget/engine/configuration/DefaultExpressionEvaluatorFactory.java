@@ -1,9 +1,6 @@
 package com.landasource.wiidget.engine.configuration;
 
-import java.util.Map;
-
-import com.landasource.wiidget.Wiidget;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluator;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 
@@ -14,27 +11,16 @@ import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
  */
 public class DefaultExpressionEvaluatorFactory implements ExpressionEvaluatorFactory {
 
-	/** The context. */
-	private final WiidgetContext wiidgetContext;
-	/** Map of binded wiidgets. */
-	private final Map<String, Wiidget> wiidgetMap;
+    private final EvaluationContext evaluationContext;
 
-	/**
-	 * Default constructor.
-	 * 
-	 * @param wiidgetContext
-	 *            context
-	 * @param wiidgetMap
-	 *            binded wiidgets
-	 */
-	public DefaultExpressionEvaluatorFactory(final WiidgetContext wiidgetContext, final Map<String, Wiidget> wiidgetMap) {
-		this.wiidgetContext = wiidgetContext;
-		this.wiidgetMap = wiidgetMap;
-	}
+    public DefaultExpressionEvaluatorFactory(final EvaluationContext evaluationContext) {
+        this.evaluationContext = evaluationContext;
 
-	@Override
-	public ExpressionEvaluator create() {
-		return new ExpressionEvaluator(wiidgetContext, wiidgetMap);
-	}
+    }
+
+    @Override
+    public ExpressionEvaluator create() {
+        return new ExpressionEvaluator(evaluationContext);
+    }
 
 }

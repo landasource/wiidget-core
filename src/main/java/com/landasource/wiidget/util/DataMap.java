@@ -5,44 +5,51 @@ import java.util.Map;
 
 /**
  * Common map for wiidgets.
- * 
+ *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
 public class DataMap extends java.util.HashMap<String, Object> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7960438109428770543L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 7960438109428770543L;
 
-	public DataMap() {
-		super();
-	}
+    public DataMap() {
+        super();
+    }
 
-	public DataMap(final Map<String, Object> value) {
-		this();
-		putAll(value);
-	}
+    public DataMap(final Map<String, Object> value) {
+        this();
+        putAll(value);
+    }
 
-	public DataMap set(final String key, final Object value) {
-		put(key, value);
+    public DataMap set(final String key, final Object value) {
+        put(key, value);
 
-		return this;
-	}
+        return this;
+    }
 
-	/**
-	 * @return
-	 */
-	public Map<String, String> toStringMap() {
+    /**
+     * @return
+     */
+    public Map<String, String> toStringMap() {
 
-		final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<String, String>();
 
-		for (final Map.Entry<String, Object> entry : this.entrySet()) {
+        for (final Map.Entry<String, Object> entry : this.entrySet()) {
 
-			map.put(entry.getKey(), entry.getValue().toString());
-		}
+            map.put(entry.getKey(), entry.getValue().toString());
+        }
 
-		return map;
-	}
+        return map;
+    }
+
+    public DataMap setAll(final Map<String, Object> data) {
+
+        putAll(data);
+
+        return this;
+    }
 
 }

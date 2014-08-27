@@ -180,6 +180,13 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitInnerImport(@NotNull WiidgetParser.InnerImportContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#unifiedWiidgetName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

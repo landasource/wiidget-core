@@ -50,7 +50,7 @@ public abstract class Wiidget {
      *            value of the field.
      */
     public void setAttribute(final String name, final Object value) {
-        throw new WiidgetException("Wiidget has no field with name: " + name);
+        throw new WiidgetException(String.format("%s has no field with name: %s", getClass().getCanonicalName(), name));
     }
 
     protected <W extends Wiidget> W beginWiidget(final W wiidget) {

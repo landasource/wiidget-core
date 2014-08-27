@@ -273,6 +273,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitInnerImport(@NotNull WiidgetParser.InnerImportContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#unifiedWiidgetName}.
 	 * @param ctx the parse tree
 	 */

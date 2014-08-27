@@ -33,13 +33,14 @@ public class ImportContext {
     /** Alias -> resource map. */
     private final Map<String, WiidgetResource> importMap = new HashMap<String, WiidgetResource>();
 
+    /** Current factory. */
     private final WiidgetFactory wiidgetFactory;
 
     /**
      * @param imports
      *            imports to process
-     * @param fileLoader
-     *            loads the inner files
+     * @param wiidgetFactory
+     *            current factory
      */
     public ImportContext(final List<ImportDeclarationContext> imports, final WiidgetFactory wiidgetFactory) {
         super();
@@ -56,10 +57,8 @@ public class ImportContext {
         processImports();
     }
 
-    private void processImports() throws ImportException {
-        for (final ImportDeclarationContext importDeclarationContext : imports) {
-            processImport(importDeclarationContext);
-        }
+    public WiidgetResource findByAlias(final String wiidgetName) {
+        return importMap.get(wiidgetName);
     }
 
     /**
@@ -119,6 +118,12 @@ public class ImportContext {
 
     }
 
+    private void processImports() throws ImportException {
+        for (final ImportDeclarationContext importDeclarationContext : imports) {
+            processImport(importDeclarationContext);
+        }
+    }
+
     private void processExternalImport(final ExternalImportContext externalImport) {
 
         final String alias = externalImport.Identifier().getText();
@@ -171,10 +176,6 @@ public class ImportContext {
 
         final TerminalNode alias = innerImport.Identifier();
         return null == alias ? new QuilifiedName(innerImport.qualifiedName()).getLastIdentifier() : alias.getText();
-    }
-
-    public WiidgetResource findByAlias(final String wiidgetName) {
-        return importMap.get(wiidgetName);
     }
 
     @SuppressWarnings("unchecked")

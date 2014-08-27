@@ -20,10 +20,10 @@ public class WiidgetLexer extends Lexer {
 		WiidgetVarSign=10, IntegerLiteral=11, FloatingPointLiteral=12, BooleanLiteral=13, 
 		CharacterLiteral=14, StringLiteral=15, NullLiteral=16, IF=17, FOREACH=18, 
 		ELSE=19, AS=20, LPAREN=21, RPAREN=22, LBRACE=23, RBRACE=24, LBRACK=25, 
-		RBRACK=26, SEMI=27, COMMA=28, DOT=29, ARROW=30, ASSIGN=31, GT=32, LT=33, 
-		BANG=34, TILDE=35, QUESTION=36, COLON=37, EQUAL=38, LE=39, GE=40, NOTEQUAL=41, 
-		AND=42, OR=43, INC=44, DEC=45, ADD=46, SUB=47, MUL=48, DIV=49, BITAND=50, 
-		BITOR=51, CARET=52, MOD=53, ADD_ASSIGN=54, SUB_ASSIGN=55, MUL_ASSIGN=56, 
+		RBRACK=26, SEMI=27, COMMA=28, DOT=29, ARROW=30, GT=31, LT=32, BANG=33, 
+		TILDE=34, QUESTION=35, COLON=36, EQUAL=37, LE=38, GE=39, NOTEQUAL=40, 
+		AND=41, OR=42, INC=43, DEC=44, ADD=45, SUB=46, ASSIGN=47, MUL=48, DIV=49, 
+		BITAND=50, BITOR=51, CARET=52, MOD=53, ADD_ASSIGN=54, SUB_ASSIGN=55, MUL_ASSIGN=56, 
 		DIV_ASSIGN=57, AND_ASSIGN=58, OR_ASSIGN=59, XOR_ASSIGN=60, MOD_ASSIGN=61, 
 		LSHIFT_ASSIGN=62, RSHIFT_ASSIGN=63, URSHIFT_ASSIGN=64, Identifier=65, 
 		WS=66, COMMENT=67, LINE_COMMENT=68;
@@ -38,8 +38,8 @@ public class WiidgetLexer extends Lexer {
 		"'seam'", "'$'", "IntegerLiteral", "FloatingPointLiteral", "BooleanLiteral", 
 		"CharacterLiteral", "StringLiteral", "'null'", "'if'", "'foreach'", "'else'", 
 		"'as'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", "','", "'.'", 
-		"'->'", "'='", "'>'", "'<'", "'!'", "TILDE", "'?'", "':'", "'=='", "'<='", 
-		"'>='", "'!='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", "'*'", "'/'", 
+		"'->'", "'>'", "'<'", "'!'", "TILDE", "'?'", "':'", "'=='", "'<='", "'>='", 
+		"'!='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", "'='", "'*'", "'/'", 
 		"'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", 
 		"'^='", "'%='", "'<<='", "'>>='", "'>>>='", "Identifier", "WS", "COMMENT", 
 		"LINE_COMMENT"
@@ -60,9 +60,9 @@ public class WiidgetLexer extends Lexer {
 		"SingleCharacter", "StringLiteral", "StringCharacters", "StringCharacter", 
 		"EscapeSequence", "OctalEscape", "UnicodeEscape", "ZeroToThree", "NullLiteral", 
 		"IF", "FOREACH", "ELSE", "AS", "LPAREN", "RPAREN", "LBRACE", "RBRACE", 
-		"LBRACK", "RBRACK", "SEMI", "COMMA", "DOT", "ARROW", "ASSIGN", "GT", "LT", 
-		"BANG", "TILDE", "QUESTION", "COLON", "EQUAL", "LE", "GE", "NOTEQUAL", 
-		"AND", "OR", "INC", "DEC", "ADD", "SUB", "MUL", "DIV", "BITAND", "BITOR", 
+		"LBRACK", "RBRACK", "SEMI", "COMMA", "DOT", "ARROW", "GT", "LT", "BANG", 
+		"TILDE", "QUESTION", "COLON", "EQUAL", "LE", "GE", "NOTEQUAL", "AND", 
+		"OR", "INC", "DEC", "ADD", "SUB", "ASSIGN", "MUL", "DIV", "BITAND", "BITOR", 
 		"CARET", "MOD", "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN", 
 		"AND_ASSIGN", "OR_ASSIGN", "XOR_ASSIGN", "MOD_ASSIGN", "LSHIFT_ASSIGN", 
 		"RSHIFT_ASSIGN", "URSHIFT_ASSIGN", "Identifier", "AttributeCharacter", 
@@ -180,8 +180,8 @@ public class WiidgetLexer extends Lexer {
 		"\3:\3:\5:\u0213\n:\3;\3;\3;\3;\3;\3;\3;\3<\3<\3=\3=\3=\3=\3=\3>\3>\3>"+
 		"\3?\3?\3?\3?\3?\3?\3?\3?\3@\3@\3@\3@\3@\3A\3A\3A\3B\3B\3C\3C\3D\3D\3E"+
 		"\3E\3F\3F\3G\3G\3H\3H\3I\3I\3J\3J\3K\3K\3K\3L\3L\3M\3M\3N\3N\3O\3O\3P"+
-		"\3P\3Q\3Q\3R\3R\3S\3S\3S\3T\3T\3T\3U\3U\3U\3V\3V\3V\3W\3W\3W\3X\3X\3X"+
-		"\3Y\3Y\3Y\3Z\3Z\3Z\3[\3[\3\\\3\\\3]\3]\3^\3^\3_\3_\3`\3`\3a\3a\3b\3b\3"+
+		"\3P\3Q\3Q\3R\3R\3R\3S\3S\3S\3T\3T\3T\3U\3U\3U\3V\3V\3V\3W\3W\3W\3X\3X"+
+		"\3X\3Y\3Y\3Y\3Z\3Z\3[\3[\3\\\3\\\3]\3]\3^\3^\3_\3_\3`\3`\3a\3a\3b\3b\3"+
 		"c\3c\3c\3d\3d\3d\3e\3e\3e\3f\3f\3f\3g\3g\3g\3h\3h\3h\3i\3i\3i\3j\3j\3"+
 		"j\3k\3k\3k\3k\3l\3l\3l\3l\3m\3m\3m\3m\3m\3n\3n\7n\u02a8\nn\fn\16n\u02ab"+
 		"\13n\3o\5o\u02ae\no\3p\3p\3p\3p\3p\3p\5p\u02b6\np\3q\3q\3q\3q\3q\3q\5"+
@@ -237,9 +237,9 @@ public class WiidgetLexer extends Lexer {
 		"\u023f\3\2\2\2\u008f\u0241\3\2\2\2\u0091\u0243\3\2\2\2\u0093\u0245\3\2"+
 		"\2\2\u0095\u0247\3\2\2\2\u0097\u024a\3\2\2\2\u0099\u024c\3\2\2\2\u009b"+
 		"\u024e\3\2\2\2\u009d\u0250\3\2\2\2\u009f\u0252\3\2\2\2\u00a1\u0254\3\2"+
-		"\2\2\u00a3\u0256\3\2\2\2\u00a5\u0258\3\2\2\2\u00a7\u025b\3\2\2\2\u00a9"+
-		"\u025e\3\2\2\2\u00ab\u0261\3\2\2\2\u00ad\u0264\3\2\2\2\u00af\u0267\3\2"+
-		"\2\2\u00b1\u026a\3\2\2\2\u00b3\u026d\3\2\2\2\u00b5\u0270\3\2\2\2\u00b7"+
+		"\2\2\u00a3\u0256\3\2\2\2\u00a5\u0259\3\2\2\2\u00a7\u025c\3\2\2\2\u00a9"+
+		"\u025f\3\2\2\2\u00ab\u0262\3\2\2\2\u00ad\u0265\3\2\2\2\u00af\u0268\3\2"+
+		"\2\2\u00b1\u026b\3\2\2\2\u00b3\u026e\3\2\2\2\u00b5\u0270\3\2\2\2\u00b7"+
 		"\u0272\3\2\2\2\u00b9\u0274\3\2\2\2\u00bb\u0276\3\2\2\2\u00bd\u0278\3\2"+
 		"\2\2\u00bf\u027a\3\2\2\2\u00c1\u027c\3\2\2\2\u00c3\u027e\3\2\2\2\u00c5"+
 		"\u0280\3\2\2\2\u00c7\u0283\3\2\2\2\u00c9\u0286\3\2\2\2\u00cb\u0289\3\2"+
@@ -357,18 +357,18 @@ public class WiidgetLexer extends Lexer {
 		"\u023e\7]\2\2\u023e\u008c\3\2\2\2\u023f\u0240\7_\2\2\u0240\u008e\3\2\2"+
 		"\2\u0241\u0242\7=\2\2\u0242\u0090\3\2\2\2\u0243\u0244\7.\2\2\u0244\u0092"+
 		"\3\2\2\2\u0245\u0246\7\60\2\2\u0246\u0094\3\2\2\2\u0247\u0248\7/\2\2\u0248"+
-		"\u0249\7@\2\2\u0249\u0096\3\2\2\2\u024a\u024b\7?\2\2\u024b\u0098\3\2\2"+
-		"\2\u024c\u024d\7@\2\2\u024d\u009a\3\2\2\2\u024e\u024f\7>\2\2\u024f\u009c"+
-		"\3\2\2\2\u0250\u0251\7#\2\2\u0251\u009e\3\2\2\2\u0252\u0253\7\u0080\2"+
-		"\2\u0253\u00a0\3\2\2\2\u0254\u0255\7A\2\2\u0255\u00a2\3\2\2\2\u0256\u0257"+
-		"\7<\2\2\u0257\u00a4\3\2\2\2\u0258\u0259\7?\2\2\u0259\u025a\7?\2\2\u025a"+
-		"\u00a6\3\2\2\2\u025b\u025c\7>\2\2\u025c\u025d\7?\2\2\u025d\u00a8\3\2\2"+
-		"\2\u025e\u025f\7@\2\2\u025f\u0260\7?\2\2\u0260\u00aa\3\2\2\2\u0261\u0262"+
-		"\7#\2\2\u0262\u0263\7?\2\2\u0263\u00ac\3\2\2\2\u0264\u0265\7(\2\2\u0265"+
-		"\u0266\7(\2\2\u0266\u00ae\3\2\2\2\u0267\u0268\7~\2\2\u0268\u0269\7~\2"+
-		"\2\u0269\u00b0\3\2\2\2\u026a\u026b\7-\2\2\u026b\u026c\7-\2\2\u026c\u00b2"+
-		"\3\2\2\2\u026d\u026e\7/\2\2\u026e\u026f\7/\2\2\u026f\u00b4\3\2\2\2\u0270"+
-		"\u0271\7-\2\2\u0271\u00b6\3\2\2\2\u0272\u0273\7/\2\2\u0273\u00b8\3\2\2"+
+		"\u0249\7@\2\2\u0249\u0096\3\2\2\2\u024a\u024b\7@\2\2\u024b\u0098\3\2\2"+
+		"\2\u024c\u024d\7>\2\2\u024d\u009a\3\2\2\2\u024e\u024f\7#\2\2\u024f\u009c"+
+		"\3\2\2\2\u0250\u0251\7\u0080\2\2\u0251\u009e\3\2\2\2\u0252\u0253\7A\2"+
+		"\2\u0253\u00a0\3\2\2\2\u0254\u0255\7<\2\2\u0255\u00a2\3\2\2\2\u0256\u0257"+
+		"\7?\2\2\u0257\u0258\7?\2\2\u0258\u00a4\3\2\2\2\u0259\u025a\7>\2\2\u025a"+
+		"\u025b\7?\2\2\u025b\u00a6\3\2\2\2\u025c\u025d\7@\2\2\u025d\u025e\7?\2"+
+		"\2\u025e\u00a8\3\2\2\2\u025f\u0260\7#\2\2\u0260\u0261\7?\2\2\u0261\u00aa"+
+		"\3\2\2\2\u0262\u0263\7(\2\2\u0263\u0264\7(\2\2\u0264\u00ac\3\2\2\2\u0265"+
+		"\u0266\7~\2\2\u0266\u0267\7~\2\2\u0267\u00ae\3\2\2\2\u0268\u0269\7-\2"+
+		"\2\u0269\u026a\7-\2\2\u026a\u00b0\3\2\2\2\u026b\u026c\7/\2\2\u026c\u026d"+
+		"\7/\2\2\u026d\u00b2\3\2\2\2\u026e\u026f\7-\2\2\u026f\u00b4\3\2\2\2\u0270"+
+		"\u0271\7/\2\2\u0271\u00b6\3\2\2\2\u0272\u0273\7?\2\2\u0273\u00b8\3\2\2"+
 		"\2\u0274\u0275\7,\2\2\u0275\u00ba\3\2\2\2\u0276\u0277\7\61\2\2\u0277\u00bc"+
 		"\3\2\2\2\u0278\u0279\7(\2\2\u0279\u00be\3\2\2\2\u027a\u027b\7~\2\2\u027b"+
 		"\u00c0\3\2\2\2\u027c\u027d\7`\2\2\u027d\u00c2\3\2\2\2\u027e\u027f\7\'"+

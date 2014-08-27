@@ -210,6 +210,14 @@ public class WiidgetBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx) { return visitChildren(ctx); }
 
 	/**

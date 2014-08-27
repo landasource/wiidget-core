@@ -90,7 +90,12 @@ elementValuePairs
     ;
 
 elementValuePair
-    : Identifier '=' elementValue
+    : attributeName ASSIGN elementValue
+    ;
+
+attributeName
+    : Identifier
+    | StringLiteral
     ;
 
 elementValue
@@ -466,7 +471,7 @@ ARROW : '->';
 
 // Operators
 
-ASSIGN : '=';
+
 GT : '>';
 LT : '<';
 BANG : '!';
@@ -483,6 +488,7 @@ INC : '++';
 DEC : '--';
 ADD : '+';
 SUB : '-';
+ASSIGN : '=';
 MUL : '*';
 DIV : '/';
 BITAND : '&';

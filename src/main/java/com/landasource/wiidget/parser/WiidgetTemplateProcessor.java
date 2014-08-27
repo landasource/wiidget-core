@@ -20,6 +20,7 @@ import com.landasource.wiidget.WiidgetView;
 import com.landasource.wiidget.annotation.DefaultField;
 import com.landasource.wiidget.antlr.WiidgetLexer;
 import com.landasource.wiidget.antlr.WiidgetParser;
+import com.landasource.wiidget.antlr.WiidgetParser.AttributeNameContext;
 import com.landasource.wiidget.antlr.WiidgetParser.CompilationUnitContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ControlStatementContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ElementValueArrayInitializerContext;
@@ -50,6 +51,7 @@ import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.parser.control.ForeachControl;
 import com.landasource.wiidget.parser.control.ForeachIterator;
 import com.landasource.wiidget.parser.control.IfControl;
+import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.EvaluationException;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluator;
 import com.landasource.wiidget.parser.imports.ImportContext;
@@ -669,7 +671,7 @@ public class WiidgetTemplateProcessor extends WiidgetView {
                 if (valuePairContext != null) {
                     for (final ElementValuePairContext elementValuePairContext : valuePairContext) {
 
-                        final String property = elementValuePairContext.Identifier().getText();
+                        final String property = getAttributeName(elementValuePairContext.attributeName());
 
                         final ElementValueContext elementValue = elementValuePairContext.elementValue();
                         final Object value = processArgumentValue(elementValue);
@@ -694,6 +696,15 @@ public class WiidgetTemplateProcessor extends WiidgetView {
 
         return dataMap;
 
+    }
+
+    private String getAttributeName(final AttributeNameContext attributeName) {
+
+        final TerminalNode stringLiteral = attributeName.StringLiteral();
+        if (null == stringLiteral) {
+            return attributeName.Identifier().getText();
+        }
+        return new StringDeclaration(stringLiteral).getContent();
     }
 
     private String getDefaultValueProperty(final Class<? extends Wiidget> wiidgetClass) {
@@ -788,7 +799,9 @@ public class WiidgetTemplateProcessor extends WiidgetView {
 
     protected ExpressionEvaluator createExpressionEvaluator() {
         final Configuration configuration = getWiidgetFactory().getConfiguration();
-        return configuration.getExpressionEvaluatorFactory(getWiidgetContext(), getWiidgetMap()).create();
+
+        final EvaluationContext evaluationContext = new EvaluationContext(importContext, getWiidgetContext(), getWiidgetMap());
+        return configuration.getExpressionEvaluatorFactory(evaluationContext).create();
     }
 
     public static CompilationUnitContext getCompilationUnitContext(final InputStream inputStream) throws WiidgetException {
