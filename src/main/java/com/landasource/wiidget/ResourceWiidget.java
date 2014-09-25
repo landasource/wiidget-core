@@ -23,11 +23,11 @@ public class ResourceWiidget extends ContextualWiidget {
     public void run() {
 
         try {
-            final InputStream inputStream = getWiidgetFactory().getConfiguration().getFileLoader().getFile(fileName);
+            final InputStream inputStream = getEngine().getConfiguration().getFileLoader().getFile(fileName);
 
             final String template = IOUtils.toString(inputStream);
 
-            final String content = Renderer.create(getWiidgetFactory()).render(template);
+            final String content = Renderer.create(getEngine()).render(template);
 
             write(content);
 

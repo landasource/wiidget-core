@@ -31,7 +31,7 @@ public class WiidgetTemplate extends ContextualWiidget {
             template = getValue();
         }
 
-        final Renderer renderer = Renderer.create(getWiidgetFactory());
+        final Renderer renderer = Renderer.create(getEngine());
         final String viewResult = renderer.renderWithoutResources(template);
 
         write(viewResult);

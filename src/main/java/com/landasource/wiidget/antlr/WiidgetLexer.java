@@ -100,14 +100,14 @@ public class WiidgetLexer extends Lexer {
 		case 114: LINE_COMMENT_action((RuleContext)_localctx, actionIndex); break;
 		}
 	}
-	private void WS_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 0: skip();  break;
-		}
-	}
 	private void LINE_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 2: skip();  break;
+		}
+	}
+	private void WS_action(RuleContext _localctx, int actionIndex) {
+		switch (actionIndex) {
+		case 0: skip();  break;
 		}
 	}
 	private void COMMENT_action(RuleContext _localctx, int actionIndex) {

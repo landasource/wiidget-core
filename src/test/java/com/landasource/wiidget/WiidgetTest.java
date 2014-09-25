@@ -43,9 +43,9 @@ public class WiidgetTest {
 	public void testWiidgetContext() {
 
 		final Object value = new Object();
-		wiidget.getWiidgetFactory().getWiidgetContext().set("var", value);
+		wiidget.getEngine().getWiidgetContext().set("var", value);
 
-		final Object object = wiidget.getWiidgetFactory().getWiidgetContext().get("var");
+		final Object object = wiidget.getEngine().getWiidgetContext().get("var");
 
 		Assert.assertSame(value, object);
 	}

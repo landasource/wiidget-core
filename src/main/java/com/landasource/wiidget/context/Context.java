@@ -8,7 +8,7 @@ import java.util.Set;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public interface WiidgetContext {
+public interface Context {
 
 	/** The variable name that refers to this context. */
 	String CONTEXT_VARIABLE = "context";

@@ -12,7 +12,7 @@ import com.landasource.wiidget.util.DataMap;
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class DefaultWiidgetContext implements WiidgetContext {
+public class DefaultContext implements Context {
 
     /**
      * List of reserved words that are unacceptable to set.
@@ -27,7 +27,7 @@ public class DefaultWiidgetContext implements WiidgetContext {
     /**
      * Default constructor.
      */
-    public DefaultWiidgetContext() {
+    public DefaultContext() {
         this(new DataMap());
     }
 
@@ -35,7 +35,7 @@ public class DefaultWiidgetContext implements WiidgetContext {
      * @param data
      *            create context from preexisting map
      */
-    public DefaultWiidgetContext(final Map<String, Object> data) {
+    public DefaultContext(final Map<String, Object> data) {
         this.dataMap = data;
         // refer to ownself
         dataMap.put(CONTEXT_VARIABLE, this);

@@ -3,7 +3,7 @@ package com.landasource.wiidget.commons;
 import java.util.Map.Entry;
 
 import com.landasource.wiidget.Wiidget;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.util.DataMap;
 
 /**
@@ -33,7 +33,7 @@ public abstract class ContextualWiidget extends Wiidget {
      * Exports defined context values from {@link #context}.
      */
     private void exportContext() {
-        final WiidgetContext wiidgetContext = getWiidgetFactory().getWiidgetContext();
+        final Context wiidgetContext = getEngine().getWiidgetContext();
         for (final String key : context.keySet()) {
             if (wiidgetContext.isSet(key)) {
                 // set to backup
@@ -50,7 +50,7 @@ public abstract class ContextualWiidget extends Wiidget {
      * Restores the previous context.
      */
     protected void restoreContext() {
-        final WiidgetContext wiidgetContext = getWiidgetFactory().getWiidgetContext();
+        final Context wiidgetContext = getEngine().getWiidgetContext();
 
         for (final String key : context.keySet()) {
             wiidgetContext.remove(key); // leter maybe will be retored

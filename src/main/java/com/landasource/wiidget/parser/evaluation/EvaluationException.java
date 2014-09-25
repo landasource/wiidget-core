@@ -2,7 +2,7 @@ package com.landasource.wiidget.parser.evaluation;
 
 import org.antlr.v4.runtime.tree.RuleNode;
 
-import com.landasource.wiidget.parser.WiidgetParserException;
+import com.landasource.wiidget.parser.ParserException;
 
 /**
  * Thrown when evaluation is failed.
@@ -10,7 +10,7 @@ import com.landasource.wiidget.parser.WiidgetParserException;
  * @author lzsolt
  *
  */
-public class EvaluationException extends WiidgetParserException {
+public class EvaluationException extends ParserException {
 
 	private static final long serialVersionUID = -6942914294591027572L;
 

@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.context.DefaultWiidgetContext;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.DefaultContext;
+import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.engine.configuration.DefaultConfiguration;
 import com.landasource.wiidget.reflect.Reflection;
@@ -25,7 +25,7 @@ import com.landasource.wiidget.validation.ValidationException;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class DefaultWiidgetFactory implements WiidgetFactory {
+public class DefaultWiidgetFactory implements Engine {
 
 	/**
 	 * Wiidget ID prefixum.
@@ -45,7 +45,7 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	/**
 	 * Context of the factory.
 	 */
-	private final WiidgetContext wiidgetContext;
+	private final Context wiidgetContext;
 
 	/**
 	 * Stack of wiidgets.
@@ -71,7 +71,7 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	 * Default constructor.
 	 */
 	public DefaultWiidgetFactory() {
-		this(new DefaultWiidgetProperties(), new DefaultWiidgetContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
+		this(new DefaultWiidgetProperties(), new DefaultContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	 * @param configuration
 	 *            configuration
 	 */
-	public DefaultWiidgetFactory(final WiidgetProperties wiidgetProperties, final WiidgetContext context, final ResultTransformerRegistrator resultTransformerRegistrator,
+	public DefaultWiidgetFactory(final WiidgetProperties wiidgetProperties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
 	        final Configuration configuration) {
 
 		this.wiidgetProperties = wiidgetProperties;
@@ -99,7 +99,7 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	 * @param wiidgetContext
 	 *            context of the factory
 	 */
-	public DefaultWiidgetFactory(final WiidgetContext wiidgetContext) {
+	public DefaultWiidgetFactory(final Context wiidgetContext) {
 		this(new DefaultWiidgetProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
@@ -197,7 +197,7 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	}
 
 	@Override
-	public WiidgetContext getWiidgetContext() {
+	public Context getWiidgetContext() {
 		return wiidgetContext;
 	}
 

@@ -3,7 +3,7 @@ package com.landasource.wiidget.parser.evaluation;
 import java.util.Map;
 
 import com.landasource.wiidget.Wiidget;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.parser.imports.ImportContext;
 
 /**
@@ -15,7 +15,7 @@ public class EvaluationContext {
 
     private ImportContext importContext;
 
-    private WiidgetContext wiidgetContext;
+    private Context wiidgetContext;
 
     private Map<String, Wiidget> wiidgetMap;
 
@@ -24,7 +24,7 @@ public class EvaluationContext {
      * @param wiidgetContext
      * @param wiidgetMap
      */
-    public EvaluationContext(final ImportContext importContext, final WiidgetContext wiidgetContext, final Map<String, Wiidget> wiidgetMap) {
+    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext, final Map<String, Wiidget> wiidgetMap) {
         super();
         this.importContext = importContext;
         this.wiidgetContext = wiidgetContext;
@@ -49,7 +49,7 @@ public class EvaluationContext {
     /**
      * @return the wiidgetContext
      */
-    public WiidgetContext getWiidgetContext() {
+    public Context getWiidgetContext() {
         return wiidgetContext;
     }
 
@@ -57,7 +57,7 @@ public class EvaluationContext {
      * @param wiidgetContext
      *            the wiidgetContext to set
      */
-    public void setWiidgetContext(final WiidgetContext wiidgetContext) {
+    public void setWiidgetContext(final Context wiidgetContext) {
         this.wiidgetContext = wiidgetContext;
     }
 

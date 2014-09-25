@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.util.DataMap;
 import com.landasource.wiidget.util.WiidgetProperties;
@@ -13,7 +13,7 @@ import com.landasource.wiidget.util.WiidgetProperties;
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public interface WiidgetFactory {
+public interface Engine {
 
 	/**
 	 * @param owner
@@ -95,7 +95,7 @@ public interface WiidgetFactory {
 	 *
 	 * @return context of the current run
 	 */
-	public WiidgetContext getWiidgetContext();
+	public Context getWiidgetContext();
 
 	/**
 	 * @return registered resources while run

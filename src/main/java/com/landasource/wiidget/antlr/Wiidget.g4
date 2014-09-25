@@ -100,14 +100,9 @@ attributeName
 
 elementValue
     :   expression
-    |   qualifiedName
-    |   elementValueArrayInitializer
+    |   qualifiedName    
     ;
     
-elementValueArrayInitializer
-    :   '{' (elementValue (',' elementValue)*)? '}'
-    ;
-
 mapExpression
     : '{' (mapEntry (',' mapEntry)*)? '}'
     ;

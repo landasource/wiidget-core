@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.landasource.wiidget.engine.WiidgetFactory;
+import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.io.BufferedPrintStream;
 import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.util.DataMap;
@@ -54,7 +54,7 @@ public abstract class Wiidget {
     }
 
     protected <W extends Wiidget> W beginWiidget(final W wiidget) {
-        getWiidgetFactory().addWiidget(wiidget, getOwner(), true);
+        getEngine().addWiidget(wiidget, getOwner(), true);
 
         if (wiidget.isRendered()) {
             wiidget.init();
@@ -70,7 +70,7 @@ public abstract class Wiidget {
     }
 
     protected <W extends Wiidget> W wiidget(final Class<W> widgetClass, final DataMap dataMap) {
-        final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, false);
+        final W widget = getEngine().createWiidget(getOwner(), widgetClass, dataMap, false);
 
         if (widget.isRendered()) {
             widget.init();
@@ -89,7 +89,7 @@ public abstract class Wiidget {
     }
 
     protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass, final DataMap dataMap) {
-        final W widget = getWiidgetFactory().createWiidget(getOwner(), widgetClass, dataMap, true);
+        final W widget = getEngine().createWiidget(getOwner(), widgetClass, dataMap, true);
 
         if (widget.isRendered()) {
             widget.init();
@@ -118,7 +118,7 @@ public abstract class Wiidget {
 
     @SuppressWarnings("unchecked")
     protected <W extends Wiidget> W endWiidget() {
-        final Wiidget wiidget = getWiidgetFactory().getWiidgetStack().pop();
+        final Wiidget wiidget = getEngine().getWiidgetStack().pop();
 
         if (wiidget.isRendered()) {
             wiidget.run();
@@ -130,7 +130,7 @@ public abstract class Wiidget {
     @SuppressWarnings("unchecked")
     protected <W extends Wiidget> W endWiidget(final W widget) {
 
-        final Wiidget popedWidget = getWiidgetFactory().getWiidgetStack().pop();
+        final Wiidget popedWidget = getEngine().getWiidgetStack().pop();
 
         if (!popedWidget.isRendered()) { // this wiidget is not rendered
             return (W) popedWidget;
@@ -149,7 +149,7 @@ public abstract class Wiidget {
 
     @SuppressWarnings("unchecked")
     protected <W extends Wiidget> W endWiidget(final Class<W> widgetClass) {
-        final Wiidget widget = getWiidgetFactory().getWiidgetStack().pop();
+        final Wiidget widget = getEngine().getWiidgetStack().pop();
 
         if (!widgetClass.isAssignableFrom(widget.getClass())) {
             throw new WiidgetException("Run specified widget failed. Maybe there is another unclosed widget.");
@@ -272,7 +272,7 @@ public abstract class Wiidget {
 
         try {
 
-            final FileLoader fileLoader = getWiidgetFactory().getConfiguration().getFileLoader();
+            final FileLoader fileLoader = getEngine().getConfiguration().getFileLoader();
             final InputStream file = fileLoader.getFile(path);
 
             if (file == null) {
@@ -305,8 +305,8 @@ public abstract class Wiidget {
         return getOwner().getPrintStream();
     }
 
-    protected WiidgetFactory getWiidgetFactory() {
-        return getOwner().getWiidgetFactory();
+    protected Engine getEngine() {
+        return getOwner().getEngine();
     }
 
     protected DataMap data() {
@@ -316,7 +316,7 @@ public abstract class Wiidget {
     public String getId() {
 
         if (null == this.id) {
-            final String uniqueId = getWiidgetFactory().getUniqueId();
+            final String uniqueId = getEngine().getUniqueId();
             this.setId(uniqueId);
         }
 

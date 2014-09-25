@@ -20,7 +20,7 @@ import com.landasource.wiidget.antlr.WiidgetParser.MapKeyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.PrimaryContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableContext;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.parser.imports.ImportContext;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.parser.util.StringDeclaration;
@@ -601,7 +601,7 @@ public class ExpressionEvaluator {
 
     }
 
-    public WiidgetContext getWiidgetContext() {
+    public Context getWiidgetContext() {
         return evaluationContext.getWiidgetContext();
     }
 

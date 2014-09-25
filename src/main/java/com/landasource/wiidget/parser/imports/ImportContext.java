@@ -10,8 +10,8 @@ import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.antlr.WiidgetParser.ExternalImportContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ImportDeclarationContext;
 import com.landasource.wiidget.antlr.WiidgetParser.InnerImportContext;
-import com.landasource.wiidget.engine.WiidgetFactory;
-import com.landasource.wiidget.parser.WiidgetParserException;
+import com.landasource.wiidget.engine.Engine;
+import com.landasource.wiidget.parser.ParserException;
 import com.landasource.wiidget.parser.resource.ClassWiidgetResource;
 import com.landasource.wiidget.parser.resource.ExternalWiidgetResource;
 import com.landasource.wiidget.parser.resource.FileWiidgetResource;
@@ -34,18 +34,18 @@ public class ImportContext {
     private final Map<String, WiidgetResource> importMap = new HashMap<String, WiidgetResource>();
 
     /** Current factory. */
-    private final WiidgetFactory wiidgetFactory;
+    private final Engine engine;
 
     /**
      * @param imports
      *            imports to process
-     * @param wiidgetFactory
+     * @param engine
      *            current factory
      */
-    public ImportContext(final List<ImportDeclarationContext> imports, final WiidgetFactory wiidgetFactory) {
+    public ImportContext(final List<ImportDeclarationContext> imports, final Engine engine) {
         super();
         this.imports = imports;
-        this.wiidgetFactory = wiidgetFactory;
+        this.engine = engine;
 
     }
 
@@ -105,7 +105,7 @@ public class ImportContext {
 
     /**
      * @param importDeclarationContext
-     * @throws WiidgetParserException
+     * @throws ParserException
      */
     protected void processImport(final ImportDeclarationContext importDeclarationContext) throws ImportException {
 
@@ -201,12 +201,12 @@ public class ImportContext {
     }
 
     protected boolean isWiidgetFile(final String canonicalFileName) {
-        return wiidgetFactory.getConfiguration().getFileLoader().exists(canonicalFileName);
+        return engine.getConfiguration().getFileLoader().exists(canonicalFileName);
     }
 
     private String getCanonicalFileName(final String className) {
         final String filename = className.replaceAll("\\.", "/");
-        final String fileextension = wiidgetFactory.getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
+        final String fileextension = engine.getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
 
         final String canonicalFileName = "/" + filename + fileextension;
         return canonicalFileName;
