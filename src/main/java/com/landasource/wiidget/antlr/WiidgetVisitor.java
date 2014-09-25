@@ -82,6 +82,13 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#mapEntry}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#elseControl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -145,6 +152,13 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitWiidgetBody(@NotNull WiidgetParser.WiidgetBodyContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#mapKey}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#elementValuePairs}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -192,6 +206,20 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#statementDeclaration}.

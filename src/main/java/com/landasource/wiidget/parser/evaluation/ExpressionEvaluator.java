@@ -1,5 +1,7 @@
 package com.landasource.wiidget.parser.evaluation;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +12,11 @@ import org.mvel2.PropertyAccessException;
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionListContext;
+import com.landasource.wiidget.antlr.WiidgetParser.ListExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.LiteralContext;
+import com.landasource.wiidget.antlr.WiidgetParser.MapEntryContext;
+import com.landasource.wiidget.antlr.WiidgetParser.MapExpressionContext;
+import com.landasource.wiidget.antlr.WiidgetParser.MapKeyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.PrimaryContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableContext;
@@ -20,14 +26,20 @@ import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.parser.util.StringDeclaration;
 import com.landasource.wiidget.reflect.Reflection;
 import com.landasource.wiidget.reflect.ReflectionException;
+import com.landasource.wiidget.util.DataMap;
 
 /**
- * @author lzsolt
+ * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
 public class ExpressionEvaluator {
 
+    /** Context within expression can be evaluated. */
     private final EvaluationContext evaluationContext;
 
+    /**
+     * @param evaluationContext
+     *            context
+     */
     public ExpressionEvaluator(final EvaluationContext evaluationContext) {
         this.evaluationContext = evaluationContext;
 
@@ -72,37 +84,7 @@ public class ExpressionEvaluator {
                 throw new EvaluationException(expression, "Value is null for: " + baseExpressionContext.getText());
             }
 
-            final ExpressionContext indexExpressionContext = expression.expression(1);
-            final Object index = evaluate(indexExpressionContext);
-
-            // resolve index
-            if (baseValue instanceof Map) {
-                @SuppressWarnings("rawtypes")
-                final Map mapValue = (Map) baseValue;
-                return mapValue.get(index);
-
-            } else if (baseValue instanceof List) {
-                @SuppressWarnings("rawtypes")
-                final List listValue = (List) baseValue;
-                try {
-                    final int indexNumber = Integer.parseInt(index.toString());
-                    return listValue.get(indexNumber);
-                } catch (final NumberFormatException numberFormatException) {
-                    // try get property
-
-                    try {
-                        return evaluatePropertyByReflection(listValue, index.toString());
-                    } catch (final PropertyAccessException propertyAccessException) {
-
-                        return MethodUtils.getAccessibleMethod(listValue.getClass(), index.toString());
-                    }
-                    //  throw new EvaluationException(String.format("Illegal index: %s on list: %s", index, listValue), numberFormatException);
-                }
-
-            } else {
-                // try get property
-                return evaluatePropertyByReflection(baseValue, index);
-            }
+            return evaluateIndexing(expression, baseValue);
         }
 
         // negotion
@@ -156,7 +138,53 @@ public class ExpressionEvaluator {
             return evaluateTernaryOperator(expression);
         }
 
+        // map expression
+        final MapExpressionContext mapExpression = expression.mapExpression();
+        if (null != mapExpression) {
+            return evaluateMap(mapExpression);
+        }
+
+        // list expression
+        final ListExpressionContext listExpression = expression.listExpression();
+        if (null != listExpression) {
+            return evaluateList(listExpression);
+        }
+
         throw new EvaluationException(expression, "Cannot evaluate expression: '" + expression.getText() + "'");
+    }
+
+    private Object evaluateIndexing(final ExpressionContext expression, final Object baseValue) throws EvaluationException {
+        final ExpressionContext indexExpressionContext = expression.expression(1);
+        final Object index = evaluate(indexExpressionContext);
+
+        // resolve index
+        if (baseValue instanceof Map) {
+            @SuppressWarnings("rawtypes")
+            final Map mapValue = (Map) baseValue;
+            return mapValue.get(index);
+
+        } else if (baseValue instanceof List) {
+            @SuppressWarnings("rawtypes")
+            final List listValue = (List) baseValue;
+            try {
+                final int indexNumber = Integer.parseInt(index.toString());
+                return listValue.get(indexNumber);
+            } catch (final NumberFormatException numberFormatException) {
+                // try get property
+
+                try {
+                    return evaluatePropertyByReflection(listValue, index.toString());
+                } catch (final PropertyAccessException propertyAccessException) {
+
+                    return MethodUtils.getAccessibleMethod(listValue.getClass(), index.toString());
+                }
+                //  throw new EvaluationException(String.format("Illegal index: %s on list: %s", index, listValue), numberFormatException);
+            }
+
+        } else {
+            // try get property
+            return evaluatePropertyByReflection(baseValue, index);
+        }
     }
 
     private Object evaluatePropertyByReflection(final Object baseValue, final Object index) throws PropertyAccessException {
@@ -183,6 +211,68 @@ public class ExpressionEvaluator {
         return evaluate(value);
     }
 
+    /**
+     * Evaluates map.
+     *
+     * @param mapExpression
+     *            expression
+     * @return new map
+     * @throws EvaluationException
+     *             when cannot evaluate some value of map
+     */
+    private Map<String, Object> evaluateMap(final MapExpressionContext mapExpression) throws EvaluationException {
+
+        final Map<String, Object> map = new DataMap();
+
+        final List<MapEntryContext> mapEntry = mapExpression.mapEntry();
+        for (final MapEntryContext mapEntryContext : mapEntry) {
+            final String key = evaluateMapKey(mapEntryContext.mapKey());
+            final Object value = evaluate(mapEntryContext.expression());
+
+            // put value
+            map.put(key, value);
+        }
+
+        // map is final
+        return Collections.unmodifiableMap(map);
+    }
+
+    /**
+     * @param mapKey
+     *            map key expression
+     * @return string value of key
+     */
+    private String evaluateMapKey(final MapKeyContext mapKey) {
+        final TerminalNode identifier = mapKey.Identifier();
+        return null == identifier ? new StringDeclaration(mapKey.StringLiteral()).getContent() : identifier.getText();
+    }
+
+    /**
+     * @param listExpression
+     *            expression
+     * @return list value
+     * @throws EvaluationException
+     *             when some item is illegal
+     */
+    private List<?> evaluateList(final ListExpressionContext listExpression) throws EvaluationException {
+
+        final List<Object> list = new ArrayList<>();
+
+        for (final ExpressionContext expression : listExpression.expression()) {
+            final Object item = evaluate(expression);
+            // add to list
+            list.add(item);
+        }
+
+        // here list is final
+        return Collections.unmodifiableList(list);
+    }
+
+    /**
+     * @param expression
+     * @return
+     * @throws EvaluationException
+     */
     private Object evaluateNegatedBoolean(final ExpressionContext expression) throws EvaluationException {
         final Boolean booleanValue = (Boolean) evaluate(expression.expression(0));
         return !booleanValue;

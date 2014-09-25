@@ -25,7 +25,7 @@ import com.landasource.wiidget.util.DataMap;
 
 public class ExpressionTest {
 
-    private WiidgetContext wiidgetContext;
+    protected WiidgetContext wiidgetContext;
 
     @Before
     public void initContext() {
@@ -121,12 +121,12 @@ public class ExpressionTest {
 
     // Helper methods
 
-    private void assertExpression(final Object expected, final String template) {
+    protected void assertExpression(final Object expected, final String template) {
 
         Assert.assertEquals(expected, safeEvaluate(template));
     }
 
-    private Object safeEvaluate(final String string) {
+    protected Object safeEvaluate(final String string) {
         try {
             return evaluate(string);
         } catch (EvaluationException | RecognitionException e) {
@@ -135,7 +135,7 @@ public class ExpressionTest {
 
     }
 
-    private Object evaluate(final String template) throws EvaluationException, RecognitionException {
+    protected Object evaluate(final String template) throws EvaluationException, RecognitionException {
 
         final WiidgetParser createParser = createParser(template);
         final ExpressionEvaluator evaluator = createEvaluator(wiidgetContext);
@@ -143,14 +143,14 @@ public class ExpressionTest {
         return evaluator.evaluate(createParser.expressionList().expression().get(0));
     }
 
-    private static ExpressionEvaluator createEvaluator(final WiidgetContext wiidgetContext) {
+    protected static ExpressionEvaluator createEvaluator(final WiidgetContext wiidgetContext) {
         final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultWiidgetFactory(wiidgetContext)), wiidgetContext,
                 new HashMap<String, Wiidget>());
 
         return new DefaultWiidgetFactory(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
     }
 
-    private static WiidgetParser createParser(final String template) {
+    protected static WiidgetParser createParser(final String template) {
         final ANTLRInputStream input = new ANTLRInputStream(template);
         final WiidgetLexer aWiidgetLexer = new WiidgetLexer(input);
         final BufferedTokenStream tokenStream = new BufferedTokenStream(aWiidgetLexer);

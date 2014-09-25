@@ -119,6 +119,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#mapEntry}.
+	 * @param ctx the parse tree
+	 */
+	void enterMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#mapEntry}.
+	 * @param ctx the parse tree
+	 */
+	void exitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#elseControl}.
 	 * @param ctx the parse tree
 	 */
@@ -218,6 +229,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitWiidgetBody(@NotNull WiidgetParser.WiidgetBodyContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#mapKey}.
+	 * @param ctx the parse tree
+	 */
+	void enterMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#mapKey}.
+	 * @param ctx the parse tree
+	 */
+	void exitMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#elementValuePairs}.
 	 * @param ctx the parse tree
 	 */
@@ -293,6 +315,28 @@ public interface WiidgetListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#statementDeclaration}.

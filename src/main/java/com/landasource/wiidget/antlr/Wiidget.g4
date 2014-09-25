@@ -7,7 +7,7 @@
  */
 grammar Wiidget;
 
-// starting point for parsing a java file
+// starting point for parsing a wiidget file
 compilationUnit
     :   importDeclaration* statementDeclaration* EOF
     ;
@@ -108,6 +108,22 @@ elementValueArrayInitializer
     :   '{' (elementValue (',' elementValue)*)? '}'
     ;
 
+mapExpression
+    : '{' (mapEntry (',' mapEntry)*)? '}'
+    ;
+
+mapEntry
+    :   mapKey ':' expression
+    ;
+
+mapKey
+    : Identifier | StringLiteral      
+    ;
+
+listExpression
+    : '[' (expression (',' expression)*)?  ']'
+    ;
+
 wiidgetBody
     :   ';'
     |   '{' statementDeclaration* '}'
@@ -139,9 +155,11 @@ expression
     :   primary
     |   wiidgetVariable
     |   wiidgetMethodCallExpression
+    |   mapExpression
+    |   listExpression
     |   expression DOT Identifier    
     |   expression LBRACK expression RBRACK
-    |   expression DOT Identifier LPAREN expressionList? RPAREN
+    |   expression DOT Identifier LPAREN expressionList? RPAREN        
     |   NegotionOperator expression
     |   expression MathematicalOperator expression
     |   expression CompareOperator expression

@@ -52,7 +52,7 @@ public class StringTemplate {
             final String key = entry.getKey();
             final String value = entry.getValue() == null ? "" : entry.getValue().toString();
 
-            final String pattern = "{" + key + "}";
+            final String pattern = "{{" + key + "}}";
 
             try {
                 base = StringUtils.replace(base, pattern, value); // better than String.replaceAll
@@ -62,7 +62,7 @@ public class StringTemplate {
         }
 
         if (removePlaceholders) {
-            base = base.replaceAll("\\{[a-zA-Z0-9_]*}", "");
+            base = base.replaceAll("\\{\\{[a-zA-Z0-9_]*}}", "");
         }
 
         return base;

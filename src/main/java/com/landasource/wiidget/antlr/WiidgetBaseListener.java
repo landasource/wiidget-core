@@ -147,6 +147,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterMapEntry(@NotNull WiidgetParser.MapEntryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterElseControl(@NotNull WiidgetParser.ElseControlContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -264,6 +277,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterMapKey(@NotNull WiidgetParser.MapKeyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitMapKey(@NotNull WiidgetParser.MapKeyContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterElementValuePairs(@NotNull WiidgetParser.ElementValuePairsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -349,6 +375,32 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterListExpression(@NotNull WiidgetParser.ListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

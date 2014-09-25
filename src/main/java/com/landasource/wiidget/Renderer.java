@@ -11,8 +11,8 @@ import com.landasource.wiidget.engine.DefaultWiidgetFactory;
 import com.landasource.wiidget.engine.Position;
 import com.landasource.wiidget.engine.ResourceLink;
 import com.landasource.wiidget.engine.WiidgetFactory;
-import com.landasource.wiidget.parser.WiidgetTemplateProcessor;
 import com.landasource.wiidget.parser.WiidgetParserException;
+import com.landasource.wiidget.parser.WiidgetTemplateProcessor;
 
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -79,7 +79,7 @@ public final class Renderer {
         } catch (final FileNotFoundException e) {
             throw new WiidgetException("Cannot found file: " + path, e);
         } catch (final WiidgetException e) {
-            throw e;
+            throw new WiidgetException("Error in file: " + path, e);
         }
 
     }

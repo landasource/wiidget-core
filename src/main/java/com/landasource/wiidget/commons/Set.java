@@ -1,13 +1,11 @@
 package com.landasource.wiidget.commons;
 
-import com.landasource.wiidget.Wiidget;
-
 /**
  * Set value to context.
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class Set extends Wiidget {
+public class Set extends ContextualWiidget {
 
     private String name;
 
@@ -15,9 +13,16 @@ public class Set extends Wiidget {
 
     @Override
     public void init() {
+        getContext().set(getName(), getValue());
         super.init();
+    }
 
-        getWiidgetFactory().getWiidgetContext().set(getName(), getValue());
+    @Override
+    public void run() {
+
+        if (!getChildren().isEmpty()) { // retore values only when set is contextual
+            super.run();
+        }
     }
 
     /**

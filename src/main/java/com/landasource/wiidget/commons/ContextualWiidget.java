@@ -51,6 +51,11 @@ public abstract class ContextualWiidget extends Wiidget {
      */
     protected void restoreContext() {
         final WiidgetContext wiidgetContext = getWiidgetFactory().getWiidgetContext();
+
+        for (final String key : context.keySet()) {
+            wiidgetContext.remove(key); // leter maybe will be retored
+        }
+
         for (final Entry<String, Object> entry : previousContext.entrySet()) {
 
             final String variable = entry.getKey();
