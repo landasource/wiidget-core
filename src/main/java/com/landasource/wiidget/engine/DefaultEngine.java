@@ -15,8 +15,8 @@ import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.engine.configuration.DefaultConfiguration;
 import com.landasource.wiidget.reflect.Reflection;
 import com.landasource.wiidget.util.DataMap;
-import com.landasource.wiidget.util.DefaultWiidgetProperties;
-import com.landasource.wiidget.util.WiidgetProperties;
+import com.landasource.wiidget.util.DefaultProperties;
+import com.landasource.wiidget.util.Properties;
 import com.landasource.wiidget.validation.ValidationError;
 import com.landasource.wiidget.validation.ValidationException;
 
@@ -25,7 +25,7 @@ import com.landasource.wiidget.validation.ValidationException;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class DefaultWiidgetFactory implements Engine {
+public class DefaultEngine implements Engine {
 
 	/**
 	 * Wiidget ID prefixum.
@@ -40,7 +40,7 @@ public class DefaultWiidgetFactory implements Engine {
 	/**
 	 * Properties of factory.
 	 */
-	private final WiidgetProperties wiidgetProperties;
+	private final Properties properties;
 
 	/**
 	 * Context of the factory.
@@ -70,12 +70,12 @@ public class DefaultWiidgetFactory implements Engine {
 	/**
 	 * Default constructor.
 	 */
-	public DefaultWiidgetFactory() {
-		this(new DefaultWiidgetProperties(), new DefaultContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
+	public DefaultEngine() {
+		this(new DefaultProperties(), new DefaultContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
 	/**
-	 * @param wiidgetProperties
+	 * @param properties
 	 *            properties
 	 * @param context
 	 *            context
@@ -84,10 +84,10 @@ public class DefaultWiidgetFactory implements Engine {
 	 * @param configuration
 	 *            configuration
 	 */
-	public DefaultWiidgetFactory(final WiidgetProperties wiidgetProperties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
+	public DefaultEngine(final Properties properties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
 	        final Configuration configuration) {
 
-		this.wiidgetProperties = wiidgetProperties;
+		this.properties = properties;
 		this.wiidgetContext = context;
 		this.resultTransformerRegistrator = resultTransformerRegistrator;
 
@@ -99,8 +99,8 @@ public class DefaultWiidgetFactory implements Engine {
 	 * @param wiidgetContext
 	 *            context of the factory
 	 */
-	public DefaultWiidgetFactory(final Context wiidgetContext) {
-		this(new DefaultWiidgetProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
+	public DefaultEngine(final Context wiidgetContext) {
+		this(new DefaultProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
 	@Override
@@ -192,12 +192,12 @@ public class DefaultWiidgetFactory implements Engine {
 	}
 
 	@Override
-	public WiidgetProperties getWiidgetProperties() {
-		return wiidgetProperties;
+	public Properties getProperties() {
+		return properties;
 	}
 
 	@Override
-	public Context getWiidgetContext() {
+	public Context getContext() {
 		return wiidgetContext;
 	}
 

@@ -18,7 +18,7 @@ import com.landasource.wiidget.parser.resource.FileWiidgetResource;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.parser.util.QuilifiedName;
 import com.landasource.wiidget.parser.util.StringDeclaration;
-import com.landasource.wiidget.util.WiidgetProperties;
+import com.landasource.wiidget.util.Properties;
 
 /**
  * Import context is due to manage and check imports of template.
@@ -206,7 +206,7 @@ public class ImportContext {
 
     private String getCanonicalFileName(final String className) {
         final String filename = className.replaceAll("\\.", "/");
-        final String fileextension = engine.getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
+        final String fileextension = engine.getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
 
         final String canonicalFileName = "/" + filename + fileextension;
         return canonicalFileName;

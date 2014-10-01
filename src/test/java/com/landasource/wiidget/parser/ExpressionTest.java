@@ -17,7 +17,7 @@ import com.landasource.wiidget.antlr.WiidgetLexer;
 import com.landasource.wiidget.antlr.WiidgetParser;
 import com.landasource.wiidget.context.DefaultContext;
 import com.landasource.wiidget.context.Context;
-import com.landasource.wiidget.engine.DefaultWiidgetFactory;
+import com.landasource.wiidget.engine.DefaultEngine;
 import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.EvaluationException;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluator;
@@ -144,10 +144,10 @@ public class ExpressionTest {
     }
 
     protected static ExpressionEvaluator createEvaluator(final Context wiidgetContext) {
-        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultWiidgetFactory(wiidgetContext)), wiidgetContext,
+        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultEngine(wiidgetContext)), wiidgetContext,
                 new HashMap<String, Wiidget>());
 
-        return new DefaultWiidgetFactory(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
+        return new DefaultEngine(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
     }
 
     protected static WiidgetParser createParser(final String template) {

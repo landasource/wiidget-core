@@ -8,7 +8,7 @@ import com.landasource.wiidget.WiidgetView;
 import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.util.DataMap;
-import com.landasource.wiidget.util.WiidgetProperties;
+import com.landasource.wiidget.util.Properties;
 
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -88,14 +88,14 @@ public interface Engine {
 	 *
 	 * @return properties
 	 */
-	public WiidgetProperties getWiidgetProperties();
+	public Properties getProperties();
 
 	/**
 	 * Holds the context variables.
 	 *
 	 * @return context of the current run
 	 */
-	public Context getWiidgetContext();
+	public Context getContext();
 
 	/**
 	 * @return registered resources while run

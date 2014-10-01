@@ -27,8 +27,6 @@ externalImport
 statementDeclaration
     :   controlStatement
     |   wiidgetDeclaration
-    |   wiidgetMethodCallExpression ';'
-    |   seamStatement
     ;
 
 controlStatement
@@ -71,14 +69,6 @@ unifiedWiidgetName
 
 expressionWiidgetName:
     '`' expression '`'
-    ;
-
-wiidgetMethodCallExpression
-    :   wiidgetVariable '.' Identifier LPAREN expressionList? RPAREN
-    ;
-
-seamStatement
-    : SEAM LPAREN expression RPAREN wiidgetBody
     ;
 
 wiidgetArguments
@@ -135,7 +125,8 @@ literal
     :   IntegerLiteral
     |   FloatingPointLiteral
     |   CharacterLiteral
-    |   StringLiteral
+    |   TextLiteral
+    |   StringLiteral        
     |   BooleanLiteral
     |   NullLiteral
     ;
@@ -149,9 +140,8 @@ expressionList
 expression
     :   primary
     |   wiidgetVariable
-    |   wiidgetMethodCallExpression
     |   mapExpression
-    |   listExpression
+    |   listExpression    
     |   expression DOT Identifier    
     |   expression LBRACK expression RBRACK
     |   expression DOT Identifier LPAREN expressionList? RPAREN        
@@ -191,7 +181,6 @@ EqualityOperator
 // Keywords
 IMPORT : 'import';
 DEFAULT_OPERATOR : '~';
-SEAM : 'seam';
 WiidgetVarSign : '$' ;
 
 IntegerLiteral
@@ -342,7 +331,7 @@ BinaryDigitOrUnderscore
 	|	'_'
 	;
 
-// �3.10.2 Floating-Point Literals
+// $3.10.2 Floating-Point Literals
 
 FloatingPointLiteral
 	:	DecimalFloatingPointLiteral
@@ -417,6 +406,16 @@ fragment
 SingleCharacter
 	:	~['\\]
 	;
+
+TextLiteral: TEXT;
+
+TEXT
+  : '"""'
+    ( ~'"'
+    | {_input.LA(2) != '"' || _input.LA(3) != '"'}? '"'
+    )*
+    '"""'
+  ;
 
 StringLiteral
 	:	'"' StringCharacters? '"'

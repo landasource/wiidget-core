@@ -48,7 +48,7 @@ public abstract class WiidgetView extends Wiidget {
 	}
 
 	protected Context getWiidgetContext() {
-		return getEngine().getWiidgetContext();
+		return getEngine().getContext();
 	}
 
 }

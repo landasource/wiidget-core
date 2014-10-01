@@ -5,12 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.landasource.wiidget.context.DefaultContext;
 import com.landasource.wiidget.context.Context;
-import com.landasource.wiidget.engine.DefaultWiidgetFactory;
+import com.landasource.wiidget.context.DefaultContext;
+import com.landasource.wiidget.engine.DefaultEngine;
+import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.engine.Position;
 import com.landasource.wiidget.engine.ResourceLink;
-import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.parser.ParserException;
 import com.landasource.wiidget.parser.TemplateProcessor;
 
@@ -39,7 +39,7 @@ public final class Renderer {
     public static Renderer create(final Map<String, Object> data) {
 
         final Context wiidgetContext = new DefaultContext(data);
-        final Engine engine = new DefaultWiidgetFactory(wiidgetContext);
+        final Engine engine = new DefaultEngine(wiidgetContext);
 
         return create(engine);
     }
@@ -48,7 +48,7 @@ public final class Renderer {
      *
      */
     public static Renderer create() {
-        return create(new DefaultWiidgetFactory());
+        return create(new DefaultEngine());
     }
 
     /**

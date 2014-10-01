@@ -33,7 +33,7 @@ public abstract class ContextualWiidget extends Wiidget {
      * Exports defined context values from {@link #context}.
      */
     private void exportContext() {
-        final Context wiidgetContext = getEngine().getWiidgetContext();
+        final Context wiidgetContext = getEngine().getContext();
         for (final String key : context.keySet()) {
             if (wiidgetContext.isSet(key)) {
                 // set to backup
@@ -50,7 +50,7 @@ public abstract class ContextualWiidget extends Wiidget {
      * Restores the previous context.
      */
     protected void restoreContext() {
-        final Context wiidgetContext = getEngine().getWiidgetContext();
+        final Context wiidgetContext = getEngine().getContext();
 
         for (final String key : context.keySet()) {
             wiidgetContext.remove(key); // leter maybe will be retored
