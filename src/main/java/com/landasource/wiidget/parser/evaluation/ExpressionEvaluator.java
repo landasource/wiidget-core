@@ -18,14 +18,12 @@ import com.landasource.wiidget.antlr.WiidgetParser.MapEntryContext;
 import com.landasource.wiidget.antlr.WiidgetParser.MapExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.MapKeyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.PrimaryContext;
-import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableContext;
 import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.parser.imports.ImportContext;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.parser.util.StringDeclaration;
 import com.landasource.wiidget.reflect.Reflection;
-import com.landasource.wiidget.reflect.ReflectionException;
 import com.landasource.wiidget.util.DataMap;
 
 /**
@@ -45,10 +43,6 @@ public class ExpressionEvaluator {
 
     }
 
-    public Object evaluate(final WiidgetMethodCallExpressionContext callExpressionContext) throws EvaluationException {
-        return processWiidgetMethodCall(callExpressionContext);
-    }
-
     public Object evaluate(final ExpressionContext expression) throws EvaluationException {
         // primary
         final PrimaryContext primaryContext = expression.primary();
@@ -60,12 +54,6 @@ public class ExpressionEvaluator {
         final WiidgetVariableContext wiidgetVariableContext = expression.wiidgetVariable();
         if (null != wiidgetVariableContext) {
             return evaluateWiidgetVariable(wiidgetVariableContext);
-        }
-
-        // wiidget method call
-        final WiidgetMethodCallExpressionContext wiidgetMethodCallExpressionContext = expression.wiidgetMethodCallExpression();
-        if (null != wiidgetMethodCallExpressionContext) {
-            return processWiidgetMethodCall(wiidgetMethodCallExpressionContext);
         }
 
         // expression with identifier
@@ -303,7 +291,7 @@ public class ExpressionEvaluator {
             final TerminalNode lparen = expression.LPAREN();
             if (null == lparen) {
                 // property getter
-                return Reflection.getFieldValue(baseValue, identifier);
+                return getObjectProperty(baseValue, identifier);
             } else {
 
                 final ExpressionListContext expressionListContext = expression.expressionList();
@@ -316,6 +304,26 @@ public class ExpressionEvaluator {
         }
 
         throw new EvaluationException(expression, "Cannot evaluate expression: " + expression.getText());
+    }
+
+    /**
+     * Object property getter. Checks whether baseValue is {@link Map}. When it
+     * is uses interface method.
+     *
+     * @param baseValue
+     *            object
+     * @param property
+     *            property name
+     * @return value of field
+     */
+    @SuppressWarnings("rawtypes")
+    private Object getObjectProperty(final Object baseValue, final String property) {
+
+        if (Map.class.isAssignableFrom(baseValue.getClass())) {
+            return ((Map) baseValue).get(property);
+        }
+
+        return Reflection.getFieldValue(baseValue, property);
     }
 
     private Object evaluateWiidgetVariable(final WiidgetVariableContext wiidgetVariableContext) throws EvaluationException {
@@ -557,29 +565,6 @@ public class ExpressionEvaluator {
         }
 
         throw new EvaluationException(literalContext, "Cannot evaluate literal: " + literalContext.getText());
-    }
-
-    private Object processWiidgetMethodCall(final WiidgetMethodCallExpressionContext expressionContext) throws EvaluationException {
-
-        final String wiidgetVariable = expressionContext.wiidgetVariable().Identifier().getText();
-
-        final Wiidget wiidget = getWiidgetMap().get(wiidgetVariable);
-
-        if (null == wiidget) {
-            handleUndefinedWiidgetVariable(wiidgetVariable);
-        }
-
-        final String methodName = expressionContext.Identifier().getText();
-
-        final ExpressionListContext expressionListContext = expressionContext.expressionList();
-
-        final Object[] parameters = null == expressionListContext ? new Object[0] : evaluateExpressionList(expressionListContext);
-
-        try {
-            return Reflection.callMethod(wiidget, methodName, parameters);
-        } catch (final ReflectionException reflectionException) {
-            throw new EvaluationException(expressionContext, "Cannot call method '" + methodName + "' on " + wiidget.getClass().getCanonicalName(), reflectionException);
-        }
     }
 
     /**

@@ -162,7 +162,7 @@ public class Tag implements Cloneable, Serializable {
      * @return reference of object to chaining method
      */
     public Tag setAttribute(final String key, final Object value) {
-        this.attributes.put(key, value.toString());
+        this.attributes.put(key, null == value ? null : String.valueOf(value));
         return this;
     }
 

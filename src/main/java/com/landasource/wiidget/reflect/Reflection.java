@@ -212,7 +212,7 @@ public final class Reflection {
 
     /**
      * Returns the declared field of class hierarchy.
-     * 
+     *
      * @param baseClass
      *            class to inspect
      * @return the array of all declared fields
@@ -241,7 +241,7 @@ public final class Reflection {
             return MethodUtils.invokeMethod(base, methodName, parameters);
 
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            throw new com.landasource.wiidget.reflect.ReflectionException("Cannot invoke method:" + methodName + " on class: " + base.getClass().getCanonicalName(), e);
+            throw new com.landasource.wiidget.reflect.ReflectionException("Cannot invoke method: " + methodName + " on class: " + base.getClass().getCanonicalName(), e);
         }
 
     }

@@ -33,13 +33,11 @@ import com.landasource.wiidget.antlr.WiidgetParser.ForeachControlContext;
 import com.landasource.wiidget.antlr.WiidgetParser.IfControlContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ImportDeclarationContext;
 import com.landasource.wiidget.antlr.WiidgetParser.QualifiedNameContext;
-import com.landasource.wiidget.antlr.WiidgetParser.SeamStatementContext;
 import com.landasource.wiidget.antlr.WiidgetParser.StatementDeclarationContext;
 import com.landasource.wiidget.antlr.WiidgetParser.UnifiedWiidgetNameContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetArgumentsContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetBodyContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetDeclarationContext;
-import com.landasource.wiidget.antlr.WiidgetParser.WiidgetMethodCallExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.WiidgetVariableBindingContext;
 import com.landasource.wiidget.commons.WiidgetTemplate;
 import com.landasource.wiidget.engine.Engine;
@@ -230,57 +228,6 @@ public class TemplateProcessor extends WiidgetView {
             processWiidget(wiidgetDeclarationContext);
         }
 
-        final WiidgetMethodCallExpressionContext wiidgetMethodCallExpressionContext = statementDeclarationContext.wiidgetMethodCallExpression();
-        if (null != wiidgetMethodCallExpressionContext) {
-
-            evaluateWiidgetMethodCall(wiidgetMethodCallExpressionContext);
-        }
-
-        final SeamStatementContext seamStatementContext = statementDeclarationContext.seamStatement();
-        if (null != seamStatementContext) {
-            processSeamStatement(seamStatementContext);
-        }
-
-    }
-
-    /**
-     * @param wiidgetMethodCallExpressionContext
-     *            wiidget method call
-     * @return result of method call
-     * @throws EvaluationException
-     *             when cannot invoke method
-     */
-    private Object evaluateWiidgetMethodCall(final WiidgetMethodCallExpressionContext wiidgetMethodCallExpressionContext) throws EvaluationException {
-        final ExpressionEvaluator evaluator = createExpressionEvaluator();
-        return evaluator.evaluate(wiidgetMethodCallExpressionContext);
-    }
-
-    /**
-     * @param seamStatementContext
-     *            seaming statement
-     * @throws ParserException
-     *             when the object if not a wiidget
-     */
-    private void processSeamStatement(final SeamStatementContext seamStatementContext) throws ParserException {
-
-        final ExpressionContext expressionContext = seamStatementContext.expression();
-
-        final Object object = evaluateExpression(expressionContext);
-
-        if (!(object instanceof Wiidget)) {
-            throw new ParserException(seamStatementContext, "Expression '" + expressionContext.getText() + "' must be return wiidget instance.");
-        }
-
-        final Wiidget wiidget = (Wiidget) object;
-
-        beginWiidget(wiidget);
-
-        final WiidgetBodyContext wiidgetBodyContext = seamStatementContext.wiidgetBody();
-        if (null != wiidgetBodyContext) {
-            processStatements(wiidgetBodyContext.statementDeclaration());
-        }
-
-        endWiidget(wiidget);
     }
 
     /**
@@ -588,7 +535,7 @@ public class TemplateProcessor extends WiidgetView {
 
         } else if (wiidgetResource instanceof ClassWiidgetResource) {
 
-            final Class<? extends Wiidget> type = ((ClassWiidgetResource) wiidgetResource).getWiidgetClass();
+            final Class<? extends Wiidget> type = ((ClassWiidgetResource) wiidgetResource).getType();
             final DataMap dataMap = processArguments(arguments, type);
 
             wiidget = getEngine().createWiidget(this, type, dataMap, true);

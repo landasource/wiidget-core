@@ -125,8 +125,7 @@ literal
     :   IntegerLiteral
     |   FloatingPointLiteral
     |   CharacterLiteral
-    |   TextLiteral
-    |   StringLiteral        
+    |   StringLiteral
     |   BooleanLiteral
     |   NullLiteral
     ;
@@ -141,7 +140,7 @@ expression
     :   primary
     |   wiidgetVariable
     |   mapExpression
-    |   listExpression    
+    |   listExpression
     |   expression DOT Identifier    
     |   expression LBRACK expression RBRACK
     |   expression DOT Identifier LPAREN expressionList? RPAREN        
@@ -331,8 +330,6 @@ BinaryDigitOrUnderscore
 	|	'_'
 	;
 
-// $3.10.2 Floating-Point Literals
-
 FloatingPointLiteral
 	:	DecimalFloatingPointLiteral
 	|	HexadecimalFloatingPointLiteral
@@ -406,16 +403,6 @@ fragment
 SingleCharacter
 	:	~['\\]
 	;
-
-TextLiteral: TEXT;
-
-TEXT
-  : '"""'
-    ( ~'"'
-    | {_input.LA(2) != '"' || _input.LA(3) != '"'}? '"'
-    )*
-    '"""'
-  ;
 
 StringLiteral
 	:	'"' StringCharacters? '"'
