@@ -433,10 +433,12 @@ public class TemplateProcessor extends WiidgetView {
                 final WiidgetResource wiidgetResource = getWiidgetClass(alias);
 
                 if (null == wiidgetResource) {
-                    throw new ParserException(declarationContext, "Unknown wiidget alias: " + alias);
-                }
+                    //throw new UnknownWiidgetTypeException(declarationContext, "Unknown wiidget alias: " + alias);
 
-                wiidget = createWiidget(wiidgetResource, wiidgetArguments);
+                    wiidget = createRawWiidget(alias, wiidgetArguments);
+                } else {
+                    wiidget = createWiidget(wiidgetResource, wiidgetArguments);
+                }
             } else {
 
                 wiidget = createWiidgetFromExpression(expressionWiidgetName.expression(), wiidgetArguments);
