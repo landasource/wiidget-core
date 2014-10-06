@@ -93,4 +93,11 @@ public class Raw extends RawWiidget {
         this.rawTagName = rawTagName;
     }
 
+    /**
+     * @return the attributes
+     */
+    public DataMap getAttributes() {
+        return attributes;
+    }
+
 }
