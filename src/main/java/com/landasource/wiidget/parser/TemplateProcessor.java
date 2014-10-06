@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -80,11 +78,6 @@ public class TemplateProcessor extends WiidgetView {
      * Lang processor will act as this view.
      */
     private final WiidgetView ownerView;
-
-    /**
-     * Stores wiidget by names if name is defined.
-     */
-    private final Map<String, Wiidget> wiidgetMap = new HashMap<>();
 
     /**
      * Default constructor.
@@ -415,7 +408,7 @@ public class TemplateProcessor extends WiidgetView {
 
         final WiidgetVariableBindingContext wiidgetVariableBindingContext = declarationContext.wiidgetVariableBinding();
         if (null != wiidgetVariableBindingContext) {
-            wiidgetVariable = wiidgetVariableBindingContext.wiidgetVariable().Identifier().getText();
+            wiidgetVariable = wiidgetVariableBindingContext.wiidgetVariable().getText();
         }
 
         Wiidget wiidget;
@@ -452,11 +445,12 @@ public class TemplateProcessor extends WiidgetView {
 
         }
 
+        // START WIIDGET
         wiidget = startWiidget(wiidget); // after start wiidget can be null when its not rendered
 
         // bind to variable
         if (null != wiidgetVariable) {
-            getWiidgetMap().put(wiidgetVariable, wiidget);
+            getWiidgetContext().set(wiidgetVariable, wiidget);
         }
 
         // rendered property has meaning here
@@ -464,6 +458,7 @@ public class TemplateProcessor extends WiidgetView {
             processStatements(declarationContext.wiidgetBody().statementDeclaration());
         }
 
+        // END WIIDGET
         endWiidget(wiidget);
 
     }
@@ -720,7 +715,7 @@ public class TemplateProcessor extends WiidgetView {
     protected ExpressionEvaluator createExpressionEvaluator() {
         final Configuration configuration = getEngine().getConfiguration();
 
-        final EvaluationContext evaluationContext = new EvaluationContext(importContext, getWiidgetContext(), getWiidgetMap());
+        final EvaluationContext evaluationContext = new EvaluationContext(importContext, getWiidgetContext());
         return configuration.getExpressionEvaluatorFactory(evaluationContext).create();
     }
 
@@ -757,10 +752,4 @@ public class TemplateProcessor extends WiidgetView {
         return compilationUnit;
     }
 
-    /**
-     * @return the wiidgetMap
-     */
-    public Map<String, Wiidget> getWiidgetMap() {
-        return wiidgetMap;
-    }
 }

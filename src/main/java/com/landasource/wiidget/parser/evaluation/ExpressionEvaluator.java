@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.mvel2.PropertyAccessException;
 
-import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionListContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ListExpressionContext;
@@ -327,9 +326,9 @@ public class ExpressionEvaluator {
     }
 
     private Object evaluateWiidgetVariable(final WiidgetVariableContext wiidgetVariableContext) throws EvaluationException {
-        final String wiidgetVariable = wiidgetVariableContext.Identifier().getText();
+        final String wiidgetVariable = wiidgetVariableContext.getText();
 
-        final Wiidget wiidget = getWiidgetMap().get(wiidgetVariable);
+        final Object wiidget = getWiidgetContext().get(wiidgetVariable);
         if (null == wiidget) {
             handleUndefinedWiidgetVariable(wiidgetVariable);
         }
@@ -588,13 +587,6 @@ public class ExpressionEvaluator {
 
     public Context getWiidgetContext() {
         return evaluationContext.getWiidgetContext();
-    }
-
-    /**
-     * @return the wiidgetMap
-     */
-    public Map<String, Wiidget> getWiidgetMap() {
-        return evaluationContext.getWiidgetMap();
     }
 
     public ImportContext getImportContext() {

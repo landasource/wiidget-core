@@ -1,8 +1,5 @@
 package com.landasource.wiidget.parser.evaluation;
 
-import java.util.Map;
-
-import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.parser.imports.ImportContext;
 
@@ -17,18 +14,16 @@ public class EvaluationContext {
 
     private Context wiidgetContext;
 
-    private Map<String, Wiidget> wiidgetMap;
-
     /**
      * @param importContext
      * @param wiidgetContext
      * @param wiidgetMap
      */
-    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext, final Map<String, Wiidget> wiidgetMap) {
+    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext) {
         super();
         this.importContext = importContext;
         this.wiidgetContext = wiidgetContext;
-        this.wiidgetMap = wiidgetMap;
+
     }
 
     /**
@@ -59,21 +54,6 @@ public class EvaluationContext {
      */
     public void setWiidgetContext(final Context wiidgetContext) {
         this.wiidgetContext = wiidgetContext;
-    }
-
-    /**
-     * @return the wiidgetMap
-     */
-    public Map<String, Wiidget> getWiidgetMap() {
-        return wiidgetMap;
-    }
-
-    /**
-     * @param wiidgetMap
-     *            the wiidgetMap to set
-     */
-    public void setWiidgetMap(final Map<String, Wiidget> wiidgetMap) {
-        this.wiidgetMap = wiidgetMap;
     }
 
 }

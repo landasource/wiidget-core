@@ -2,7 +2,6 @@ package com.landasource.wiidget.parser;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -12,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.landasource.wiidget.Tag;
-import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.antlr.WiidgetLexer;
 import com.landasource.wiidget.antlr.WiidgetParser;
 import com.landasource.wiidget.context.Context;
@@ -145,7 +143,7 @@ public class ExpressionTest {
     }
 
     protected static ExpressionEvaluator createEvaluator(final Context wiidgetContext) {
-        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultEngine(wiidgetContext)), wiidgetContext, new HashMap<String, Wiidget>());
+        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultEngine(wiidgetContext)), wiidgetContext);
 
         return new DefaultEngine(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
     }
