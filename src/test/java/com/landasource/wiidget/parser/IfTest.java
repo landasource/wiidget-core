@@ -9,33 +9,33 @@ import com.landasource.wiidget.testutil.AbstractTemplateTest;
  */
 public class IfTest extends AbstractTemplateTest {
 
-    @Test
-    public void testSimpleIfWithTrue() {
-        context.set("truevalue", true);
+	@Test
+	public void testSimpleIfWithTrue() {
+		context.set("truevalue", true);
 
-        assertText("Foo", " if(truevalue){ \"Foo\"; } ");
-        assertText("", " if(!truevalue){ \"Foo\"; } ");
-    }
+		assertText("Foo", " if(truevalue){ \"Foo\"; } ");
+		assertText("", " if(!truevalue){ \"Foo\"; } ");
+	}
 
-    @Test
-    public void testSimpleIfWithFalse() {
-        context.set("falsevalue", false);
+	@Test
+	public void testSimpleIfWithFalse() {
+		context.set("falsevalue", false);
 
-        assertText("", " if(falsevalue){ \"Foo\"; } ");
-        assertText("Foo", " if(!falsevalue){ \"Foo\"; } ");
-    }
+		assertText("", " if(falsevalue){ \"Foo\"; } ");
+		assertText("Foo", " if(!falsevalue){ \"Foo\"; } ");
+	}
 
-    @Test
-    public void testElseIfWithTrue() {
+	@Test
+	public void testElseIfWithTrue() {
 
-        context.set("truevalue", true);
+		context.set("truevalue", true);
 
-        assertText("Foo", " if(!truevalue){ \"Bar\"; } else { \"Foo\"; } ");
-        assertText("Foo", " if(truevalue){ \"Foo\"; } else { \"Bar\"; } ");
+		assertText("Foo", " if(!truevalue){ \"Bar\"; } else { \"Foo\"; } ");
+		assertText("Foo", " if(truevalue){ \"Foo\"; } else { \"Bar\"; } ");
 
-        assertText("", " if(!truevalue){ \"Foo\"; } else; ");
-        assertText("", " if(!truevalue){ \"Foo\"; } else{} ");
+		assertText("", " if(!truevalue){ \"Foo\"; } else; ");
+		assertText("", " if(!truevalue){ \"Foo\"; } else{} ");
 
-    }
+	}
 
 }

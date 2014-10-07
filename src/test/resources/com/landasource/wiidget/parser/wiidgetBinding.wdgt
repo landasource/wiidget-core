@@ -1,0 +1,7 @@
+import com.landasource.wiidget.parser.WiidgetVariableTest$SimpleWiidget as simple;
+
+$fooWiidget : div(class = "some class"){
+
+	$simple : simple; 
+
+}
