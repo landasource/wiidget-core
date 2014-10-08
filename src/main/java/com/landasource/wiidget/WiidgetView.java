@@ -13,7 +13,7 @@ public abstract class WiidgetView extends Wiidget {
 
 	private BufferedPrintStream printStream;
 
-	private Engine widgetFactory;
+	private Engine engine;
 
 	protected WiidgetView() {
 		this.printStream = new BufferedPrintStream();
@@ -21,7 +21,7 @@ public abstract class WiidgetView extends Wiidget {
 
 	public WiidgetView(final Engine engine) {
 		this();
-		this.widgetFactory = engine;
+		this.engine = engine;
 	}
 
 	public void clearPrintStream() {
@@ -44,7 +44,7 @@ public abstract class WiidgetView extends Wiidget {
 
 	@Override
 	protected Engine getEngine() {
-		return widgetFactory;
+		return engine;
 	}
 
 	protected Context getWiidgetContext() {
