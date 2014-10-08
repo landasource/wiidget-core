@@ -1,5 +1,6 @@
 package com.landasource.wiidget.engine;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -7,7 +8,6 @@ import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetView;
 import com.landasource.wiidget.context.Context;
 import com.landasource.wiidget.engine.configuration.Configuration;
-import com.landasource.wiidget.util.DataMap;
 import com.landasource.wiidget.util.Properties;
 
 /**
@@ -28,7 +28,7 @@ public interface Engine {
 	 *            type of the wiidget
 	 * @return the new constructed wiidget with set properties
 	 */
-	public <W extends Wiidget> W createWiidget(WiidgetView owner, Class<W> widgetClass, DataMap attributes, boolean putToStack);
+	public <W extends Wiidget> W createWiidget(WiidgetView owner, Class<W> widgetClass, Map<String, Object> attributes, boolean putToStack);
 
 	/**
 	 * @return the stask of the wiidgets in current state
@@ -55,7 +55,7 @@ public interface Engine {
 	 *            type of wiidget
 	 * @return instance
 	 */
-	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final DataMap data);
+	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final Map<String, Object> data);
 
 	/**
 	 * Generates unique id.

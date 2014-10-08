@@ -11,76 +11,79 @@ import com.landasource.wiidget.util.DataMap;
  */
 public abstract class ContextualWiidget extends Wiidget {
 
-    /** Extra context value of the template. */
-    private DataMap context = new DataMap();
+	/** Name of the context attribute. */
+	public static final String CONTEXT_ATTRIBUTE = "context";
 
-    /** Previous values of the external context. */
-    private final DataMap previousContext = new DataMap();
+	/** Extra context value of the template. */
+	private DataMap context = new DataMap();
 
-    @Override
-    public void init() {
-        super.init();
-        exportContext();
-    }
+	/** Previous values of the external context. */
+	private final DataMap previousContext = new DataMap();
 
-    @Override
-    public void run() {
-        super.run();
-        restoreContext();
-    }
+	@Override
+	public void init() {
+		super.init();
+		exportContext();
+	}
 
-    /**
-     * Exports defined context values from {@link #context}.
-     */
-    private void exportContext() {
-        final Context wiidgetContext = getEngine().getContext();
-        for (final String key : context.keySet()) {
-            if (wiidgetContext.isSet(key)) {
-                // set to backup
-                previousContext.set(key, wiidgetContext.get(key));
-            } else {
-                previousContext.set(key, null);
-            }
-            // set to context
-            wiidgetContext.set(key, context.get(key));
-        }
-    }
+	@Override
+	public void run() {
+		super.run();
+		restoreContext();
+	}
 
-    /**
-     * Restores the previous context.
-     */
-    protected void restoreContext() {
-        final Context wiidgetContext = getEngine().getContext();
+	/**
+	 * Exports defined context values from {@link #context}.
+	 */
+	private void exportContext() {
+		final Context wiidgetContext = getEngine().getContext();
+		for (final String key : context.keySet()) {
+			if (wiidgetContext.isSet(key)) {
+				// set to backup
+				previousContext.set(key, wiidgetContext.get(key));
+			} else {
+				previousContext.set(key, null);
+			}
+			// set to context
+			wiidgetContext.set(key, context.get(key));
+		}
+	}
 
-        for (final String key : context.keySet()) {
-            wiidgetContext.remove(key); // leter maybe will be retored
-        }
+	/**
+	 * Restores the previous context.
+	 */
+	protected void restoreContext() {
+		final Context wiidgetContext = getEngine().getContext();
 
-        for (final Entry<String, Object> entry : previousContext.entrySet()) {
+		for (final String key : context.keySet()) {
+			wiidgetContext.remove(key); // leter maybe will be retored
+		}
 
-            final String variable = entry.getKey();
-            final Object value = entry.getValue();
-            if (value == null) {
-                //wiidgetContext.remove(variable);
-            } else {
-                wiidgetContext.set(variable, value);
-            }
-        }
-    }
+		for (final Entry<String, Object> entry : previousContext.entrySet()) {
 
-    /**
-     * @return the context
-     */
-    public DataMap getContext() {
-        return context;
-    }
+			final String variable = entry.getKey();
+			final Object value = entry.getValue();
+			if (value == null) {
+				//wiidgetContext.remove(variable);
+			} else {
+				wiidgetContext.set(variable, value);
+			}
+		}
+	}
 
-    /**
-     * @param context
-     *            the context to set
-     */
-    public void setContext(final DataMap context) {
-        this.context = context;
-    }
+	/**
+	 * @return the context
+	 */
+	public DataMap getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context
+	 *            the context to set
+	 */
+	public void setContext(final DataMap context) {
+		this.context = context;
+	}
 
 }

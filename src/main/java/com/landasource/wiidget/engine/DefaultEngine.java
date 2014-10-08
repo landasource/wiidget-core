@@ -2,6 +2,7 @@ package com.landasource.wiidget.engine;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
@@ -9,8 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.context.DefaultContext;
 import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.context.DefaultContext;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.engine.configuration.DefaultConfiguration;
 import com.landasource.wiidget.reflect.Reflection;
@@ -85,7 +86,7 @@ public class DefaultEngine implements Engine {
 	 *            configuration
 	 */
 	public DefaultEngine(final Properties properties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
-	        final Configuration configuration) {
+			final Configuration configuration) {
 
 		this.properties = properties;
 		this.wiidgetContext = context;
@@ -104,7 +105,7 @@ public class DefaultEngine implements Engine {
 	}
 
 	@Override
-	public <W extends Wiidget> W createWiidget(final WiidgetView owner, final Class<W> widgetClass, final DataMap attributes, final boolean putToStack) {
+	public <W extends Wiidget> W createWiidget(final WiidgetView owner, final Class<W> widgetClass, final Map<String, Object> attributes, final boolean putToStack) {
 
 		final W widget = createWiidget(widgetClass, attributes);
 
@@ -125,7 +126,7 @@ public class DefaultEngine implements Engine {
 	}
 
 	@Override
-	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final DataMap data) {
+	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final Map<String, Object> data) {
 
 		final C component = getConfiguration().getObjectFactory().getInstance(componentClass);
 
