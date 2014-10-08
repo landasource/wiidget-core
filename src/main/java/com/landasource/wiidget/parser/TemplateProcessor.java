@@ -447,6 +447,8 @@ public class TemplateProcessor extends WiidgetView {
 
 		}
 
+		Wiidget before = wiidget;
+
 		// START WIIDGET
 		wiidget = startWiidget(wiidget); // after start wiidget can be null when its not rendered
 
@@ -461,7 +463,7 @@ public class TemplateProcessor extends WiidgetView {
 		}
 
 		// END WIIDGET
-		endWiidget(wiidget);
+		endWiidget(before);
 
 	}
 
