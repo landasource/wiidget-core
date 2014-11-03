@@ -32,6 +32,19 @@ public class ExpressionTest {
     }
 
     @Test
+    public void testSimpleStrings() {
+
+        for (char i = Character.MIN_VALUE; i < Character.MAX_VALUE; i++) {
+            final String string = new String(new char[] { i });
+            if (Arrays.asList("\"", "\\").contains(string)) {
+                continue; // igonre spec chars
+            }
+            assertExpression(string, "\"" + string + "\""); // check the string will be evaluated to itself
+        }
+
+    }
+
+    @Test
     public void testIndexedListExpression() {
 
         final Object object = new Object();
@@ -143,9 +156,10 @@ public class ExpressionTest {
     }
 
     protected static ExpressionEvaluator createEvaluator(final Context wiidgetContext) {
-        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(new DefaultEngine(wiidgetContext)), wiidgetContext);
+        final DefaultEngine engine = new DefaultEngine(wiidgetContext);
+        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(engine), wiidgetContext, new TemplateProcessor(engine));
 
-        return new DefaultEngine(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
+        return engine.getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
     }
 
     protected static WiidgetParser createParser(final String template) {

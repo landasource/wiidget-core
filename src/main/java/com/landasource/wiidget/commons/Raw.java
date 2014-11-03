@@ -30,6 +30,10 @@ public class Raw extends RawWiidget {
     public void run() {
         super.run();
 
+        if (isIdSet()) {
+            attributes.put("id", getId());
+        }
+
         final String children = endBuffer();
 
         if (Strings.isEmpty(children) && attributes.isEmpty()) {

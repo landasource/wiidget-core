@@ -228,10 +228,15 @@ public class ExpressionEvaluator {
      * @param mapKey
      *            map key expression
      * @return string value of key
+     * @throws EvaluationException
      */
-    private String evaluateMapKey(final MapKeyContext mapKey) {
+    private String evaluateMapKey(final MapKeyContext mapKey) throws EvaluationException {
         final TerminalNode identifier = mapKey.Identifier();
-        return null == identifier ? new StringDeclaration(mapKey.StringLiteral()).getContent() : identifier.getText();
+        return null == identifier ? new StringDeclaration(mapKey.StringLiteral()).getContent(getStringExpressionEvaluation()) : identifier.getText();
+    }
+
+    private StringExpressionEvaluation getStringExpressionEvaluation() {
+        return evaluationContext.getTemplateProcessor().createStringExpressionEvaluation();
     }
 
     /**
@@ -535,7 +540,7 @@ public class ExpressionEvaluator {
 
         final TerminalNode string = literalContext.StringLiteral();
         if (null != string) {
-            return new StringDeclaration(string).getContent();
+            return new StringDeclaration(string).getContent(getStringExpressionEvaluation());
         }
 
         final TerminalNode integer = literalContext.IntegerLiteral();

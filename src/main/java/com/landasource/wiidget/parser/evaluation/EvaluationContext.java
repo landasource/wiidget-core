@@ -1,6 +1,7 @@
 package com.landasource.wiidget.parser.evaluation;
 
 import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.parser.TemplateProcessor;
 import com.landasource.wiidget.parser.imports.ImportContext;
 
 /**
@@ -14,15 +15,18 @@ public class EvaluationContext {
 
     private Context wiidgetContext;
 
+    private final TemplateProcessor templateProcessor;
+
     /**
      * @param importContext
      * @param wiidgetContext
      * @param wiidgetMap
      */
-    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext) {
+    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext, final TemplateProcessor templateProcessor) {
         super();
         this.importContext = importContext;
         this.wiidgetContext = wiidgetContext;
+        this.templateProcessor = templateProcessor;
 
     }
 
@@ -54,6 +58,13 @@ public class EvaluationContext {
      */
     public void setWiidgetContext(final Context wiidgetContext) {
         this.wiidgetContext = wiidgetContext;
+    }
+
+    /**
+     * @return the templateProcessor
+     */
+    public TemplateProcessor getTemplateProcessor() {
+        return templateProcessor;
     }
 
 }

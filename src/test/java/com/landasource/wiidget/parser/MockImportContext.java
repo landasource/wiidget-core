@@ -9,8 +9,8 @@ import com.landasource.wiidget.parser.resource.WiidgetResource;
  */
 public class MockImportContext extends ImportContext {
 
-    public MockImportContext(final Engine factory) {
-        super(null, factory);
+    public MockImportContext(final Engine engine) {
+        super(null, engine, new TemplateProcessor(engine));
     }
 
     @Override
