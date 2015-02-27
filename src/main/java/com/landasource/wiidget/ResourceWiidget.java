@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 import com.landasource.wiidget.commons.ContextualWiidget;
+import com.landasource.wiidget.context.Context;
 
 /**
  * Wiidget for files.
@@ -14,47 +15,72 @@ import com.landasource.wiidget.commons.ContextualWiidget;
  */
 public class ResourceWiidget extends ContextualWiidget {
 
-    /** Full path to file. */
-    private String fileName;
+	/** Full path to file. */
+	private String fileName;
+	private String content;
 
-    // TODO handle children
+	@Override
+	public void init() {
+		super.init();
 
-    @Override
-    public void run() {
+		startBuffer();
+	}
 
-        try {
-            final InputStream inputStream = getEngine().getConfiguration().getFileLoader().getFile(fileName);
+	@Override
+	public void run() {
 
-            final String template = IOUtils.toString(inputStream);
+		try {
+			final InputStream inputStream = getEngine().getConfiguration()
+					.getFileLoader().getFile(fileName);
 
-            final String content = Renderer.create(getEngine()).render(template);
+			final String template = IOUtils.toString(inputStream);
 
-            write(content);
+			final Context context = getEngine().getContext();
+			final Object prevThis = context.get("this");
 
-        } catch (final WiidgetException exception) {
+			content = endBuffer(); // use: this.content
+			context.set("this", this);
 
-            throw new WiidgetException("Cannot render wiidget: " + fileName, exception);
+			final String content = Renderer.create(getEngine())
+					.render(template);
 
-        } catch (final IOException e) {
-            throw new WiidgetException("Cannot load wiidget", e);
-        }
+			if (null == prevThis) {
+				context.remove("this");
+			} else {
+				context.set("this", prevThis);
+			}
 
-        super.run();
-    }
+			write(content);
 
-    /**
-     * @return the fileName
-     */
-    public String getFileName() {
-        return fileName;
-    }
+		} catch (final WiidgetException exception) {
 
-    /**
-     * @param fileName
-     *            the fileName to set
-     */
-    public void setFileName(final String fileName) {
-        this.fileName = fileName;
-    }
+			throw new WiidgetException("Cannot render wiidget: " + fileName,
+					exception);
+
+		} catch (final IOException e) {
+			throw new WiidgetException("Cannot load wiidget", e);
+		}
+
+		super.run();
+	}
+
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+		return fileName;
+	}
+
+	/**
+	 * @param fileName
+	 *            the fileName to set
+	 */
+	public void setFileName(final String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getContent() {
+		return content;
+	}
 
 }
