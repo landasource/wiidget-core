@@ -18,42 +18,46 @@ import com.landasource.wiidget.validation.WiidgetValidator;
  */
 public interface Configuration {
 
-    /**
-     * @return raw type that can render raw wiidgets
-     */
-    public Class<? extends RawWiidget> getRawType();
+	/**
+	 * @return raw type that can render raw wiidgets
+	 */
+	public Class<? extends RawWiidget> getRawType();
 
-    /**
-     * @return URL resolver
-     */
-    public URLResolver getUrlResolver();
+	/**
+	 * @return URL resolver
+	 */
+	public URLResolver getUrlResolver();
 
-    /**
-     * @return validator
-     */
-    public WiidgetValidator getWiidgetValidator();
+	/**
+	 * @return validator
+	 */
+	public WiidgetValidator getWiidgetValidator();
 
-    /**
-     * @return object factory
-     * @see ObjectFactory
-     */
-    public ObjectFactory getObjectFactory();
+	/**
+	 * @return object factory
+	 * @see ObjectFactory
+	 */
+	public ObjectFactory getObjectFactory();
 
-    /**
-     * @param evaluationContext
-     *            evaluation context within the evaluation of expressions
-     *            happens
-     * @return factory of evaluator
-     */
-    public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(EvaluationContext evaluationContext);
+	/**
+	 * @param evaluationContext
+	 *           evaluation context within the evaluation of expressions happens
+	 * @return factory of evaluator
+	 */
+	public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(EvaluationContext evaluationContext);
 
-    /**
-     * @return set of loaders that can load external wiidget resources
-     */
-    public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders();
+	/**
+	 * @return set of loaders that can load external wiidget resources
+	 */
+	public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders();
 
-    /**
-     * @return file loader
-     */
-    public FileLoader getFileLoader();
+	/**
+	 * @return file loader
+	 */
+	public FileLoader getFileLoader();
+
+	/**
+	 * @return class loader
+	 */
+	public ClassLoader getClassLoader();
 }

@@ -24,55 +24,60 @@ import com.landasource.wiidget.validation.WiidgetValidator;
  */
 public class DefaultConfiguration implements Configuration {
 
-    /**
-     * Set of external loaders.
-     */
-    private final Set<ExternalWiidgetLoader> externalWiidgetLoader = new HashSet<>();
+	/**
+	 * Set of external loaders.
+	 */
+	private final Set<ExternalWiidgetLoader> externalWiidgetLoader = new HashSet<>();
 
-    /**
-     * Default constructor.
-     */
-    public DefaultConfiguration() {
-        super();
-        getExternalWiidgetLoaders().add(new WebWiidgetLoader());
-        getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
-        getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
-    }
+	/**
+	 * Default constructor.
+	 */
+	public DefaultConfiguration() {
+		super();
+		getExternalWiidgetLoaders().add(new WebWiidgetLoader());
+		getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
+		getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
+	}
 
-    @Override
-    public Class<? extends RawWiidget> getRawType() {
-        return Raw.class;
-    }
+	@Override
+	public Class<? extends RawWiidget> getRawType() {
+		return Raw.class;
+	}
 
-    @Override
-    public URLResolver getUrlResolver() {
-        return new TransparentURLResolver();
-    }
+	@Override
+	public URLResolver getUrlResolver() {
+		return new TransparentURLResolver();
+	}
 
-    @Override
-    public WiidgetValidator getWiidgetValidator() {
+	@Override
+	public WiidgetValidator getWiidgetValidator() {
 
-        return new DefaultWiidgetValidator(getObjectFactory());
-    }
+		return new DefaultWiidgetValidator(getObjectFactory());
+	}
 
-    @Override
-    public ObjectFactory getObjectFactory() {
-        return new ReflectionObjectFactory();
-    }
+	@Override
+	public ObjectFactory getObjectFactory() {
+		return new ReflectionObjectFactory();
+	}
 
-    @Override
-    public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(final EvaluationContext evaluationContext) {
-        return new DefaultExpressionEvaluatorFactory(evaluationContext);
-    }
+	@Override
+	public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(final EvaluationContext evaluationContext) {
+		return new DefaultExpressionEvaluatorFactory(evaluationContext);
+	}
 
-    @Override
-    public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders() {
-        return externalWiidgetLoader;
-    }
+	@Override
+	public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders() {
+		return externalWiidgetLoader;
+	}
 
-    @Override
-    public FileLoader getFileLoader() {
-        return new ClassPathFileLoader();
-    }
+	@Override
+	public FileLoader getFileLoader() {
+		return new ClassPathFileLoader();
+	}
+
+	@Override
+	public ClassLoader getClassLoader() {
+		return new DefaultClassLoader();
+	}
 
 }

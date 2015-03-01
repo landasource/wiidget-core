@@ -21,6 +21,11 @@ public class ValidationException extends RuntimeException {
 	}
 
 	@Override
+	public String getLocalizedMessage() {
+		return toString();
+	}
+
+	@Override
 	public String toString() {
 		return this.getClass().getCanonicalName() + " : " + errors.toString();
 	}
