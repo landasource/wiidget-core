@@ -6,8 +6,6 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -115,18 +113,6 @@ public class TemplateProcessor extends WiidgetView implements StatementProcessor
 
     }
 
-    /**
-     * Children processors can import default classes here.
-     */
-    protected void importDefaultClasses() {
-
-        final Map<String, WiidgetResource> defaultImports = getEngine().getConfiguration().getDefaultImports();
-        for (final Entry<String, WiidgetResource> importEntry : defaultImports.entrySet()) {
-            importContext.pull(importEntry.getKey(), importEntry.getValue());
-        }
-
-    }
-
     @Override
     public void run() {
         // NO-OP
@@ -174,8 +160,6 @@ public class TemplateProcessor extends WiidgetView implements StatementProcessor
             throw new WiidgetException(e.getMessage(), e);
         }
 
-        importDefaultClasses();
-
         processStatements(compilationUnitContext.statementDeclaration());
 
         final String result = this.render();
@@ -191,7 +175,7 @@ public class TemplateProcessor extends WiidgetView implements StatementProcessor
      * @return import context
      */
     protected ImportContext createImportContext(final List<ImportDeclarationContext> importDeclaration) {
-        return new ImportContext(importDeclaration, getEngine(), this); // use
+        return new ImportContext(importDeclaration, getEngine(), this, getEngine().getConfiguration().getDefaultImports()); // use
         // default
         // context
     }

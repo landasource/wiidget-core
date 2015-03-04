@@ -56,11 +56,16 @@ public class ImportContext {
      * @param engine
      *            current factory
      */
-    public ImportContext(final List<ImportDeclarationContext> imports, final Engine engine, final TemplateProcessor templateProcessor) {
+    public ImportContext(final List<ImportDeclarationContext> imports, final Engine engine, final TemplateProcessor templateProcessor,
+            final Map<String, WiidgetResource> defaultImports) {
         super();
         this.imports = imports;
         this.engine = engine;
         this.templateProcessor = templateProcessor;
+
+        if (null != defaultImports) { // add default imports
+            importMap.putAll(defaultImports);
+        }
 
     }
 
@@ -249,7 +254,7 @@ public class ImportContext {
         return canonicalFileName;
     }
 
-    public void pull(final String alias, final WiidgetResource resource) {
+    private void pull(final String alias, final WiidgetResource resource) {
         importMap.put(alias, resource);
     }
 
