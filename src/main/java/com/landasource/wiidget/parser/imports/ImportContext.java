@@ -1,8 +1,10 @@
 package com.landasource.wiidget.parser.imports;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -31,202 +33,224 @@ import com.landasource.wiidget.util.Properties;
  */
 public class ImportContext {
 
-	/** Imports to process. */
-	private final List<ImportDeclarationContext> imports;
+    /** Imports to process. */
+    private final List<ImportDeclarationContext> imports;
 
-	/** Alias -> resource map. */
-	private final Map<String, WiidgetResource> importMap = new HashMap<String, WiidgetResource>();
+    /** Alias -> resource map. */
+    private final Map<String, WiidgetResource> importMap = new HashMap<String, WiidgetResource>();
 
-	/** Current factory. */
-	private final Engine engine;
+    /** Current factory. */
+    private final Engine engine;
 
-	private final TemplateProcessor templateProcessor;
+    private final TemplateProcessor templateProcessor;
 
-	/**
-	 * @param imports
-	 *           imports to process
-	 * @param engine
-	 *           current factory
-	 */
-	public ImportContext(final List<ImportDeclarationContext> imports, final Engine engine, final TemplateProcessor templateProcessor) {
-		super();
-		this.imports = imports;
-		this.engine = engine;
-		this.templateProcessor = templateProcessor;
+    /**
+     * Stores the aliases that was found. With this set we are able to find
+     * unused imports.
+     */
+    private final Set<String> aliasHits = new HashSet<String>();
 
-	}
+    /**
+     * @param imports
+     *            imports to process
+     * @param engine
+     *            current factory
+     */
+    public ImportContext(final List<ImportDeclarationContext> imports, final Engine engine, final TemplateProcessor templateProcessor) {
+        super();
+        this.imports = imports;
+        this.engine = engine;
+        this.templateProcessor = templateProcessor;
 
-	public void process() throws DuplicateAliasException, ImportException {
+    }
 
-		checkDuplicateAliases();
-		// at this point the template does not contain duplicate aliases
+    public void process() throws DuplicateAliasException, ImportException {
 
-		processImports();
-	}
+        checkDuplicateAliases();
+        // at this point the template does not contain duplicate aliases
 
-	public WiidgetResource findByAlias(final String wiidgetName) {
-		return importMap.get(wiidgetName);
-	}
+        processImports();
+    }
 
-	/**
-	 * Check whether the template contains duplicated aliases
-	 *
-	 * @throws DuplicateAliasException
-	 *            when the template contains duplicated aliases
-	 */
-	protected void checkDuplicateAliases() throws DuplicateAliasException {
+    public WiidgetResource findByAlias(final String wiidgetName) {
+        final WiidgetResource wiidgetResource = importMap.get(wiidgetName);
 
-		// store in this map the aliases and their imports
-		final Map<String, ImportDeclarationContext> aliases = new HashMap<String, ImportDeclarationContext>();
+        if (null != wiidgetResource) {
+            aliasHits.add(wiidgetName);
+        }
 
-		// for each import check alias
-		for (final ImportDeclarationContext importDeclaration : imports) {
+        return wiidgetResource;
+    }
 
-			final InnerImportContext innerImport = importDeclaration.innerImport();
-			if (null == innerImport) {
-				final ExternalImportContext externalImport = importDeclaration.externalImport();
-				final String alias = externalImport.Identifier().getText();
+    /**
+     * @return name of imported aliases that were not used
+     */
+    public Set<String> getUnusedImports() {
+        final Set<String> importAliases = importMap.keySet();
+        importAliases.removeAll(aliasHits);
 
-				checkAlias(aliases, alias, importDeclaration);
+        return importAliases;
+    }
 
-			} else {
+    /**
+     * Check whether the template contains duplicated aliases
+     *
+     * @throws DuplicateAliasException
+     *             when the template contains duplicated aliases
+     */
+    protected void checkDuplicateAliases() throws DuplicateAliasException {
 
-				final String alias = getAlias(innerImport);
-				checkAlias(aliases, alias, importDeclaration);
+        // store in this map the aliases and their imports
+        final Map<String, ImportDeclarationContext> aliases = new HashMap<String, ImportDeclarationContext>();
 
-			}
-		}
+        // for each import check alias
+        for (final ImportDeclarationContext importDeclaration : imports) {
 
-	}
+            final InnerImportContext innerImport = importDeclaration.innerImport();
+            if (null == innerImport) {
+                final ExternalImportContext externalImport = importDeclaration.externalImport();
+                final String alias = externalImport.Identifier().getText();
 
-	protected void checkAlias(final Map<String, ImportDeclarationContext> aliases, final String alias, final ImportDeclarationContext importDeclaration)
-			throws DuplicateAliasException {
+                checkAlias(aliases, alias, importDeclaration);
 
-		final ImportDeclarationContext existingImport = aliases.get(alias);
-		if (null != existingImport) {
-			throw new DuplicateAliasException(alias, existingImport, importDeclaration);
-		}
+            } else {
 
-		aliases.put(alias, importDeclaration);
-	}
+                final String alias = getAlias(innerImport);
+                checkAlias(aliases, alias, importDeclaration);
 
-	/**
-	 * @param importDeclarationContext
-	 * @throws ParserException
-	 */
-	protected void processImport(final ImportDeclarationContext importDeclarationContext) throws ImportException {
+            }
+        }
 
-		final InnerImportContext innerImport = importDeclarationContext.innerImport();
-		if (null == innerImport) {
-			try {
-				processExternalImport(importDeclarationContext.externalImport());
-			} catch (final EvaluationException e) {
-				throw new WiidgetException("Bad expression in import", e);
-			}
-		} else {
-			processInnerImport(innerImport);
-		}
+    }
 
-	}
+    protected void checkAlias(final Map<String, ImportDeclarationContext> aliases, final String alias, final ImportDeclarationContext importDeclaration)
+            throws DuplicateAliasException {
 
-	private void processImports() throws ImportException {
-		for (final ImportDeclarationContext importDeclarationContext : imports) {
-			processImport(importDeclarationContext);
-		}
-	}
+        final ImportDeclarationContext existingImport = aliases.get(alias);
+        if (null != existingImport) {
+            throw new DuplicateAliasException(alias, existingImport, importDeclaration);
+        }
 
-	private void processExternalImport(final ExternalImportContext externalImport) throws EvaluationException {
+        aliases.put(alias, importDeclaration);
+    }
 
-		final String alias = externalImport.Identifier().getText();
-		final String content = new StringDeclaration(externalImport.StringLiteral()).getContent(templateProcessor.createStringExpressionEvaluation());
+    /**
+     * @param importDeclarationContext
+     * @throws ParserException
+     */
+    protected void processImport(final ImportDeclarationContext importDeclarationContext) throws ImportException {
 
-		pull(alias, new ExternalWiidgetResource(content));
-	}
+        final InnerImportContext innerImport = importDeclarationContext.innerImport();
+        if (null == innerImport) {
+            try {
+                processExternalImport(importDeclarationContext.externalImport());
+            } catch (final EvaluationException e) {
+                throw new WiidgetException("Bad expression in import", e);
+            }
+        } else {
+            processInnerImport(innerImport);
+        }
 
-	/**
-	 * @param innerImport
-	 *           inner import
-	 * @throws ImportException
-	 *            when the import is not satisfiable
-	 */
-	private void processInnerImport(final InnerImportContext innerImport) throws ImportException {
+    }
 
-		final String alias = getAlias(innerImport);
-		final String className = innerImport.qualifiedName().getText();
+    private void processImports() throws ImportException {
+        for (final ImportDeclarationContext importDeclarationContext : imports) {
+            processImport(importDeclarationContext);
+        }
+    }
 
-		Class<? extends Wiidget> imported = null;
-		try {
-			imported = findWiidgetClass(className);
-		} catch (final ClassNotFoundException e) {
-			// avoid. Maybe this is a file
-		} catch (final NonWiidgetClassException exception) {
-			throw new ImportException(innerImport, "Not a wiidget class", exception);
-		}
+    private void processExternalImport(final ExternalImportContext externalImport) throws EvaluationException {
 
-		if (null == imported) {
+        final String alias = externalImport.Identifier().getText();
+        final String content = new StringDeclaration(externalImport.StringLiteral()).getContent(templateProcessor.createStringExpressionEvaluation());
 
-			final String canonicalFileName = getCanonicalFileName(className);
+        pull(alias, new ExternalWiidgetResource(content));
+    }
 
-			if (isWiidgetFile(canonicalFileName)) {
+    /**
+     * @param innerImport
+     *            inner import
+     * @throws ImportException
+     *             when the import is not satisfiable
+     */
+    private void processInnerImport(final InnerImportContext innerImport) throws ImportException {
 
-				pull(alias, new FileWiidgetResource(canonicalFileName));
+        final String alias = getAlias(innerImport);
+        final String className = innerImport.qualifiedName().getText();
 
-			} else {
-				throw new ImportException(innerImport, "Cannot find wiidget: " + className);
-			}
-		} else {
+        Class<? extends Wiidget> imported = null;
+        try {
+            imported = findWiidgetClass(className);
+        } catch (final ClassNotFoundException e) {
+            // avoid. Maybe this is a file
+        } catch (final NonWiidgetClassException exception) {
+            throw new ImportException(innerImport, "Not a wiidget class", exception);
+        }
 
-			// put the full and simple name too
-			pull(alias, new ClassWiidgetResource(imported));
+        if (null == imported) {
 
-		}
+            final String canonicalFileName = getCanonicalFileName(className);
 
-	}
+            if (isWiidgetFile(canonicalFileName)) {
 
-	private String getAlias(final InnerImportContext innerImport) {
+                pull(alias, new FileWiidgetResource(canonicalFileName));
 
-		final TerminalNode alias = innerImport.Identifier();
-		return null == alias ? new QuilifiedName(innerImport.qualifiedName()).getLastIdentifier() : alias.getText();
-	}
+            } else {
+                throw new ImportException(innerImport, "Cannot find wiidget: " + className);
+            }
+        } else {
 
-	@SuppressWarnings("unchecked")
-	protected Class<? extends Wiidget> findWiidgetClass(final String wiidgetName) throws NonWiidgetClassException, ClassNotFoundException {
+            // put the full and simple name too
+            pull(alias, new ClassWiidgetResource(imported));
 
-		Class<? extends Wiidget> wiidgetClass = null;
-		Class<?> loadedClass = null;
-		try {
+        }
 
-			try {
-				final ClassLoader classLoader = engine.getConfiguration().getClassLoader();
+    }
 
-				loadedClass = classLoader.loadClass(wiidgetName);
-			} catch (final ClassNotFoundException e) {
-				throw e;
-			}
+    private String getAlias(final InnerImportContext innerImport) {
 
-			wiidgetClass = (Class<? extends Wiidget>) loadedClass;
+        final TerminalNode alias = innerImport.Identifier();
+        return null == alias ? new QuilifiedName(innerImport.qualifiedName()).getLastIdentifier() : alias.getText();
+    }
 
-		} catch (final ClassCastException castException) {
-			throw new NonWiidgetClassException(loadedClass);
-		}
+    @SuppressWarnings("unchecked")
+    protected Class<? extends Wiidget> findWiidgetClass(final String wiidgetName) throws NonWiidgetClassException, ClassNotFoundException {
 
-		return wiidgetClass;
-	}
+        Class<? extends Wiidget> wiidgetClass = null;
+        Class<?> loadedClass = null;
+        try {
 
-	protected boolean isWiidgetFile(final String canonicalFileName) {
-		return engine.getConfiguration().getFileLoader().exists(canonicalFileName);
-	}
+            try {
+                final ClassLoader classLoader = engine.getConfiguration().getClassLoader();
 
-	private String getCanonicalFileName(final String className) {
-		final String filename = className.replaceAll("\\.", "/");
-		final String fileextension = engine.getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
+                loadedClass = classLoader.loadClass(wiidgetName);
+            } catch (final ClassNotFoundException e) {
+                throw e;
+            }
 
-		final String canonicalFileName = "/" + filename + fileextension;
-		return canonicalFileName;
-	}
+            wiidgetClass = (Class<? extends Wiidget>) loadedClass;
 
-	public void pull(final String alias, final WiidgetResource resource) {
-		importMap.put(alias, resource);
-	}
+        } catch (final ClassCastException castException) {
+            throw new NonWiidgetClassException(loadedClass);
+        }
+
+        return wiidgetClass;
+    }
+
+    protected boolean isWiidgetFile(final String canonicalFileName) {
+        return engine.getConfiguration().getFileLoader().exists(canonicalFileName);
+    }
+
+    private String getCanonicalFileName(final String className) {
+        final String filename = className.replaceAll("\\.", "/");
+        final String fileextension = engine.getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
+
+        final String canonicalFileName = "/" + filename + fileextension;
+        return canonicalFileName;
+    }
+
+    public void pull(final String alias, final WiidgetResource resource) {
+        importMap.put(alias, resource);
+    }
 
 }

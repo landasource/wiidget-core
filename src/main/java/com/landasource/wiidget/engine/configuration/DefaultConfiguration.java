@@ -1,8 +1,12 @@
 package com.landasource.wiidget.engine.configuration;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.commons.Raw;
 import com.landasource.wiidget.engine.ObjectFactory;
 import com.landasource.wiidget.engine.RawWiidget;
@@ -14,6 +18,8 @@ import com.landasource.wiidget.engine.externals.WebWiidgetLoader;
 import com.landasource.wiidget.io.FileLoader;
 import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
+import com.landasource.wiidget.parser.resource.ClassWiidgetResource;
+import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.url.TransparentURLResolver;
 import com.landasource.wiidget.url.URLResolver;
 import com.landasource.wiidget.validation.DefaultWiidgetValidator;
@@ -24,60 +30,80 @@ import com.landasource.wiidget.validation.WiidgetValidator;
  */
 public class DefaultConfiguration implements Configuration {
 
-	/**
-	 * Set of external loaders.
-	 */
-	private final Set<ExternalWiidgetLoader> externalWiidgetLoader = new HashSet<>();
+    /**
+     * Set of external loaders.
+     */
+    private final Set<ExternalWiidgetLoader> externalWiidgetLoader = new HashSet<>();
 
-	/**
-	 * Default constructor.
-	 */
-	public DefaultConfiguration() {
-		super();
-		getExternalWiidgetLoaders().add(new WebWiidgetLoader());
-		getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
-		getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
-	}
+    /**
+     * Default imported resources.
+     */
+    private final Map<String, WiidgetResource> defaultImports = new HashMap<String, WiidgetResource>();
 
-	@Override
-	public Class<? extends RawWiidget> getRawType() {
-		return Raw.class;
-	}
+    /**
+     * Default constructor.
+     */
+    public DefaultConfiguration() {
+        super();
+        getExternalWiidgetLoaders().add(new WebWiidgetLoader());
+        getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
+        getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
+    }
 
-	@Override
-	public URLResolver getUrlResolver() {
-		return new TransparentURLResolver();
-	}
+    @Override
+    public Class<? extends RawWiidget> getRawType() {
+        return Raw.class;
+    }
 
-	@Override
-	public WiidgetValidator getWiidgetValidator() {
+    @Override
+    public URLResolver getUrlResolver() {
+        return new TransparentURLResolver();
+    }
 
-		return new DefaultWiidgetValidator(getObjectFactory());
-	}
+    @Override
+    public WiidgetValidator getWiidgetValidator() {
 
-	@Override
-	public ObjectFactory getObjectFactory() {
-		return new ReflectionObjectFactory();
-	}
+        return new DefaultWiidgetValidator(getObjectFactory());
+    }
 
-	@Override
-	public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(final EvaluationContext evaluationContext) {
-		return new DefaultExpressionEvaluatorFactory(evaluationContext);
-	}
+    @Override
+    public ObjectFactory getObjectFactory() {
+        return new ReflectionObjectFactory();
+    }
 
-	@Override
-	public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders() {
-		return externalWiidgetLoader;
-	}
+    @Override
+    public ExpressionEvaluatorFactory getExpressionEvaluatorFactory(final EvaluationContext evaluationContext) {
+        return new DefaultExpressionEvaluatorFactory(evaluationContext);
+    }
 
-	@Override
-	public FileLoader getFileLoader() {
-		return new ClassPathFileLoader();
-	}
+    @Override
+    public Set<ExternalWiidgetLoader> getExternalWiidgetLoaders() {
+        return externalWiidgetLoader;
+    }
 
-	@Override
-	public ClassLoader getClassLoader() {
-		return new DefaultClassLoader();
-	}
+    @Override
+    public FileLoader getFileLoader() {
+        return new ClassPathFileLoader();
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return new DefaultClassLoader();
+    }
+
+    @Override
+    public Map<String, WiidgetResource> getDefaultImports() {
+        return Collections.unmodifiableMap(defaultImports);
+    }
+
+    @Override
+    public void addDefaultImport(final String alias, final WiidgetResource wiidgetResource) {
+        defaultImports.put(alias, wiidgetResource);
+    }
+
+    @Override
+    public void addDefaultImport(final Class<? extends Wiidget> wiidgetClass) {
+        addDefaultImport(wiidgetClass.getSimpleName(), new ClassWiidgetResource(wiidgetClass));
+    }
 
 }
