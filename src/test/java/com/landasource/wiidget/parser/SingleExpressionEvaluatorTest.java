@@ -42,6 +42,22 @@ public class SingleExpressionEvaluatorTest {
         Assert.assertEquals("This is {foo=5, bar=false}.", replaced);
     }
 
+    @Test
+    public void testOneExressionInTemplate4Fail() throws ParserException {
+        final String replaced = evaluate("This is {{ {foo: true, bar: false, \"foo\": {bar:1} }  }}.");
+        Assert.assertEquals("This is {foo={bar=1}, bar=false}.", replaced);
+    }
+
+    @Test
+    public void testOneExressionInTemplateWithCustomBounds() throws ParserException {
+        final Engine engine = getEngine();
+
+        engine.getConfiguration().setTemplateExpressionBound(new TemplateExpressionBound("<?wii", "?>"));
+
+        final String replaced = getEvaluator(engine).replaceExpressions("This is <?wii {foo: true, bar: false, \"foo\": 2+3}  ?>.");
+        Assert.assertEquals("This is {foo=5, bar=false}.", replaced);
+    }
+
     private String evaluate(final String template) throws ParserException {
         final SingleExpressionEvaluator expressionEvaluator = getEvaluator();
         final String replaced = expressionEvaluator.replaceExpressions(template);
@@ -49,7 +65,12 @@ public class SingleExpressionEvaluatorTest {
     }
 
     private SingleExpressionEvaluator getEvaluator() {
-        final SingleExpressionEvaluator expressionEvaluator = new SingleExpressionEvaluator(getEngine());
+        final SingleExpressionEvaluator expressionEvaluator = getEvaluator(getEngine());
+        return expressionEvaluator;
+    }
+
+    private SingleExpressionEvaluator getEvaluator(final Engine engine) {
+        final SingleExpressionEvaluator expressionEvaluator = new SingleExpressionEvaluator(engine);
         return expressionEvaluator;
     }
 

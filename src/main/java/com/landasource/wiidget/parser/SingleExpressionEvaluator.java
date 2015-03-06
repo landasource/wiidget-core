@@ -46,7 +46,14 @@ public class SingleExpressionEvaluator {
 
         // \{\{\s*(((?!\{\{|\}\}).)+)\s*\}\}
 
-        final Matcher m = Pattern.compile("\\{\\{\\s*(((?!\\{\\{|\\}\\}).)+)\\s*\\}\\}").matcher(template);
+        final TemplateExpressionBound bounds = engine.getConfiguration().getTemplateExpressionBound();
+        final String open = bounds.getRegexpQuotedOpen();
+        final String close = bounds.getRegexpQuotedClose();
+
+        // final Matcher m =
+        // Pattern.compile("\\{\\{\\s*(((?!\\{\\{|\\}\\}).)+)\\s*\\}\\}").matcher(template);
+        final String searchPattern = open + "s*(((?!" + open + "|" + close + ").)+)\\s*" + close;
+        final Matcher m = Pattern.compile(searchPattern).matcher(template);
         final StringBuffer sb = new StringBuffer(), rsb = new StringBuffer();
 
         while (m.find()) {

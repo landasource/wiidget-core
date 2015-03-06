@@ -16,6 +16,7 @@ import com.landasource.wiidget.engine.externals.LocalFileWiidgetLoader;
 import com.landasource.wiidget.engine.externals.ResourceWiidgetLoader;
 import com.landasource.wiidget.engine.externals.WebWiidgetLoader;
 import com.landasource.wiidget.io.FileLoader;
+import com.landasource.wiidget.parser.TemplateExpressionBound;
 import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.parser.resource.ClassWiidgetResource;
@@ -40,6 +41,8 @@ public class DefaultConfiguration implements Configuration {
      */
     private final Map<String, WiidgetResource> defaultImports = new HashMap<String, WiidgetResource>();
 
+    private TemplateExpressionBound templateExpressionBound;
+
     /**
      * Default constructor.
      */
@@ -48,6 +51,7 @@ public class DefaultConfiguration implements Configuration {
         getExternalWiidgetLoaders().add(new WebWiidgetLoader());
         getExternalWiidgetLoaders().add(new LocalFileWiidgetLoader());
         getExternalWiidgetLoaders().add(new ResourceWiidgetLoader());
+        setTemplateExpressionBound(new TemplateExpressionBound("{{", "}}"));
     }
 
     @Override
@@ -104,6 +108,16 @@ public class DefaultConfiguration implements Configuration {
     @Override
     public void addDefaultImport(final Class<? extends Wiidget> wiidgetClass) {
         addDefaultImport(wiidgetClass.getSimpleName(), new ClassWiidgetResource(wiidgetClass));
+    }
+
+    @Override
+    public TemplateExpressionBound getTemplateExpressionBound() {
+        return templateExpressionBound;
+    }
+
+    @Override
+    public void setTemplateExpressionBound(final TemplateExpressionBound templateExpressionBound) {
+        this.templateExpressionBound = templateExpressionBound;
     }
 
 }

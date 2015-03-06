@@ -8,6 +8,7 @@ import com.landasource.wiidget.engine.ObjectFactory;
 import com.landasource.wiidget.engine.RawWiidget;
 import com.landasource.wiidget.engine.externals.ExternalWiidgetLoader;
 import com.landasource.wiidget.io.FileLoader;
+import com.landasource.wiidget.parser.TemplateExpressionBound;
 import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
@@ -86,5 +87,13 @@ public interface Configuration {
      *            default imported class
      */
     void addDefaultImport(Class<? extends Wiidget> wiidgetClass);
+
+    /**
+     *
+     * @return bounds
+     */
+    TemplateExpressionBound getTemplateExpressionBound();
+
+    void setTemplateExpressionBound(TemplateExpressionBound bound);
 
 }
