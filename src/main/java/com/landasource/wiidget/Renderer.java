@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.landasource.wiidget.context.DefaultWiidgetContext;
-import com.landasource.wiidget.context.WiidgetContext;
-import com.landasource.wiidget.engine.DefaultWiidgetFactory;
+import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.context.DefaultContext;
+import com.landasource.wiidget.engine.DefaultEngine;
+import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.engine.Position;
 import com.landasource.wiidget.engine.ResourceLink;
-import com.landasource.wiidget.engine.WiidgetFactory;
-import com.landasource.wiidget.parser.WiidgetLangProcessor;
-import com.landasource.wiidget.parser.WiidgetParserException;
+import com.landasource.wiidget.parser.ParserException;
+import com.landasource.wiidget.parser.TemplateProcessor;
 
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -22,14 +22,14 @@ public final class Renderer {
     /**
      * The factory for createing / validating wiidgets.
      */
-    private final WiidgetFactory wiidgetFactory;
+    private final Engine engine;
 
     /**
-     * @param wiidgetFactory
+     * @param engine
      *            factory
      */
-    private Renderer(final WiidgetFactory wiidgetFactory) {
-        this.wiidgetFactory = wiidgetFactory;
+    private Renderer(final Engine engine) {
+        this.engine = engine;
     }
 
     /**
@@ -38,29 +38,29 @@ public final class Renderer {
      */
     public static Renderer create(final Map<String, Object> data) {
 
-        final WiidgetContext wiidgetContext = new DefaultWiidgetContext(data);
-        final WiidgetFactory wiidgetFactory = new DefaultWiidgetFactory(wiidgetContext);
+        final Context wiidgetContext = new DefaultContext(data);
+        final Engine engine = new DefaultEngine(wiidgetContext);
 
-        return create(wiidgetFactory);
+        return create(engine);
     }
 
     /**
      *
      */
     public static Renderer create() {
-        return create(new DefaultWiidgetFactory());
+        return create(new DefaultEngine());
     }
 
     /**
-     * @param wiidgetFactory
+     * @param engine
      * @return
      */
-    public static Renderer create(final WiidgetFactory wiidgetFactory) {
-        return new Renderer(wiidgetFactory);
+    public static Renderer create(final Engine engine) {
+        return new Renderer(engine);
     }
 
-    public WiidgetFactory getWiidgetFactory() {
-        return wiidgetFactory;
+    public Engine getWiidgetFactory() {
+        return engine;
     }
 
     /**
@@ -79,7 +79,7 @@ public final class Renderer {
         } catch (final FileNotFoundException e) {
             throw new WiidgetException("Cannot found file: " + path, e);
         } catch (final WiidgetException e) {
-            throw e;
+            throw new WiidgetException("Error in file: " + path, e);
         }
 
     }
@@ -102,7 +102,7 @@ public final class Renderer {
      */
     public String render(final InputStream inputStream) {
 
-        final WiidgetLangProcessor langProcessor = new WiidgetLangProcessor(wiidgetFactory);
+        final TemplateProcessor langProcessor = new TemplateProcessor(engine);
 
         try {
 
@@ -110,7 +110,7 @@ public final class Renderer {
 
             return transform(result);
 
-        } catch (final WiidgetParserException exception) {
+        } catch (final ParserException exception) {
             throw new WiidgetException("Template render failed.", exception);
         }
 
@@ -150,7 +150,7 @@ public final class Renderer {
      * @return
      */
     public String renderWithoutResources(final String template) {
-        final WiidgetLangProcessor langProcessor = new WiidgetLangProcessor(wiidgetFactory);
+        final TemplateProcessor langProcessor = new TemplateProcessor(engine);
 
         try {
 
@@ -158,7 +158,7 @@ public final class Renderer {
 
             return result;
 
-        } catch (final WiidgetParserException e) {
+        } catch (final ParserException e) {
             throw new WiidgetException("Template render failed.", e);
         }
 

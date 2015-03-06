@@ -1,0 +1,6 @@
+import com.landasource.wiidget.commons.Set;
+
+Set(name ="val1", value = {test : "Hello"});
+Set(name ="val2", value = {test : {foo : "Hello"}});
+Set(name ="val3", value = {test : {foo : 1 + 2}});
+Set(name ="val4", value = {test : {"foo" : 1 + 2}});

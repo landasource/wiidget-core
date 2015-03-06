@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -86,17 +86,6 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitWiidgetVariableBinding(@NotNull WiidgetParser.WiidgetVariableBindingContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link WiidgetParser#elementValueArrayInitializer}.
-	 * @param ctx the parse tree
-	 */
-	void enterElementValueArrayInitializer(@NotNull WiidgetParser.ElementValueArrayInitializerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link WiidgetParser#elementValueArrayInitializer}.
-	 * @param ctx the parse tree
-	 */
-	void exitElementValueArrayInitializer(@NotNull WiidgetParser.ElementValueArrayInitializerContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#primary}.
 	 * @param ctx the parse tree
 	 */
@@ -119,15 +108,26 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link WiidgetParser#wiidgetMethodCallExpression}.
+	 * Enter a parse tree produced by {@link WiidgetParser#mapEntry}.
 	 * @param ctx the parse tree
 	 */
-	void enterWiidgetMethodCallExpression(@NotNull WiidgetParser.WiidgetMethodCallExpressionContext ctx);
+	void enterMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link WiidgetParser#wiidgetMethodCallExpression}.
+	 * Exit a parse tree produced by {@link WiidgetParser#mapEntry}.
 	 * @param ctx the parse tree
 	 */
-	void exitWiidgetMethodCallExpression(@NotNull WiidgetParser.WiidgetMethodCallExpressionContext ctx);
+	void exitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#foreachVariable}.
@@ -229,15 +229,15 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitElementValuePair(@NotNull WiidgetParser.ElementValuePairContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link WiidgetParser#seamStatement}.
+	 * Enter a parse tree produced by {@link WiidgetParser#mapKey}.
 	 * @param ctx the parse tree
 	 */
-	void enterSeamStatement(@NotNull WiidgetParser.SeamStatementContext ctx);
+	void enterMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link WiidgetParser#seamStatement}.
+	 * Exit a parse tree produced by {@link WiidgetParser#mapKey}.
 	 * @param ctx the parse tree
 	 */
-	void exitSeamStatement(@NotNull WiidgetParser.SeamStatementContext ctx);
+	void exitMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#wiidgetVariable}.
@@ -262,6 +262,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitInnerImport(@NotNull WiidgetParser.InnerImportContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#unifiedWiidgetName}.
 	 * @param ctx the parse tree
 	 */
@@ -273,6 +284,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	void exitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#statementDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -282,6 +304,17 @@ public interface WiidgetListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatementDeclaration(@NotNull WiidgetParser.StatementDeclarationContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link WiidgetParser#externalImport}.

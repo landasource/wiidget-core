@@ -10,8 +10,24 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-public class XMLFormatter {
+/**
+ * Formats XML output.
+ *
+ * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
+ */
+public final class XMLFormatter {
 
+	/** Utility constructor. */
+	private XMLFormatter() {
+	}
+
+	/**
+	 * @param input
+	 *            input content
+	 * @param indent
+	 *            indentation depth
+	 * @return the formatted content
+	 */
 	public static String format(final String input, final int indent) {
 		try {
 			final Source xmlInput = new StreamSource(new StringReader(input));
@@ -25,6 +41,7 @@ public class XMLFormatter {
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(xmlInput, xmlOutput);
 			return xmlOutput.getWriter().toString();
+
 		} catch (final Throwable e) {
 			// You'll come here if you are using JDK 1.5
 			// you are getting an the following exeption
@@ -46,6 +63,13 @@ public class XMLFormatter {
 		}
 	}
 
+	/**
+	 * Formats input with default indentation.
+	 *
+	 * @param input
+	 *            input
+	 * @return formatted input
+	 */
 	public static String format(final String input) {
 		return format(input, 2);
 	}

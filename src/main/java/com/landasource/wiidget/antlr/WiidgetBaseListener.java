@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -108,19 +108,6 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterElementValueArrayInitializer(@NotNull WiidgetParser.ElementValueArrayInitializerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitElementValueArrayInitializer(@NotNull WiidgetParser.ElementValueArrayInitializerContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterPrimary(@NotNull WiidgetParser.PrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -147,13 +134,26 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterWiidgetMethodCallExpression(@NotNull WiidgetParser.WiidgetMethodCallExpressionContext ctx) { }
+	@Override public void enterMapEntry(@NotNull WiidgetParser.MapEntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void exitWiidgetMethodCallExpression(@NotNull WiidgetParser.WiidgetMethodCallExpressionContext ctx) { }
+	@Override public void exitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterElseControl(@NotNull WiidgetParser.ElseControlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitElseControl(@NotNull WiidgetParser.ElseControlContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -277,13 +277,13 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterSeamStatement(@NotNull WiidgetParser.SeamStatementContext ctx) { }
+	@Override public void enterMapKey(@NotNull WiidgetParser.MapKeyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void exitSeamStatement(@NotNull WiidgetParser.SeamStatementContext ctx) { }
+	@Override public void exitMapKey(@NotNull WiidgetParser.MapKeyContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -316,6 +316,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -329,6 +342,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterStatementDeclaration(@NotNull WiidgetParser.StatementDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -336,6 +362,19 @@ public class WiidgetBaseListener implements WiidgetListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitStatementDeclaration(@NotNull WiidgetParser.StatementDeclarationContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterListExpression(@NotNull WiidgetParser.ListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

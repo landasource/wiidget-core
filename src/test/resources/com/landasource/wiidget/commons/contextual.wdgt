@@ -1,0 +1,5 @@
+import com.landasource.wiidget.commons.component;
+
+`title`;
+component(title="Bar");
+`title`;

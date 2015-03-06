@@ -7,7 +7,7 @@
  */
 grammar Wiidget;
 
-// starting point for parsing a java file
+// starting point for parsing a wiidget file
 compilationUnit
     :   importDeclaration* statementDeclaration* EOF
     ;
@@ -27,12 +27,10 @@ externalImport
 statementDeclaration
     :   controlStatement
     |   wiidgetDeclaration
-    |   wiidgetMethodCallExpression ';'
-    |   seamStatement
     ;
 
 controlStatement
-    :   (ifControl || foreachControl) wiidgetBody
+    :   (ifControl | foreachControl) wiidgetBody (elseControl)?
     ;
 
 ifControl
@@ -41,6 +39,10 @@ ifControl
 
 foreachControl
     : FOREACH LPAREN foreachVariable ':' expression RPAREN
+    ;
+
+elseControl
+    : ELSE wiidgetBody
     ;
 
 foreachVariable
@@ -69,14 +71,6 @@ expressionWiidgetName:
     '`' expression '`'
     ;
 
-wiidgetMethodCallExpression
-    :   wiidgetVariable '.' Identifier LPAREN expressionList? RPAREN
-    ;
-
-seamStatement
-    : SEAM LPAREN expression RPAREN wiidgetBody
-    ;
-
 wiidgetArguments
     : '(' ( elementValue | elementValuePairs )? ')'
     ;
@@ -86,17 +80,33 @@ elementValuePairs
     ;
 
 elementValuePair
-    : Identifier '=' elementValue
+    : attributeName ASSIGN elementValue
+    ;
+
+attributeName
+    : Identifier
+    | StringLiteral
     ;
 
 elementValue
     :   expression
-    |   qualifiedName
-    |   elementValueArrayInitializer
+    |   qualifiedName    
     ;
     
-elementValueArrayInitializer
-    :   '{' (elementValue (',' elementValue)*)? '}'
+mapExpression
+    : '{' (mapEntry (',' mapEntry)*)? '}'
+    ;
+
+mapEntry
+    :   mapKey ':' expression
+    ;
+
+mapKey
+    : Identifier | StringLiteral      
+    ;
+
+listExpression
+    : '[' (expression (',' expression)*)?  ']'
     ;
 
 wiidgetBody
@@ -129,10 +139,11 @@ expressionList
 expression
     :   primary
     |   wiidgetVariable
-    |   wiidgetMethodCallExpression
+    |   mapExpression
+    |   listExpression
     |   expression DOT Identifier    
     |   expression LBRACK expression RBRACK
-    |   expression DOT Identifier LPAREN expressionList? RPAREN
+    |   expression DOT Identifier LPAREN expressionList? RPAREN        
     |   NegotionOperator expression
     |   expression MathematicalOperator expression
     |   expression CompareOperator expression
@@ -169,7 +180,6 @@ EqualityOperator
 // Keywords
 IMPORT : 'import';
 DEFAULT_OPERATOR : '~';
-SEAM : 'seam';
 WiidgetVarSign : '$' ;
 
 IntegerLiteral
@@ -320,8 +330,6 @@ BinaryDigitOrUnderscore
 	|	'_'
 	;
 
-// �3.10.2 Floating-Point Literals
-
 FloatingPointLiteral
 	:	DecimalFloatingPointLiteral
 	|	HexadecimalFloatingPointLiteral
@@ -442,6 +450,7 @@ NullLiteral
 // CONTROLS
 IF : 'if';
 FOREACH : 'foreach';
+ELSE : 'else';
 
 // KEYWORDS
 AS : 'as';
@@ -461,7 +470,7 @@ ARROW : '->';
 
 // Operators
 
-ASSIGN : '=';
+
 GT : '>';
 LT : '<';
 BANG : '!';
@@ -478,6 +487,7 @@ INC : '++';
 DEC : '--';
 ADD : '+';
 SUB : '-';
+ASSIGN : '=';
 MUL : '*';
 DIV : '/';
 BITAND : '&';

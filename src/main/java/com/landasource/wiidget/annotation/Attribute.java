@@ -20,7 +20,7 @@ public @interface Attribute {
 	String name() default "";
 
 	/**
-	 * If true, the processor will put this attribute too either if the value is null-
+	 * If true, the processor will put this attribute too either if the value is null.
 	 */
 	boolean showNull() default false;
 }

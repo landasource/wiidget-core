@@ -1,0 +1,3 @@
+import com.landasource.wiidget.commons.Set;
+
+Set(name ="val1", value = data["foo"]);

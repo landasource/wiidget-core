@@ -2,20 +2,22 @@ package com.landasource.wiidget.engine;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.context.DefaultWiidgetContext;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.context.DefaultContext;
 import com.landasource.wiidget.engine.configuration.Configuration;
 import com.landasource.wiidget.engine.configuration.DefaultConfiguration;
 import com.landasource.wiidget.reflect.Reflection;
 import com.landasource.wiidget.util.DataMap;
-import com.landasource.wiidget.util.DefaultWiidgetProperties;
-import com.landasource.wiidget.util.WiidgetProperties;
+import com.landasource.wiidget.util.DefaultProperties;
+import com.landasource.wiidget.util.Properties;
 import com.landasource.wiidget.validation.ValidationError;
 import com.landasource.wiidget.validation.ValidationException;
 
@@ -24,7 +26,7 @@ import com.landasource.wiidget.validation.ValidationException;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class DefaultWiidgetFactory implements WiidgetFactory {
+public class DefaultEngine implements Engine {
 
 	/**
 	 * Wiidget ID prefixum.
@@ -32,20 +34,29 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	public static final String ID_PREFIX = "wiidget-";
 
 	/**
-	 * Stack.
+	 * Transformer registrator.
+	 */
+	private final ResultTransformerRegistrator resultTransformerRegistrator;
+
+	/**
+	 * Properties of factory.
+	 */
+	private final Properties properties;
+
+	/**
+	 * Context of the factory.
+	 */
+	private final Context wiidgetContext;
+
+	/**
+	 * Stack of wiidgets.
 	 */
 	private final Stack<Wiidget> wiidgetStack = new Stack<Wiidget>();
-
-	protected ResultTransformerRegistrator resultTransformerRegistrator;
 
 	/**
 	 * For generate unique IDs.
 	 */
-	private int idCounter = 1;
-
-	protected WiidgetProperties wiidgetProperties;
-
-	protected WiidgetContext wiidgetContext;
+	private final AtomicInteger idCounter = new AtomicInteger(1);
 
 	/**
 	 * Resource links.
@@ -58,17 +69,26 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	private final Configuration configuration;
 
 	/**
-	 * @param objectFactory
-	 * @param wiidgetValidator
+	 * Default constructor.
 	 */
-	public DefaultWiidgetFactory() {
-		this(new DefaultWiidgetProperties(), new DefaultWiidgetContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
+	public DefaultEngine() {
+		this(new DefaultProperties(), new DefaultContext(), new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
-	public DefaultWiidgetFactory(final WiidgetProperties wiidgetProperties, final WiidgetContext context, final ResultTransformerRegistrator resultTransformerRegistrator,
-	        final Configuration configuration) {
+	/**
+	 * @param properties
+	 *            properties
+	 * @param context
+	 *            context
+	 * @param resultTransformerRegistrator
+	 *            custorm transformer registrator
+	 * @param configuration
+	 *            configuration
+	 */
+	public DefaultEngine(final Properties properties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
+			final Configuration configuration) {
 
-		this.wiidgetProperties = wiidgetProperties;
+		this.properties = properties;
 		this.wiidgetContext = context;
 		this.resultTransformerRegistrator = resultTransformerRegistrator;
 
@@ -76,20 +96,20 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 
 	}
 
-	public DefaultWiidgetFactory(final WiidgetContext wiidgetContext) {
-		this(new DefaultWiidgetProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
+	/**
+	 * @param wiidgetContext
+	 *            context of the factory
+	 */
+	public DefaultEngine(final Context wiidgetContext) {
+		this(new DefaultProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
 	}
 
 	@Override
-	public <W extends Wiidget> W createWiidget(final WiidgetView owner, final Class<W> widgetClass, final DataMap attributes, final boolean putToStack) {
+	public <W extends Wiidget> W createWiidget(final WiidgetView owner, final Class<W> widgetClass, final Map<String, Object> attributes, final boolean putToStack) {
 
-		final W widget = createComponent(widgetClass, attributes);
-
-		// widget.setPrintStream(this.printStream);
+		final W widget = createWiidget(widgetClass, attributes);
 
 		addWiidget(widget, owner, putToStack);
-
-		widget.setOwner(owner);
 
 		return widget;
 
@@ -101,17 +121,12 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	}
 
 	@Override
-	public <C extends Wiidget> C createComponent(final Class<C> componentClass) {
-		return createComponent(componentClass, new DataMap());
+	public <C extends Wiidget> C createWiidget(final Class<C> componentClass) {
+		return createWiidget(componentClass, new DataMap());
 	}
 
-	/**
-	 * @param componentClass
-	 * @param data
-	 * @return
-	 */
 	@Override
-	public <C extends Wiidget> C createComponent(final Class<C> componentClass, final DataMap data) {
+	public <C extends Wiidget> C createWiidget(final Class<C> componentClass, final Map<String, Object> data) {
 
 		final C component = getConfiguration().getObjectFactory().getInstance(componentClass);
 
@@ -122,9 +137,10 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 
 			try {
 				Reflection.setField(component, field, value);
+				// CHECKSTYLE.OFF: IllegalCatch can be any exception
 			} catch (final Exception exception) {
-
-				component.setAttribute(field, value);
+				// CHECKSTYLE.ON: IllegalCatch
+				component.setAttribute(field, value); // call the attribute setter
 			}
 
 		}
@@ -135,19 +151,25 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 		return component;
 	}
 
+	/**
+	 * Validates wiidget if has valid properties. <br/>
+	 * Throws ValidationException when the wiidget is invalid.
+	 *
+	 * @param wiidget
+	 *            validate it
+	 */
+	// TODO use java.validation
 	private void validate(final Wiidget wiidget) {
 		final List<ValidationError> errors = getConfiguration().getWiidgetValidator().validate(wiidget);
 
 		if (!errors.isEmpty()) {
-
 			throw new ValidationException(errors);
 		}
 	}
 
 	@Override
 	public String getUniqueId() {
-
-		return ID_PREFIX + (this.idCounter++);
+		return ID_PREFIX + (this.idCounter.incrementAndGet());
 	}
 
 	@Override
@@ -171,12 +193,12 @@ public class DefaultWiidgetFactory implements WiidgetFactory {
 	}
 
 	@Override
-	public WiidgetProperties getWiidgetProperties() {
-		return wiidgetProperties;
+	public Properties getProperties() {
+		return properties;
 	}
 
 	@Override
-	public WiidgetContext getWiidgetContext() {
+	public Context getContext() {
 		return wiidgetContext;
 	}
 

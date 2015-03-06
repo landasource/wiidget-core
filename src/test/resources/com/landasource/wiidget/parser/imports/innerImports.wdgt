@@ -1,0 +1,5 @@
+import com.landasource.wiidget.parser.imports.component;
+import com.landasource.wiidget.parser.imports.component2 as other;
+
+component();
+other();

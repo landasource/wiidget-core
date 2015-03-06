@@ -4,21 +4,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.landasource.wiidget.context.DefaultWiidgetContext;
-import com.landasource.wiidget.context.WiidgetContext;
+import com.landasource.wiidget.context.DefaultContext;
+import com.landasource.wiidget.context.Context;
 
 public class WiidgetContextTest {
 
-	private WiidgetContext wiidgetContext;
+	private Context wiidgetContext;
 
 	@Before
 	public void initContext() {
-		wiidgetContext = new DefaultWiidgetContext();
+		wiidgetContext = new DefaultContext();
 	}
 
 	@Test
 	public void testLoopReference() {
-		Assert.assertSame(wiidgetContext, wiidgetContext.get(WiidgetContext.CONTEXT_VARIABLE));
+		Assert.assertSame(wiidgetContext, wiidgetContext.get(Context.CONTEXT_VARIABLE));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

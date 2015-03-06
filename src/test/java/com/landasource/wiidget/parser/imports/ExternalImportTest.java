@@ -1,4 +1,4 @@
-package com.landasource.wiidget.parser;
+package com.landasource.wiidget.parser.imports;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-// Generated from C:\Users\lzsolt\Documents\GitHub\wiidget\wiidget\src\main\java\org\landa\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
+// Generated from C:\Users\Zsolti\Documents\GitHub\landasource\wiidget-core\src\main\java\com\landasource\wiidget\antlr\Wiidget.g4 by ANTLR 4.1
 package com.landasource.wiidget.antlr;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -61,13 +61,6 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitWiidgetVariableBinding(@NotNull WiidgetParser.WiidgetVariableBindingContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link WiidgetParser#elementValueArrayInitializer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElementValueArrayInitializer(@NotNull WiidgetParser.ElementValueArrayInitializerContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#primary}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -82,11 +75,18 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitControlStatement(@NotNull WiidgetParser.ControlStatementContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link WiidgetParser#wiidgetMethodCallExpression}.
+	 * Visit a parse tree produced by {@link WiidgetParser#mapEntry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWiidgetMethodCallExpression(@NotNull WiidgetParser.WiidgetMethodCallExpressionContext ctx);
+	T visitMapEntry(@NotNull WiidgetParser.MapEntryContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#elseControl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseControl(@NotNull WiidgetParser.ElseControlContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#foreachVariable}.
@@ -152,11 +152,11 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitElementValuePair(@NotNull WiidgetParser.ElementValuePairContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link WiidgetParser#seamStatement}.
+	 * Visit a parse tree produced by {@link WiidgetParser#mapKey}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSeamStatement(@NotNull WiidgetParser.SeamStatementContext ctx);
+	T visitMapKey(@NotNull WiidgetParser.MapKeyContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#wiidgetVariable}.
@@ -173,6 +173,13 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitInnerImport(@NotNull WiidgetParser.InnerImportContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#attributeName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAttributeName(@NotNull WiidgetParser.AttributeNameContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#unifiedWiidgetName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -180,11 +187,25 @@ public interface WiidgetVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUnifiedWiidgetName(@NotNull WiidgetParser.UnifiedWiidgetNameContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#mapExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMapExpression(@NotNull WiidgetParser.MapExpressionContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#statementDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatementDeclaration(@NotNull WiidgetParser.StatementDeclarationContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link WiidgetParser#listExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListExpression(@NotNull WiidgetParser.ListExpressionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link WiidgetParser#externalImport}.

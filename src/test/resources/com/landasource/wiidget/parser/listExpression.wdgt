@@ -1,0 +1,9 @@
+import com.landasource.wiidget.commons.Set;
+
+Set(name ="val1", value = [1, "Hello", var]);
+Set(name ="val2", value = [1, "Hello", {foo : "bar", yes : 1}]);
+Set(name ="val3", value = [1, "Hello", {foo : "bar", yes : 1}, [1, 3, 5]]);
+
+foreach(num : [1, 2, 4]){
+	`"" + num`;
+}

@@ -6,7 +6,7 @@ package com.landasource.wiidget.util;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public interface WiidgetProperties {
+public interface Properties {
 
 	public static final String FORMAT_OUTPUT = "wiidget.format_output";
 

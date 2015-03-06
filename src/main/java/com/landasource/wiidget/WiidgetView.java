@@ -1,7 +1,7 @@
 package com.landasource.wiidget;
 
-import com.landasource.wiidget.context.WiidgetContext;
-import com.landasource.wiidget.engine.WiidgetFactory;
+import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.io.BufferedPrintStream;
 
 /**
@@ -13,15 +13,15 @@ public abstract class WiidgetView extends Wiidget {
 
 	private BufferedPrintStream printStream;
 
-	private WiidgetFactory widgetFactory;
+	private Engine engine;
 
 	protected WiidgetView() {
 		this.printStream = new BufferedPrintStream();
 	}
 
-	public WiidgetView(final WiidgetFactory wiidgetFactory) {
+	public WiidgetView(final Engine engine) {
 		this();
-		this.widgetFactory = wiidgetFactory;
+		this.engine = engine;
 	}
 
 	public void clearPrintStream() {
@@ -43,12 +43,12 @@ public abstract class WiidgetView extends Wiidget {
 	}
 
 	@Override
-	protected WiidgetFactory getWiidgetFactory() {
-		return widgetFactory;
+	protected Engine getEngine() {
+		return engine;
 	}
 
-	protected WiidgetContext getWiidgetContext() {
-		return getWiidgetFactory().getWiidgetContext();
+	protected Context getWiidgetContext() {
+		return getEngine().getContext();
 	}
 
 }

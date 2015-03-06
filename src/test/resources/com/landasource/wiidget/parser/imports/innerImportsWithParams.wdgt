@@ -1,0 +1,3 @@
+import com.landasource.wiidget.parser.imports.component3;
+
+component3(passedParameter = title, message = "Foobar");

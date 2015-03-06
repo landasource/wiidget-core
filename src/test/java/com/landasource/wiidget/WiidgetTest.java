@@ -10,8 +10,8 @@ import org.junit.Test;
 import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.WiidgetView;
-import com.landasource.wiidget.basewiidgets.Raw;
-import com.landasource.wiidget.engine.DefaultWiidgetFactory;
+import com.landasource.wiidget.commons.Raw;
+import com.landasource.wiidget.engine.DefaultEngine;
 
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -24,7 +24,7 @@ public class WiidgetTest {
 
 	@Before
 	public void initView() {
-		wiidgetView = new WiidgetView(new DefaultWiidgetFactory()) {
+		wiidgetView = new WiidgetView(new DefaultEngine()) {
 		};
 
 		wiidget = wiidgetView.wiidget(Raw.class);
@@ -43,9 +43,9 @@ public class WiidgetTest {
 	public void testWiidgetContext() {
 
 		final Object value = new Object();
-		wiidget.getWiidgetFactory().getWiidgetContext().set("var", value);
+		wiidget.getEngine().getContext().set("var", value);
 
-		final Object object = wiidget.getWiidgetFactory().getWiidgetContext().get("var");
+		final Object object = wiidget.getEngine().getContext().get("var");
 
 		Assert.assertSame(value, object);
 	}

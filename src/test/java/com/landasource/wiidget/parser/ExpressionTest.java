@@ -2,7 +2,6 @@ package com.landasource.wiidget.parser;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -12,148 +11,164 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.landasource.wiidget.Tag;
-import com.landasource.wiidget.Wiidget;
 import com.landasource.wiidget.antlr.WiidgetLexer;
 import com.landasource.wiidget.antlr.WiidgetParser;
-import com.landasource.wiidget.context.DefaultWiidgetContext;
-import com.landasource.wiidget.context.WiidgetContext;
-import com.landasource.wiidget.engine.DefaultWiidgetFactory;
-import com.landasource.wiidget.parser.CustomWiidgetParser;
+import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.context.DefaultContext;
+import com.landasource.wiidget.engine.DefaultEngine;
+import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.EvaluationException;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluator;
 import com.landasource.wiidget.util.DataMap;
 
 public class ExpressionTest {
 
-	private WiidgetContext wiidgetContext;
+    protected Context wiidgetContext;
 
-	@Before
-	public void initContext() {
-		wiidgetContext = new DefaultWiidgetContext();
+    @Before
+    public void initContext() {
+        wiidgetContext = new DefaultContext();
 
-	}
+    }
 
-	@Test
-	public void testIndexedListExpression() {
+    @Test
+    public void testSimpleStrings() {
 
-		final Object object = new Object();
-		wiidgetContext.set("list", Arrays.asList(1, 2, 3, 4, "foo", object));
+        for (char i = Character.MIN_VALUE; i < Character.MAX_VALUE; i++) {
+            final String string = new String(new char[] { i });
+            if (Arrays.asList("\"", "\\").contains(string)) {
+                continue; // igonre spec chars
+            }
+            assertExpression(string, "\"" + string + "\""); // check the string will be evaluated to itself
+        }
 
-		assertExpression(1, "list[0]");
-		assertExpression(2, "list[1]");
-		assertExpression("foo", "list[4]");
-		assertExpression(object, "list[5]");
-	}
+    }
 
-	@Test
-	public void testPropertyByIndexing() throws NoSuchMethodException, SecurityException {
+    @Test
+    public void testIndexedListExpression() {
 
-		final Tag tag = new Tag("div");
+        final Object object = new Object();
+        wiidgetContext.set("list", Arrays.asList(1, 2, 3, 4, "foo", object));
 
-		wiidgetContext.set("tag", tag);
-		assertExpression("div", "tag[\"name\"]");
+        assertExpression(1, "list[0]");
+        assertExpression(2, "list[1]");
+        assertExpression("foo", "list[4]");
+        assertExpression(object, "list[5]");
+    }
 
-		wiidgetContext.set("propertyName", "name");
-		assertExpression("div", "tag[propertyName]");
+    @Test
+    public void testPropertyByIndexing() throws NoSuchMethodException, SecurityException {
 
-		wiidgetContext.set("list", Arrays.asList(1, 2, 4));
-		assertExpression(Collection.class.getMethod("size"), "list[\"size\"]");
+        final Tag tag = new Tag("div");
 
-		// TODO make it possible
-		//assertExpression(3, "list[\"size\"]()");
-	}
+        wiidgetContext.set("tag", tag);
+        assertExpression("div", "tag[\"name\"]");
 
-	@Test
-	public void testMapExpression() throws NoSuchMethodException, SecurityException {
+        wiidgetContext.set("propertyName", "name");
+        assertExpression("div", "tag[propertyName]");
 
-		wiidgetContext.set("map", new DataMap().set("someValue", 12));
-		assertExpression(12, "map[\"someValue\"]");
+        wiidgetContext.set("list", Arrays.asList(1, 2, 4));
+        assertExpression(Collection.class.getMethod("size"), "list[\"size\"]");
 
-		wiidgetContext.set("someValueKey", "someValue");
-		assertExpression(12, "map[someValueKey]");
+        // TODO make it possible
+        //assertExpression(3, "list[\"size\"]()");
+    }
 
-		Assert.assertNull(safeEvaluate("map[\"some\"]"));
-	}
+    @Test
+    public void testMapExpression() throws NoSuchMethodException, SecurityException {
 
-	@Test
-	public void testMethodCall() {
+        wiidgetContext.set("map", new DataMap().set("someValue", 12));
+        assertExpression(12, "map[\"someValue\"]");
 
-		final DataMap dataMap = new DataMap();
-		wiidgetContext.set("data", dataMap.set("key", "foo"));
+        wiidgetContext.set("someValueKey", "someValue");
+        assertExpression(12, "map[someValueKey]");
 
-		assertExpression(1, "data.size()");
-		assertExpression("foo", "data.get(\"key\")");
+        Assert.assertNull(safeEvaluate("map[\"some\"]"));
+    }
 
-		wiidgetContext.set("number", 12);
-		assertExpression(dataMap, "data.set(\"own\", data).set(\"twelve\", 12)");
+    @Test
+    public void testMethodCall() {
 
-		assertExpression(3, "data.size()");
-		assertExpression(true, "data.size() == 3");
+        final DataMap dataMap = new DataMap();
+        wiidgetContext.set("data", dataMap.set("key", "foo"));
 
-		assertExpression(dataMap, "data");
-	}
+        assertExpression(1, "data.size()");
+        assertExpression("foo", "data.get(\"key\")");
 
-	@Test
-	public void testEqualityOperator() {
+        wiidgetContext.set("number", 12);
+        assertExpression(dataMap, "data.set(\"own\", data).set(\"twelve\", 12)");
 
-		wiidgetContext.set("foo", "foo");
+        assertExpression(3, "data.size()");
+        assertExpression(true, "data.size() == 3");
 
-		// equality
-		assertExpression(true, "true == true"); // basic case
-		assertExpression(true, "\"foo\" == foo");
-		assertExpression(true, "foo == \"foo\"");
-		assertExpression(true, "null == null");
-		assertExpression(true, "null == someKeyword");
-		assertExpression(true, "some == null");
-	}
+        assertExpression(dataMap, "data");
+    }
 
-	@Test
-	public void testDefaultOperator() {
+    @Test
+    public void testEqualityOperator() {
 
-		assertExpression("foo", "null ~ \"foo\"");
-		assertExpression("foobar", "some ~ other ~ keyword ~ (\"foo\" + \"bar\")");
+        wiidgetContext.set("foo", "foo");
 
-		final int value = 1;
-		wiidgetContext.set("value", value);
-		assertExpression(value, "some ~ key ~ value ~ 2");
+        // equality
+        assertExpression(true, "true == true"); // basic case
+        assertExpression(true, "\"foo\" == foo");
+        assertExpression(true, "foo == \"foo\"");
+        assertExpression(true, "null == null");
+        assertExpression(true, "null == someKeyword");
+        assertExpression(true, "some == null");
+    }
 
-	}
+    @Test
+    public void testDefaultOperator() {
 
-	// Helper methods
+        assertExpression("foo", "null ~ \"foo\"");
+        assertExpression("foobar", "some ~ other ~ keyword ~ (\"foo\" + \"bar\")");
 
-	private void assertExpression(final Object expected, final String template) {
+        final int value = 1;
+        wiidgetContext.set("value", value);
+        assertExpression(value, "some ~ key ~ value ~ 2");
 
-		Assert.assertEquals(expected, safeEvaluate(template));
-	}
+    }
 
-	private Object safeEvaluate(final String string) {
-		try {
-			return evaluate(string);
-		} catch (EvaluationException | RecognitionException e) {
-			throw new RuntimeException(e);
-		}
+    // Helper methods
 
-	}
+    protected void assertExpression(final Object expected, final String template) {
 
-	private Object evaluate(final String template) throws EvaluationException, RecognitionException {
+        final Object evaluated = safeEvaluate(template);
+        Assert.assertEquals(expected, evaluated);
+    }
 
-		final WiidgetParser createParser = createParser(template);
-		final ExpressionEvaluator evaluator = createEvaluator(wiidgetContext);
+    protected Object safeEvaluate(final String string) {
+        try {
+            return evaluate(string);
+        } catch (EvaluationException | RecognitionException e) {
+            throw new RuntimeException(e);
+        }
 
-		return evaluator.evaluate(createParser.expressionList().expression().get(0));
-	}
+    }
 
-	private static ExpressionEvaluator createEvaluator(final WiidgetContext wiidgetContext) {
-		return new DefaultWiidgetFactory(wiidgetContext).getConfiguration().getExpressionEvaluatorFactory(wiidgetContext, new HashMap<String, Wiidget>()).create();
-	}
+    protected Object evaluate(final String template) throws EvaluationException, RecognitionException {
 
-	private static WiidgetParser createParser(final String template) {
-		final ANTLRInputStream input = new ANTLRInputStream(template);
-		final WiidgetLexer aWiidgetLexer = new WiidgetLexer(input);
-		final BufferedTokenStream tokenStream = new BufferedTokenStream(aWiidgetLexer);
-		final WiidgetParser wiidgetParser = new CustomWiidgetParser(tokenStream);
+        final WiidgetParser createParser = createParser(template);
+        final ExpressionEvaluator evaluator = createEvaluator(wiidgetContext);
 
-		return wiidgetParser;
-	}
+        return evaluator.evaluate(createParser.expressionList().expression().get(0));
+    }
+
+    protected static ExpressionEvaluator createEvaluator(final Context wiidgetContext) {
+        final DefaultEngine engine = new DefaultEngine(wiidgetContext);
+        final EvaluationContext evaluationContext = new EvaluationContext(new MockImportContext(engine), wiidgetContext, new TemplateProcessor(engine));
+
+        return engine.getConfiguration().getExpressionEvaluatorFactory(evaluationContext).create();
+    }
+
+    protected static WiidgetParser createParser(final String template) {
+        final ANTLRInputStream input = new ANTLRInputStream(template);
+        final WiidgetLexer aWiidgetLexer = new WiidgetLexer(input);
+        final BufferedTokenStream tokenStream = new BufferedTokenStream(aWiidgetLexer);
+        final WiidgetParser wiidgetParser = new CustomWiidgetParser(tokenStream);
+
+        return wiidgetParser;
+    }
 
 }

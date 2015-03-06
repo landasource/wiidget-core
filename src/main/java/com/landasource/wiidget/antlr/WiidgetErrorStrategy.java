@@ -40,43 +40,45 @@ public class WiidgetErrorStrategy extends DefaultErrorStrategy {
 
             final IntervalSet expectedTokens = inputMismatchException.getExpectedTokens();
 
-            throw new WiidgetLexerException(String.format("Input mismatch at %d:%d. Expected: %s", line, charPositionInLine, expectedTokens), recognitionException);
+            final String expectedToken = WiidgetLexer.tokenNames[expectedTokens.getSingleElement()];
+
+            throw new WiidgetLexerException(String.format("Input mismatch at %d:%d. Expected: %s", line, charPositionInLine, expectedToken), recognitionException);
 
         } else
 
-        if (recognitionException instanceof NoViableAltException) {
+            if (recognitionException instanceof NoViableAltException) {
 
-            final NoViableAltException noViableAltException = (NoViableAltException) recognitionException;
+                final NoViableAltException noViableAltException = (NoViableAltException) recognitionException;
 
-            final TokenStream tokens = recognizer.getInputStream();
-            String input;
-            if (tokens instanceof TokenStream) {
-                if (noViableAltException.getStartToken().getType() == Token.EOF) {
-                    input = "<EOF>";
+                final TokenStream tokens = recognizer.getInputStream();
+                String input;
+                if (tokens instanceof TokenStream) {
+                    if (noViableAltException.getStartToken().getType() == Token.EOF) {
+                        input = "<EOF>";
+                    } else {
+                        input = tokens.getText(noViableAltException.getStartToken(), noViableAltException.getOffendingToken());
+                    }
                 } else {
-                    input = tokens.getText(noViableAltException.getStartToken(), noViableAltException.getOffendingToken());
+                    input = "<unknown input>";
                 }
+                final String msg = "no viable alternative at input " + escapeWSAndQuote(input);
+
+                final Token offendingToken = noViableAltException.getOffendingToken();
+                final int line = offendingToken.getLine();
+                final int charPositionInLine = offendingToken.getCharPositionInLine();
+
+                throw new WiidgetLexerException(msg + " at " + line + ":" + charPositionInLine, noViableAltException);
+
             } else {
-                input = "<unknown input>";
+
+                final Token offendingToken = recognitionException.getOffendingToken();
+                int line = -1;
+                int charPositionInLine = -1;
+                line = offendingToken.getLine();
+                charPositionInLine = offendingToken.getCharPositionInLine();
+
+                throw new WiidgetLexerException("Error at " + line + ":" + charPositionInLine, recognitionException);
             }
-            final String msg = "no viable alternative at input " + escapeWSAndQuote(input);
-
-            final Token offendingToken = noViableAltException.getOffendingToken();
-            final int line = offendingToken.getLine();
-            final int charPositionInLine = offendingToken.getCharPositionInLine();
-
-            throw new WiidgetLexerException(msg + " at " + line + ":" + charPositionInLine, noViableAltException);
-
-        } else {
-
-            final Token offendingToken = recognitionException.getOffendingToken();
-            int line = -1;
-            int charPositionInLine = -1;
-            line = offendingToken.getLine();
-            charPositionInLine = offendingToken.getCharPositionInLine();
-
-            throw new WiidgetLexerException("Error at " + line + ":" + charPositionInLine, recognitionException);
-        }
 
     }
 }
