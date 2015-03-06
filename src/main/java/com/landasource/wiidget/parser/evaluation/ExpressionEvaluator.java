@@ -165,7 +165,9 @@ public class ExpressionEvaluator {
 
                     return MethodUtils.getAccessibleMethod(listValue.getClass(), index.toString());
                 }
-                //  throw new EvaluationException(String.format("Illegal index: %s on list: %s", index, listValue), numberFormatException);
+                // throw new
+                // EvaluationException(String.format("Illegal index: %s on list: %s",
+                // index, listValue), numberFormatException);
             }
 
         } else {
@@ -580,7 +582,12 @@ public class ExpressionEvaluator {
     }
 
     private Object getValue(final String name) {
-        final WiidgetResource wiidgetResource = getImportContext().findByAlias(name);
+
+        WiidgetResource wiidgetResource = null;
+        final ImportContext importContext = getImportContext();
+        if (null != importContext) {
+            wiidgetResource = importContext.findByAlias(name);
+        }
 
         if (null != wiidgetResource) {
             return wiidgetResource;
