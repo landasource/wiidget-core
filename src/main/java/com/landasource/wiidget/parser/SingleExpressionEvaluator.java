@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.tree.RuleNode;
 
+import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.antlr.WiidgetParser.CompilationUnitContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionWiidgetNameContext;
@@ -21,94 +22,98 @@ import com.landasource.wiidget.engine.Engine;
  */
 public class SingleExpressionEvaluator {
 
-    /**
-     * Context and others.
-     */
-    private final Engine engine;
+	/**
+	 * Context and others.
+	 */
+	private final Engine engine;
 
-    /**
-     * @param engine
-     *            engine
-     */
-    public SingleExpressionEvaluator(final Engine engine) {
-        super();
-        this.engine = engine;
-    }
+	/**
+	 * @param engine
+	 *           engine
+	 */
+	public SingleExpressionEvaluator(final Engine engine) {
+		super();
+		this.engine = engine;
+	}
 
-    /**
-     *
-     * @param template
-     * @return
-     * @throws ParserException
-     *             when template contains illegal expression
-     */
-    public String replaceExpressions(final String template) throws ParserException {
+	/**
+	 *
+	 * @param template
+	 * @return
+	 * @throws ParserException
+	 *            when template contains illegal expression
+	 */
+	public String replaceExpressions(final String template) throws ParserException {
 
-        // \{\{\s*(((?!\{\{|\}\}).)+)\s*\}\}
+		// \{\{\s*(((?!\{\{|\}\}).)+)\s*\}\}
 
-        final TemplateExpressionBound bounds = engine.getConfiguration().getTemplateExpressionBound();
-        final String open = bounds.getRegexpQuotedOpen();
-        final String close = bounds.getRegexpQuotedClose();
+		final TemplateExpressionBound bounds = engine.getConfiguration().getTemplateExpressionBound();
+		final String open = bounds.getRegexpQuotedOpen();
+		final String close = bounds.getRegexpQuotedClose();
 
-        // final Matcher m =
-        // Pattern.compile("\\{\\{\\s*(((?!\\{\\{|\\}\\}).)+)\\s*\\}\\}").matcher(template);
-        final String searchPattern = open + "s*(((?!" + open + "|" + close + ").)+)\\s*" + close;
-        final Matcher m = Pattern.compile(searchPattern).matcher(template);
-        final StringBuffer sb = new StringBuffer(), rsb = new StringBuffer();
+		// final Matcher m =
+		// Pattern.compile("\\{\\{\\s*(((?!\\{\\{|\\}\\}).)+)\\s*\\}\\}").matcher(template);
+		final String searchPattern = open + "s*(((?!" + open + "|" + close + ").)+)\\s*" + close;
+		final Matcher m = Pattern.compile(searchPattern).matcher(template);
+		final StringBuffer sb = new StringBuffer(), rsb = new StringBuffer();
 
-        while (m.find()) {
-            rsb.replace(0, rsb.length(), m.group(1));
+		while (m.find()) {
+			rsb.replace(0, rsb.length(), m.group(1));
 
-            final Object devaluated = evaluate(rsb.toString());
+			final Object devaluated = evaluate(rsb.toString());
 
-            m.appendReplacement(sb, String.valueOf(devaluated));
-        }
-        m.appendTail(sb);
+			try {
+				m.appendReplacement(sb, String.valueOf(devaluated));
+			} catch (final IllegalArgumentException e) {
+				throw new WiidgetException("Cannot eval: " + devaluated, e);
+			}
+		}
+		m.appendTail(sb);
 
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 
-    /**
-     *
-     * @return result
-     * @throws ParserException
-     *             when expression is not a legal wiidget expression
-     */
-    public Object evaluate(final String expression) throws ParserException {
+	/**
+	 *
+	 * @return result
+	 * @throws ParserException
+	 *            when expression is not a legal wiidget expression
+	 */
+	public Object evaluate(final String expression) throws ParserException {
 
-        final String wrappedExpression = wrap(expression);
+		final String wrappedExpression = wrap(expression);
 
-        final CompilationUnitContext compilationUnitContext = TemplateProcessor.getCompilationUnitContext(wrappedExpression);
-        assertExpression(compilationUnitContext != null, compilationUnitContext);
+		final CompilationUnitContext compilationUnitContext = TemplateProcessor.getCompilationUnitContext(wrappedExpression);
+		assertExpression(compilationUnitContext != null, compilationUnitContext);
 
-        final List<StatementDeclarationContext> statementDeclarations = compilationUnitContext.statementDeclaration();
-        assertExpression(statementDeclarations.size() == 1, compilationUnitContext);
+		final List<StatementDeclarationContext> statementDeclarations = compilationUnitContext.statementDeclaration();
+		assertExpression(statementDeclarations.size() == 1, compilationUnitContext);
 
-        final StatementDeclarationContext statementDeclarationContext = statementDeclarations.get(0);
+		final StatementDeclarationContext statementDeclarationContext = statementDeclarations.get(0);
 
-        final WiidgetDeclarationContext wiidgetDeclaration = statementDeclarationContext.wiidgetDeclaration();
-        assertExpression(null != wiidgetDeclaration, wiidgetDeclaration);
+		final WiidgetDeclarationContext wiidgetDeclaration = statementDeclarationContext.wiidgetDeclaration();
+		assertExpression(null != wiidgetDeclaration, wiidgetDeclaration);
 
-        final UnifiedWiidgetNameContext unifiedWiidgetName = wiidgetDeclaration.unifiedWiidgetName();
-        final ExpressionWiidgetNameContext expressionWiidgetName = unifiedWiidgetName.expressionWiidgetName();
-        assertExpression(null != expressionWiidgetName, expressionWiidgetName);
+		final UnifiedWiidgetNameContext unifiedWiidgetName = wiidgetDeclaration.unifiedWiidgetName();
+		final ExpressionWiidgetNameContext expressionWiidgetName = unifiedWiidgetName.expressionWiidgetName();
+		assertExpression(null != expressionWiidgetName, expressionWiidgetName);
 
-        final ExpressionContext expressionContext = expressionWiidgetName.expression();
+		final ExpressionContext expressionContext = expressionWiidgetName.expression();
 
-        final TemplateProcessor templateProcessor = new TemplateProcessor(engine);
+		final TemplateProcessor templateProcessor = new TemplateProcessor(engine);
 
-        final Object result = templateProcessor.createStringExpressionEvaluation().getExpressionEvaluator().evaluate(expressionContext);
+		final Object result = templateProcessor.createStringExpressionEvaluation().getExpressionEvaluator().evaluate(expressionContext);
 
-        return result;
-    }
+		return result;
+	}
 
-    private void assertExpression(final boolean condition, final RuleNode node) throws ParserException {
-        if (!condition) {
-            throw new ParserException(node, "Must be a single expression.");
-        }
-    }
+	private void assertExpression(final boolean condition, final RuleNode node) throws ParserException {
+		if (!condition) {
+			throw new ParserException(node, "Must be a single expression.");
+		}
+	}
 
-    private String wrap(final String expression) {
-        return "`" + expression + "`;";
-    }
+	private String wrap(final String expression) {
+		return "`" + expression + "`;";
+	}
 }

@@ -30,8 +30,7 @@ public class ResourceWiidget extends ContextualWiidget {
 	public void run() {
 
 		try {
-			final InputStream inputStream = getEngine().getConfiguration()
-					.getFileLoader().getFile(fileName);
+			final InputStream inputStream = getEngine().getConfiguration().getFileLoader().getFile(fileName);
 
 			final String template = IOUtils.toString(inputStream);
 
@@ -41,8 +40,7 @@ public class ResourceWiidget extends ContextualWiidget {
 			content = endBuffer(); // use: this.content
 			context.set("this", this);
 
-			final String content = Renderer.create(getEngine())
-					.render(template);
+			final String content = Renderer.create(getEngine()).render(template);
 
 			if (null == prevThis) {
 				context.remove("this");
@@ -54,8 +52,7 @@ public class ResourceWiidget extends ContextualWiidget {
 
 		} catch (final WiidgetException exception) {
 
-			throw new WiidgetException("Cannot render wiidget: " + fileName,
-					exception);
+			throw new WiidgetException("Cannot render wiidget: " + fileName, exception);
 
 		} catch (final IOException e) {
 			throw new WiidgetException("Cannot load wiidget", e);
@@ -73,7 +70,7 @@ public class ResourceWiidget extends ContextualWiidget {
 
 	/**
 	 * @param fileName
-	 *            the fileName to set
+	 *           the fileName to set
 	 */
 	public void setFileName(final String fileName) {
 		this.fileName = fileName;
