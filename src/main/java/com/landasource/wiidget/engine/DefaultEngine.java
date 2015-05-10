@@ -77,16 +77,15 @@ public class DefaultEngine implements Engine {
 
 	/**
 	 * @param properties
-	 *            properties
+	 *           properties
 	 * @param context
-	 *            context
+	 *           context
 	 * @param resultTransformerRegistrator
-	 *            custorm transformer registrator
+	 *           custorm transformer registrator
 	 * @param configuration
-	 *            configuration
+	 *           configuration
 	 */
-	public DefaultEngine(final Properties properties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator,
-			final Configuration configuration) {
+	public DefaultEngine(final Properties properties, final Context context, final ResultTransformerRegistrator resultTransformerRegistrator, final Configuration configuration) {
 
 		this.properties = properties;
 		this.wiidgetContext = context;
@@ -98,7 +97,7 @@ public class DefaultEngine implements Engine {
 
 	/**
 	 * @param wiidgetContext
-	 *            context of the factory
+	 *           context of the factory
 	 */
 	public DefaultEngine(final Context wiidgetContext) {
 		this(new DefaultProperties(), wiidgetContext, new ResultTransformerRegistrator(), new DefaultConfiguration());
@@ -156,7 +155,7 @@ public class DefaultEngine implements Engine {
 	 * Throws ValidationException when the wiidget is invalid.
 	 *
 	 * @param wiidget
-	 *            validate it
+	 *           validate it
 	 */
 	// TODO use java.validation
 	private void validate(final Wiidget wiidget) {

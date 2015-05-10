@@ -58,11 +58,17 @@ public class SingleExpressionEvaluator {
 		final StringBuffer sb = new StringBuffer(), rsb = new StringBuffer();
 
 		while (m.find()) {
-			rsb.replace(0, rsb.length(), m.group(1));
+
+			final String expressionsGroup = m.group(1);
+
+			rsb.replace(0, rsb.length(), expressionsGroup.substring(0)); // start
+			// from
+			// non-escaped
 
 			final Object devaluated = evaluate(rsb.toString());
 
 			try {
+				// prepend leading chart
 				m.appendReplacement(sb, String.valueOf(devaluated));
 			} catch (final IllegalArgumentException e) {
 				throw new WiidgetException("Cannot eval: " + devaluated, e);

@@ -1,6 +1,7 @@
 package com.landasource.wiidget.parser.evaluation;
 
 import com.landasource.wiidget.context.Context;
+import com.landasource.wiidget.engine.Engine;
 import com.landasource.wiidget.parser.TemplateProcessor;
 import com.landasource.wiidget.parser.imports.ImportContext;
 
@@ -11,60 +12,49 @@ import com.landasource.wiidget.parser.imports.ImportContext;
  */
 public class EvaluationContext {
 
-    private ImportContext importContext;
+	private final ImportContext importContext;
 
-    private Context wiidgetContext;
+	private final TemplateProcessor templateProcessor;
 
-    private final TemplateProcessor templateProcessor;
+	private final Engine engine;
 
-    /**
-     * @param importContext
-     * @param wiidgetContext
-     * @param wiidgetMap
-     */
-    public EvaluationContext(final ImportContext importContext, final Context wiidgetContext, final TemplateProcessor templateProcessor) {
-        super();
-        this.importContext = importContext;
-        this.wiidgetContext = wiidgetContext;
-        this.templateProcessor = templateProcessor;
+	/**
+	 * @param importContext
+	 * @param wiidgetContext
+	 * @param wiidgetMap
+	 */
+	public EvaluationContext(final ImportContext importContext, final Engine engine, final TemplateProcessor templateProcessor) {
+		super();
+		this.importContext = importContext;
+		this.engine = engine;
 
-    }
+		this.templateProcessor = templateProcessor;
 
-    /**
-     * @return the importContext
-     */
-    public ImportContext getImportContext() {
-        return importContext;
-    }
+	}
 
-    /**
-     * @param importContext
-     *            the importContext to set
-     */
-    public void setImportContext(final ImportContext importContext) {
-        this.importContext = importContext;
-    }
+	/**
+	 * @return the importContext
+	 */
+	public ImportContext getImportContext() {
+		return importContext;
+	}
 
-    /**
-     * @return the wiidgetContext
-     */
-    public Context getWiidgetContext() {
-        return wiidgetContext;
-    }
+	public Engine getEngine() {
+		return engine;
+	}
 
-    /**
-     * @param wiidgetContext
-     *            the wiidgetContext to set
-     */
-    public void setWiidgetContext(final Context wiidgetContext) {
-        this.wiidgetContext = wiidgetContext;
-    }
+	/**
+	 * @return the wiidgetContext
+	 */
+	public Context getWiidgetContext() {
+		return getEngine().getContext();
+	}
 
-    /**
-     * @return the templateProcessor
-     */
-    public TemplateProcessor getTemplateProcessor() {
-        return templateProcessor;
-    }
+	/**
+	 * @return the templateProcessor
+	 */
+	public TemplateProcessor getTemplateProcessor() {
+		return templateProcessor;
+	}
 
 }
