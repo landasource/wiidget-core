@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 import com.landasource.wiidget.WiidgetException;
+import com.landasource.wiidget.antlr.WiidgetLexerException;
 import com.landasource.wiidget.antlr.WiidgetParser.CompilationUnitContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionContext;
 import com.landasource.wiidget.antlr.WiidgetParser.ExpressionWiidgetNameContext;
@@ -88,8 +89,12 @@ public class SingleExpressionEvaluator {
 	public Object evaluate(final String expression) throws ParserException {
 
 		final String wrappedExpression = wrap(expression);
-
-		final CompilationUnitContext compilationUnitContext = TemplateProcessor.getCompilationUnitContext(wrappedExpression);
+		CompilationUnitContext compilationUnitContext;
+		try {
+			compilationUnitContext = TemplateProcessor.getCompilationUnitContext(wrappedExpression);
+		} catch (final WiidgetLexerException e) {
+			throw new WiidgetException("Illegal expression: " + expression, e);
+		}
 		assertExpression(compilationUnitContext != null, compilationUnitContext);
 
 		final List<StatementDeclarationContext> statementDeclarations = compilationUnitContext.statementDeclaration();
@@ -120,6 +125,8 @@ public class SingleExpressionEvaluator {
 	}
 
 	private String wrap(final String expression) {
-		return "`" + expression + "`;";
+		final String deEscapedQuotes = expression.replaceAll("\\\\\"", "\"");
+
+		return "`" + deEscapedQuotes + "`;";
 	}
 }
