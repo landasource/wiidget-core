@@ -6,6 +6,7 @@ import com.landasource.wiidget.parser.imports.ImportContext;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
 import com.landasource.wiidget.parser.util.StringDeclaration;
 import com.landasource.wiidget.reflect.Reflection;
+import com.landasource.wiidget.reflect.ReflectionException;
 import com.landasource.wiidget.util.DataMap;
 import com.landasource.wiidget.util.Function;
 import com.landasource.wiidget.util.FunctionFactory;
@@ -283,17 +284,21 @@ public class ExpressionEvaluator {
                 final ExpressionListContext expressionListContext = expression.expressionList();
                 final Object[] arguments = evaluateExpressionList(expressionListContext);
 
-                boolean hasMethod = Reflection.hasMethod(baseValue, identifier, arguments);
-                if (hasMethod) {
+                try {
                     return Reflection.callMethod(baseValue, identifier, arguments);
-                } else if (baseValue instanceof FunctionFactory) {
+                } catch (ReflectionException reflectionException) {
 
-                    FunctionFactory functionFactory = (FunctionFactory) baseValue;
-                    Function function = functionFactory.provideFunction(identifier, arguments);
-                    if (null != function){
-                        return function.invoke(arguments);
+                    if (baseValue instanceof FunctionFactory) {
+
+                        FunctionFactory functionFactory = (FunctionFactory) baseValue;
+                        Function function = functionFactory.provideFunction(identifier, arguments);
+                        if (null != function) {
+                            return function.invoke(arguments);
+                        }
+
+                    }else{
+                        throw reflectionException;
                     }
-
                 }
             }
 
