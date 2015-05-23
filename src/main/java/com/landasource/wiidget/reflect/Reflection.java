@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.mvel2.MVEL;
 
@@ -246,4 +247,12 @@ public final class Reflection {
 
     }
 
+    public static boolean hasMethod(Object baseValue, String identifier, Object[] arguments) {
+        Class<?>[] types = new Class<?>[arguments.length];
+        for(int i = 0; i<arguments.length; i++){
+            types[i]=null == arguments[i] ? Object.class : arguments[i].getClass();
+        }
+
+        return null != MethodUtils.getAccessibleMethod(baseValue.getClass(), identifier,types );
+    }
 }
