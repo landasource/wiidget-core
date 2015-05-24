@@ -25,8 +25,7 @@ public final class Renderer {
     private final Engine engine;
 
     /**
-     * @param engine
-     *            factory
+     * @param engine factory
      */
     private Renderer(final Engine engine) {
         this.engine = engine;
@@ -90,10 +89,14 @@ public final class Renderer {
      */
     public String render(final String template) {
 
-        final String result = renderWithoutResources(template);
+        return render(template, null);
+
+    }
+
+    public String render(String template, Wiidget owner) {
+        final String result = renderWithoutResources(template, owner);
 
         return transform(result);
-
     }
 
     /**
@@ -147,10 +150,11 @@ public final class Renderer {
      * Without placing resources.
      *
      * @param template
+     * @param owner
      * @return
      */
-    public String renderWithoutResources(final String template) {
-        final TemplateProcessor langProcessor = new TemplateProcessor(engine);
+    public String renderWithoutResources(final String template, Wiidget owner) {
+        final TemplateProcessor langProcessor = new TemplateProcessor(engine, owner);
 
         try {
 
@@ -185,4 +189,6 @@ public final class Renderer {
         }
         return resourcePlace;
     }
+
+
 }

@@ -35,7 +35,9 @@ import com.landasource.wiidget.util.DataMap;
  */
 public abstract class Wiidget {
 
-    /** Empty data map. Just for avoid unnecessary constructions */
+    /**
+     * Empty data map. Just for avoid unnecessary constructions
+     */
     @SuppressWarnings("unchecked")
     public static final Map<String, Object> EMPTY_DATA = Collections.unmodifiableMap(Collections.EMPTY_MAP);
 
@@ -45,13 +47,19 @@ public abstract class Wiidget {
      */
     protected String id;
 
-    /** Rendered property. By default every widget is rendered. */
+    /**
+     * Rendered property. By default every widget is rendered.
+     */
     private boolean rendered = true;
 
-    /** Owner/parent of the current wiidget. */
-    private WiidgetView owner;
+    /**
+     * Owner/parent of the current wiidget.
+     */
+    private Wiidget owner;
 
-    /** Children are stored in this linked list. */
+    /**
+     * Children are stored in this linked list.
+     */
     private final List<Wiidget> children = new LinkedList<Wiidget>();
 
     /**
@@ -70,10 +78,8 @@ public abstract class Wiidget {
      * This method is called, when the lang processor did not find the field in
      * the class.
      *
-     * @param name
-     *            name of the field
-     * @param value
-     *            value of the field.
+     * @param name  name of the field
+     * @param value value of the field.
      */
     public void setAttribute(final String name, final Object value) {
         throw new WiidgetException(String.format("%s has no field with name: %s", getClass().getCanonicalName(), name));
@@ -113,8 +119,7 @@ public abstract class Wiidget {
     /**
      * Creates instance of specified type.
      *
-     * @param widgetClass
-     *            type of the wiidget
+     * @param widgetClass type of the wiidget
      * @return instance of the wiidget when it is rendered
      */
     protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass) {
@@ -124,10 +129,8 @@ public abstract class Wiidget {
     /**
      * Creates instance of specified type.
      *
-     * @param widgetClass
-     *            type of the wiidget
-     * @param dataMap
-     *            attributes map
+     * @param widgetClass type of the wiidget
+     * @param dataMap     attributes map
      * @return instance of the wiidget when it is rendered
      */
     protected <W extends Wiidget> W beginWiidget(final Class<W> widgetClass, final Map<String, Object> dataMap) {
@@ -143,8 +146,7 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param wiidget
-     *            wiidget to start
+     * @param wiidget wiidget to start
      * @return the wiidget when its rendered. Otherwise null
      */
     protected <W extends Wiidget> W startWiidget(final W wiidget) {
@@ -164,11 +166,13 @@ public abstract class Wiidget {
      */
     @SuppressWarnings("unchecked")
     protected <W extends Wiidget> W endWiidget() {
-        final Wiidget wiidget = getEngine().getWiidgetStack().pop();
+        final Wiidget wiidget = getEngine().getWiidgetStack().peek();
 
         if (wiidget.isRendered()) {
             wiidget.run();
         }
+        // pop finally
+        getEngine().getWiidgetStack().pop();
 
         return (W) wiidget;
     }
@@ -176,9 +180,8 @@ public abstract class Wiidget {
     /**
      * Ends the wiidget. Similar to {@link #endWiidget()} but checks the
      * reference to enforce document validity.
-     * 
-     * @param wiidget
-     *            the current wiidget
+     *
+     * @param wiidget the current wiidget
      * @return the closed wiidget
      */
     protected <W extends Wiidget> W endWiidget(final W wiidget) {
@@ -206,18 +209,17 @@ public abstract class Wiidget {
 
     /**
      * @return the parent of the wiidget. Can be null in some case. E.g. when
-     *         wiidget is a view.
+     * wiidget is a view.
      */
-    public WiidgetView getOwner() {
+    public Wiidget getOwner() {
         return this.owner;
     }
 
     /**
-     * @param owner
-     *            owner of the wiidget. Called by the engine but in some special
-     *            case can be useful to change the owner
+     * @param owner owner of the wiidget. Called by the engine but in some special
+     *              case can be useful to change the owner
      */
-    public void setOwner(final WiidgetView owner) {
+    public void setOwner(final Wiidget owner) {
         this.owner = owner;
     }
 
@@ -229,8 +231,7 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param wiidgetClass
-     *            type of child wiidgets must be present in the result
+     * @param wiidgetClass type of child wiidgets must be present in the result
      * @return children with the specified type
      */
     @SuppressWarnings("unchecked")
@@ -250,11 +251,9 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param wiidgetClass
-     *            type of child
+     * @param wiidgetClass type of child
      * @return the only one child with the type
-     * @throws WiidgetException
-     *             when there are more then one children with the specified type
+     * @throws WiidgetException when there are more then one children with the specified type
      */
     public <W> W getChild(final Class<W> wiidgetClass) {
 
@@ -271,10 +270,9 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param wiidgetClass
-     *            type of children
-     * @see #getChildren(Class)
+     * @param wiidgetClass type of children
      * @return list of direct and indirect children with the given type
+     * @see #getChildren(Class)
      */
     @SuppressWarnings("unchecked")
     public <W> W getChildRecursive(final Class<W> wiidgetClass) {
@@ -306,7 +304,7 @@ public abstract class Wiidget {
 
     /**
      * @return flushes the buffer and pops from stack. Returns the content of
-     *         the popped buffer.
+     * the popped buffer.
      */
     protected String endBuffer() {
         return getPrintStream().endBuffer();
@@ -315,8 +313,7 @@ public abstract class Wiidget {
     /**
      * Returns the content of the specified file.
      *
-     * @param path
-     *            path of the template
+     * @param path path of the template
      * @return content of the file
      * @see FileLoader
      */
@@ -381,8 +378,7 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param id
-     *            explicitly sets the id of this wiidget
+     * @param id explicitly sets the id of this wiidget
      */
     public void setId(final String id) {
         this.id = id;
@@ -396,8 +392,7 @@ public abstract class Wiidget {
     }
 
     /**
-     * @param rendered
-     *            attribute setter
+     * @param rendered attribute setter
      */
     public void setRendered(final boolean rendered) {
         this.rendered = rendered;

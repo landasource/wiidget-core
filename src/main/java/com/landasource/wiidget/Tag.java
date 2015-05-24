@@ -60,8 +60,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param name
-     *            name of tag
+     * @param name name of tag
      */
     public Tag(final String name) {
         this.name = name;
@@ -70,12 +69,9 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param name
-     *            name of tag
-     * @param attributes
-     *            attributes
-     * @param children
-     *            children objects
+     * @param name       name of tag
+     * @param attributes attributes
+     * @param children   children objects
      */
     public Tag(final String name, final Map<String, String> attributes, final List<Object> children) {
         super();
@@ -103,8 +99,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param tagName
-     *            the name to set
+     * @param tagName the name to set
      * @return reference of object to chaining method
      */
     public Tag setName(final String tagName) {
@@ -120,8 +115,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param tagAttributes
-     *            the attributes to set
+     * @param tagAttributes the attributes to set
      * @return reference of object to chaining method
      */
     public Tag setAttributes(final Map<String, String> tagAttributes) {
@@ -137,8 +131,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param newChildren
-     *            the children to set
+     * @param newChildren the children to set
      * @return reference of object to chaining method
      */
     public Tag setChildren(final List<Object> newChildren) {
@@ -147,18 +140,15 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param childrenList
-     *            to add
+     * @param childrenList to add
      */
     public void addChildren(final List<Tag> childrenList) {
         children.addAll(childrenList);
     }
 
     /**
-     * @param key
-     *            attribute key
-     * @param value
-     *            attribute value
+     * @param key   attribute key
+     * @param value attribute value
      * @return reference of object to chaining method
      */
     public Tag setAttribute(final String key, final Object value) {
@@ -169,10 +159,8 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Alias of {@link #setAttribute(String, String)}.
      *
-     * @param key
-     *            attribute key
-     * @param value
-     *            attribute value
+     * @param key   attribute key
+     * @param value attribute value
      * @return reference of object to chaining method
      */
     public Tag a(final String key, final Object value) {
@@ -180,8 +168,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param key
-     *            attribute key
+     * @param key attribute key
      * @return attribute value
      */
     public String getAttribute(final String key) {
@@ -191,8 +178,7 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Alias of {@link #getAttribute(String)}.
      *
-     * @param key
-     *            key
+     * @param key key
      * @return value
      */
     public String a(final String key) {
@@ -203,8 +189,7 @@ public class Tag implements Cloneable, Serializable {
      * Use for attributes like 'disabled', 'readonly'. When you ain't give
      * value.
      *
-     * @param singleAttribute
-     *            name of single attribute
+     * @param singleAttribute name of single attribute
      * @return reference of object to chaining method
      */
     public Tag singleAttribute(final String singleAttribute) {
@@ -213,8 +198,7 @@ public class Tag implements Cloneable, Serializable {
     }
 
     /**
-     * @param styleClass
-     *            class to add
+     * @param styleClass class to add
      * @return reference of object to chaining method
      */
     public Tag addClass(final String styleClass) {
@@ -246,8 +230,7 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Adds a children.
      *
-     * @param child
-     *            to add
+     * @param child to add
      * @return reference of object to chaining method
      */
     public Tag addChild(final Object child) {
@@ -258,8 +241,7 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Adds a children.
      *
-     * @param child
-     *            to add
+     * @param child to add
      * @return reference of object to chaining method
      */
     public Tag c(final Object child) {
@@ -269,8 +251,7 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Prepends a child.
      *
-     * @param child
-     *            to prepend
+     * @param child to prepend
      * @return reference of object
      */
     public Tag prependChild(final Object child) {
@@ -297,8 +278,7 @@ public class Tag implements Cloneable, Serializable {
     /**
      * Finds a html tag object with the specified id attribute in this tree.
      *
-     * @param tagId
-     *            id of tag
+     * @param tagId id of tag
      * @return the specified tag if found, else null
      */
     public Tag byId(final String tagId) {
@@ -452,5 +432,9 @@ public class Tag implements Cloneable, Serializable {
         // return "<" + tagName + renderAttributes(attributeMap) + " />";
 
         return new Tag(tagName, attributeMap).toString();
+    }
+
+    public static Tag tag(String tagName, Map<String, Object> attributeMap, String content) {
+        return new Tag(tagName, new DataMap(attributeMap)).addChild(content);
     }
 }

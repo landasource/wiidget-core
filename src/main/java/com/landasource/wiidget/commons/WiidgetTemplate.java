@@ -9,49 +9,50 @@ import com.landasource.wiidget.Renderer;
  */
 public class WiidgetTemplate extends ContextualWiidget {
 
-	/** Wiidget template content. */
-	private String value;
+    /**
+     * Wiidget template content.
+     */
+    private String value;
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		if (null == getValue()) {
-			startBuffer();
-		}
-	}
+        if (null == getValue()) {
+            startBuffer();
+        }
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		String template = null;
-		if (null == getValue()) {
-			template = endBuffer();
-		} else {
-			template = getValue();
-		}
+        String template = null;
+        if (null == getValue()) {
+            template = endBuffer();
+        } else {
+            template = getValue();
+        }
 
-		final Renderer renderer = Renderer.create(getEngine());
-		final String viewResult = renderer.renderWithoutResources(template);
+        final Renderer renderer = Renderer.create(getEngine());
+        final String viewResult = renderer.renderWithoutResources(template, null);
 
-		write(viewResult);
+        write(viewResult);
 
-		restoreContext();
-	}
+        restoreContext();
+    }
 
-	/**
-	 * @return the value
-	 */
-	 public String getValue() {
-		return value;
-	}
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * @param value
-	 *            the value to set
-	 */
-	 public void setValue(final String value) {
-		 this.value = value;
-	 }
+    /**
+     * @param value the value to set
+     */
+    public void setValue(final String value) {
+        this.value = value;
+    }
 
 }

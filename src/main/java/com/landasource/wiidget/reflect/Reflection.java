@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.mvel2.MVEL;
+import org.mvel2.PropertyAccessException;
 
 /**
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
@@ -38,7 +39,11 @@ public final class Reflection {
     @SuppressWarnings("unchecked")
     public static <T> T getFieldValue(final Object target, final String field) {
 
-        return (T) MVEL.getProperty(field, target);
+        try {
+            return (T) MVEL.getProperty(field, target);
+        } catch (PropertyAccessException e) {
+            throw new ReflectionException("No property found: " + field, e);
+        }
 
     }
 
@@ -214,8 +219,7 @@ public final class Reflection {
     /**
      * Returns the declared field of class hierarchy.
      *
-     * @param baseClass
-     *            class to inspect
+     * @param baseClass class to inspect
      * @return the array of all declared fields
      */
     public static Field[] getDeclaredFields(final Class<?> baseClass) {
@@ -249,10 +253,10 @@ public final class Reflection {
 
     public static boolean hasMethod(Object baseValue, String identifier, Object[] arguments) {
         Class<?>[] types = new Class<?>[arguments.length];
-        for(int i = 0; i<arguments.length; i++){
-            types[i]=null == arguments[i] ? Object.class : arguments[i].getClass();
+        for (int i = 0; i < arguments.length; i++) {
+            types[i] = null == arguments[i] ? Object.class : arguments[i].getClass();
         }
 
-        return null != MethodUtils.getAccessibleMethod(baseValue.getClass(), identifier,types );
+        return null != MethodUtils.getAccessibleMethod(baseValue.getClass(), identifier, types);
     }
 }

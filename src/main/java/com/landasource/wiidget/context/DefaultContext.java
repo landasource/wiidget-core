@@ -32,8 +32,7 @@ public class DefaultContext implements Context {
     }
 
     /**
-     * @param data
-     *            create context from preexisting map
+     * @param data create context from preexisting map
      */
     public DefaultContext(final Map<String, Object> data) {
         this.dataMap = data;

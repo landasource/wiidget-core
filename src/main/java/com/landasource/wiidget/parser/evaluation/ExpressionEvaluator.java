@@ -10,6 +10,7 @@ import com.landasource.wiidget.reflect.ReflectionException;
 import com.landasource.wiidget.util.DataMap;
 import com.landasource.wiidget.util.Function;
 import com.landasource.wiidget.util.FunctionFactory;
+import com.landasource.wiidget.util.PropertyFactory;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.mvel2.PropertyAccessException;
@@ -296,7 +297,7 @@ public class ExpressionEvaluator {
                             return function.invoke(arguments);
                         }
 
-                    }else{
+                    } else {
                         throw reflectionException;
                     }
                 }
@@ -322,7 +323,17 @@ public class ExpressionEvaluator {
             return ((Map) baseValue).get(property);
         }
 
-        return Reflection.getFieldValue(baseValue, property);
+        try {
+            return Reflection.getFieldValue(baseValue, property);
+        } catch (ReflectionException e) {
+
+            if (baseValue instanceof PropertyFactory) {
+                PropertyFactory propertyFactory = (PropertyFactory) baseValue;
+                return propertyFactory.provideProperty(property);
+            } else {
+                throw e;
+            }
+        }
     }
 
     private Object evaluateWiidgetVariable(final WiidgetVariableContext wiidgetVariableContext) throws EvaluationException {
