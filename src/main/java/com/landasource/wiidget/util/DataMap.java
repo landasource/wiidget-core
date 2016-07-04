@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
  */
-public class DataMap extends java.util.HashMap<String, Object> {
+public class DataMap extends java.util.LinkedHashMap<String, Object> {
 
     /**
      *
@@ -50,11 +50,6 @@ public class DataMap extends java.util.HashMap<String, Object> {
         putAll(data);
 
         return this;
-    }
-
-    @Override
-    public Object get(final Object key) {
-        return super.get(key);
     }
 
 }
