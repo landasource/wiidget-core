@@ -52,4 +52,9 @@ public class DataMap extends java.util.HashMap<String, Object> {
         return this;
     }
 
+    @Override
+    public Object get(final Object key) {
+        return super.get(key);
+    }
+
 }

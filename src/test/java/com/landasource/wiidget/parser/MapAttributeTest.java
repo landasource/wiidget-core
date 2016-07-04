@@ -20,4 +20,14 @@ public class MapAttributeTest extends AbstractTemplateTest {
 
         Assert.assertEquals("bar", context.get("val1"));
     }
+
+    @Test
+    public void testComplexAttr() {
+        context.set("deviceOperationModes", new DataMap());
+        context.set("gpio", 1);
+
+        final String result = render("complex.wdgt");
+
+        System.out.println(result);
+    }
 }

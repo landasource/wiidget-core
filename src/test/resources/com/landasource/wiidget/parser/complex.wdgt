@@ -1,0 +1,6 @@
+button(type="button", class=("btn dropdown-toggle " + ({"OFF" : "btn-danger", "ON" : "btn-success", "AUTO" : "btn-info"}.get(deviceOperationModes.get(gpio) ~ "OFF")) ), 
+                                style="width:100px;", "data-toggle"="dropdown", "aria-haspopup"="true", "aria-expanded"="false"){
+    Out(deviceOperationModes.get(gpio) ~ "OFF");
+    Out(" ");
+    span(class="caret");
+} // end of button.btn.btn-default.dropdown-toggle

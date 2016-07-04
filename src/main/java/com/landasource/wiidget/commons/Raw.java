@@ -2,6 +2,7 @@ package com.landasource.wiidget.commons;
 
 import java.util.Map.Entry;
 
+import com.landasource.wiidget.DynamicWiidget;
 import com.landasource.wiidget.Tag;
 import com.landasource.wiidget.annotation.DefaultField;
 import com.landasource.wiidget.engine.RawWiidget;
@@ -11,7 +12,7 @@ import com.landasource.wiidget.util.Strings;
 /**
  * @author lzsolt
  */
-public class Raw extends RawWiidget {
+public class Raw extends RawWiidget implements DynamicWiidget {
 
     /** Attributes. */
     private final DataMap attributes = new DataMap();
@@ -102,6 +103,11 @@ public class Raw extends RawWiidget {
      */
     public DataMap getAttributes() {
         return attributes;
+    }
+
+    @Override
+    public Object getAttribute(final String name) {
+        return getAttributes().get(name);
     }
 
 }

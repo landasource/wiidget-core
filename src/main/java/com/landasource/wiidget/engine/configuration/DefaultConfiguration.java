@@ -1,8 +1,10 @@
 package com.landasource.wiidget.engine.configuration;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.parser.resource.ClassWiidgetResource;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
+import com.landasource.wiidget.transform.TransformRule;
 import com.landasource.wiidget.url.TransparentURLResolver;
 import com.landasource.wiidget.url.URLResolver;
 import com.landasource.wiidget.validation.DefaultWiidgetValidator;
@@ -42,6 +45,8 @@ public class DefaultConfiguration implements Configuration {
     private final Map<String, WiidgetResource> defaultImports = new HashMap<String, WiidgetResource>();
 
     private TemplateExpressionBound templateExpressionBound;
+
+    private final List<TransformRule> transformRules = new ArrayList<>();
 
     /**
      * Default constructor.
@@ -118,6 +123,17 @@ public class DefaultConfiguration implements Configuration {
     @Override
     public void setTemplateExpressionBound(final TemplateExpressionBound templateExpressionBound) {
         this.templateExpressionBound = templateExpressionBound;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public List<TransformRule> getTransformRules() {
+        return transformRules;
+    }
+
+    @Override
+    public void addTransformRule(final TransformRule<? extends Wiidget> rule) {
+        getTransformRules().add(rule);
     }
 
 }

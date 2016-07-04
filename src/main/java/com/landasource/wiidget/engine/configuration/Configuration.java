@@ -1,5 +1,6 @@
 package com.landasource.wiidget.engine.configuration;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import com.landasource.wiidget.parser.TemplateExpressionBound;
 import com.landasource.wiidget.parser.evaluation.EvaluationContext;
 import com.landasource.wiidget.parser.evaluation.ExpressionEvaluatorFactory;
 import com.landasource.wiidget.parser.resource.WiidgetResource;
+import com.landasource.wiidget.transform.TransformRule;
 import com.landasource.wiidget.url.URLResolver;
 import com.landasource.wiidget.validation.WiidgetValidator;
 
@@ -95,5 +97,10 @@ public interface Configuration {
     TemplateExpressionBound getTemplateExpressionBound();
 
     void setTemplateExpressionBound(TemplateExpressionBound bound);
+
+    @SuppressWarnings("rawtypes")
+    List<TransformRule> getTransformRules();
+
+    void addTransformRule(TransformRule<? extends Wiidget> rule);
 
 }

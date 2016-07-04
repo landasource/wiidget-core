@@ -66,19 +66,6 @@ public abstract class Wiidget {
     public void run() {
     }
 
-    /**
-     * This method is called, when the lang processor did not find the field in
-     * the class.
-     *
-     * @param name
-     *            name of the field
-     * @param value
-     *            value of the field.
-     */
-    public void setAttribute(final String name, final Object value) {
-        throw new WiidgetException(String.format("%s has no field with name: %s", getClass().getCanonicalName(), name));
-    }
-
     protected <W extends Wiidget> W beginWiidget(final W wiidget) {
         getEngine().addWiidget(wiidget, getOwner(), true);
 
@@ -176,7 +163,7 @@ public abstract class Wiidget {
     /**
      * Ends the wiidget. Similar to {@link #endWiidget()} but checks the
      * reference to enforce document validity.
-     * 
+     *
      * @param wiidget
      *            the current wiidget
      * @return the closed wiidget
