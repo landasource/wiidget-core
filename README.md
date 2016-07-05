@@ -1,4 +1,4 @@
-[ ![Codeship Status for landasource/wiidget-core](https://www.codeship.io/projects/032b2e40-0bfa-0132-22a0-72230f3fc4ea/status)](https://www.codeship.io/projects/32088)
+[ ![Codeship Status for landasource/wiidget-core](https://www.codeship.io/projects/38907dc0-24e4-0134-062e-7a46f2e0a594/status)](https://www.codeship.io/projects/161585)
 
 Wiidget
 =======
